@@ -1,0 +1,1476 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Edit Tenant | PG Management System
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-4 py-lg-5">
+
+    <!-- ================= PAGE HEADER ================= -->
+    <div class="page-container mb-4">
+
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+
+            <div>
+
+                <div class="d-flex align-items-center gap-2 mb-2">
+
+                    <span class="badge bg-warning-subtle text-warning-emphasis px-3 py-2 rounded-pill">
+                        <i class="bi bi-pencil-square me-1"></i>
+                        Tenant Management
+                    </span>
+
+                </div>
+
+                <h1 class="fw-bold mb-1">
+                    Edit Tenant
+                </h1>
+
+                <p class="text-muted mb-0">
+                    Update personal, accommodation and rental information.
+                </p>
+
+            </div>
+
+            <a href="{% url 'tenant_list' %}"
+               class="btn btn-light border shadow-sm">
+
+                <i class="bi bi-arrow-left me-2"></i>
+                Back to Tenants
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <div class="row g-4 justify-content-center">
+
+
+        <!-- ================= LEFT PROFILE ================= -->
+        <div class="col-xl-4 col-lg-5">
+
+            <div class="card border-0 shadow-sm overflow-hidden h-100 tenant-profile-card">
+
+                <!-- Profile Image -->
+                <div class="tenant-image-wrapper">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=1200&q=85"
+                        alt="PG Accommodation"
+                        class="tenant-main-image">
+
+                    <div class="tenant-image-overlay"></div>
+
+                    <div class="tenant-image-content">
+
+                        <span class="badge bg-white text-dark rounded-pill px-3 py-2 mb-3">
+
+                            <i class="bi bi-person-check-fill text-primary me-1"></i>
+
+                            Tenant Profile
+
+                        </span>
+
+                        <h3 class="text-white fw-bold mb-2">
+                            {{ tenant.full_name }}
+                        </h3>
+
+                        <p class="text-white-50 mb-0">
+                            Keep tenant information accurate and up to date.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Current Details -->
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-4">
+
+                        <i class="bi bi-person-vcard-fill text-primary me-2"></i>
+
+                        Current Details
+
+                    </h5>
+
+
+                    <!-- Email -->
+                    <div class="profile-detail">
+
+                        <div class="detail-icon bg-primary-subtle text-primary">
+                            <i class="bi bi-envelope-fill"></i>
+                        </div>
+
+                        <div class="overflow-hidden">
+
+                            <small class="text-muted d-block">
+                                Email
+                            </small>
+
+                            <span class="fw-semibold text-break">
+                                {{ tenant.email }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Phone -->
+                    <div class="profile-detail">
+
+                        <div class="detail-icon bg-success-subtle text-success">
+                            <i class="bi bi-telephone-fill"></i>
+                        </div>
+
+                        <div>
+
+                            <small class="text-muted d-block">
+                                Phone
+                            </small>
+
+                            <span class="fw-semibold">
+                                {{ tenant.phone }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Gender -->
+                    <div class="profile-detail">
+
+                        <div class="detail-icon bg-info-subtle text-info">
+                            <i class="bi bi-gender-ambiguous"></i>
+                        </div>
+
+                        <div>
+
+                            <small class="text-muted d-block">
+                                Gender
+                            </small>
+
+                            <span class="fw-semibold">
+                                {{ tenant.gender|default:"Not specified" }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Bed -->
+                    <div class="profile-detail mb-0">
+
+                        <div class="detail-icon bg-warning-subtle text-warning">
+                            <i class="bi bi-door-open-fill"></i>
+                        </div>
+
+                        <div>
+
+                            <small class="text-muted d-block">
+                                Current Bed
+                            </small>
+
+
+                            {% if tenant.bed %}
+
+                                <span class="fw-semibold">
+
+                                    Room {{ tenant.bed.room.room_number }}
+
+                                    ·
+
+                                    Bed {{ tenant.bed.bed_number }}
+
+                                </span>
+
+                                <small class="text-muted d-block">
+                                    {{ tenant.bed.room.pg.name }}
+                                </small>
+
+                            {% else %}
+
+                                <span class="text-muted">
+                                    No Bed Assigned
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= RIGHT FORM ================= -->
+        <div class="col-xl-8 col-lg-7">
+
+            <div class="card border-0 shadow-sm tenant-form-card">
+
+
+                <!-- Form Header -->
+                <div class="card-header bg-white border-0 p-4 pb-2">
+
+                    <div class="d-flex align-items-center gap-3">
+
+                        <div class="tenant-form-icon">
+
+                            <i class="bi bi-pencil-fill"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h4 class="fw-bold mb-1">
+                                Update Tenant Information
+                            </h4>
+
+                            <p class="text-muted small mb-0">
+                                Modify the details below and save your changes.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Form -->
+                <div class="card-body p-4">
+
+                    <form method="POST" id="tenantEditForm">
+
+                        {% csrf_token %}
+
+
+                        <!-- ================= PERSONAL INFORMATION ================= -->
+                        <div class="form-section mb-4">
+
+                            <div class="section-heading">
+
+                                <div class="section-heading-icon bg-primary-subtle text-primary">
+
+                                    <i class="bi bi-person-vcard-fill"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <h5 class="fw-bold mb-1">
+                                        Personal Information
+                                    </h5>
+
+                                    <p class="text-muted small mb-0">
+                                        Update the tenant's basic information.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="row g-3">
+
+
+                                <!-- Full Name -->
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Full Name
+
+                                        <span class="text-danger">*</span>
+
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-text">
+
+                                            <i class="bi bi-person text-primary"></i>
+
+                                        </span>
+
+                                        <input
+                                            type="text"
+                                            name="full_name"
+                                            class="form-control"
+                                            value="{{ tenant.full_name }}"
+                                            placeholder="Enter full name"
+                                            required>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Email -->
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Email Address
+
+                                        <span class="text-danger">*</span>
+
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-text">
+
+                                            <i class="bi bi-envelope text-primary"></i>
+
+                                        </span>
+
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            class="form-control"
+                                            value="{{ tenant.email }}"
+                                            placeholder="Enter email address"
+                                            required>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Phone -->
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Phone Number
+
+                                        <span class="text-danger">*</span>
+
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-text">
+
+                                            <i class="bi bi-telephone text-success"></i>
+
+                                        </span>
+
+                                        <input
+                                            type="text"
+                                            name="phone"
+                                            id="phone"
+                                            class="form-control"
+                                            value="{{ tenant.phone }}"
+                                            minlength="10"
+                                            maxlength="10"
+                                            pattern="[0-9]{10}"
+                                            inputmode="numeric"
+                                            required>
+
+                                    </div>
+
+                                    <small class="text-muted">
+                                        Enter exactly 10 digits.
+                                    </small>
+
+                                </div>
+
+
+                                <!-- ================= GENDER ================= -->
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Gender
+
+                                        <span class="text-danger">*</span>
+
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-text">
+
+                                            <i class="bi bi-gender-ambiguous text-info"></i>
+
+                                        </span>
+
+
+                                        <select
+                                            name="gender"
+                                            id="gender"
+                                            class="form-select"
+                                            required>
+
+                                            <option value="">
+                                                Select Gender
+                                            </option>
+
+
+                                            {% if tenant.gender == "Male" %}
+
+                                                <option value="Male" selected>
+                                                    Male
+                                                </option>
+
+                                            {% else %}
+
+                                                <option value="Male">
+                                                    Male
+                                                </option>
+
+                                            {% endif %}
+
+
+                                            {% if tenant.gender == "Female" %}
+
+                                                <option value="Female" selected>
+                                                    Female
+                                                </option>
+
+                                            {% else %}
+
+                                                <option value="Female">
+                                                    Female
+                                                </option>
+
+                                            {% endif %}
+
+
+                                            {% if tenant.gender == "Other" %}
+
+                                                <option value="Other" selected>
+                                                    Other
+                                                </option>
+
+                                            {% else %}
+
+                                                <option value="Other">
+                                                    Other
+                                                </option>
+
+                                            {% endif %}
+
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Date of Birth -->
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+                                        Date of Birth
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-text">
+
+                                            <i class="bi bi-calendar-heart text-danger"></i>
+
+                                        </span>
+
+                                        <input
+                                            type="date"
+                                            name="date_of_birth"
+                                            class="form-control"
+                                            value="{{ tenant.date_of_birth|date:'Y-m-d' }}">
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Joining Date -->
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Joining Date
+
+                                        <span class="text-danger">*</span>
+
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-text">
+
+                                            <i class="bi bi-calendar-check text-success"></i>
+
+                                        </span>
+
+                                        <input
+                                            type="date"
+                                            name="joining_date"
+                                            class="form-control"
+                                            value="{{ tenant.joining_date|date:'Y-m-d' }}"
+                                            required>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Address -->
+                                <div class="col-12">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Address
+
+                                        <span class="text-danger">*</span>
+
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-text align-items-start pt-3">
+
+                                            <i class="bi bi-geo-alt text-danger"></i>
+
+                                        </span>
+
+                                        <textarea
+                                            name="address"
+                                            class="form-control"
+                                            rows="3"
+                                            placeholder="Enter complete address"
+                                            required>{{ tenant.address }}</textarea>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================= ACCOMMODATION ================= -->
+                        <div class="form-section mb-4">
+
+                            <div class="section-heading">
+
+                                <div class="section-heading-icon bg-info-subtle text-info">
+
+                                    <i class="bi bi-building-fill"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <h5 class="fw-bold mb-1">
+                                        Accommodation
+                                    </h5>
+
+                                    <p class="text-muted small mb-0">
+                                        Change the tenant's assigned bed.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <label class="form-label fw-semibold">
+                                Assign Bed
+                            </label>
+
+
+                            <div class="input-group input-group-lg">
+
+                                <span class="input-group-text bg-light border-end-0">
+
+                                    <i class="bi bi-door-open-fill text-info"></i>
+
+                                </span>
+
+
+                                <select
+                                    name="bed"
+                                    id="bed"
+                                    class="form-select border-start-0">
+
+                                    <option value="">
+                                        No Bed Assigned
+                                    </option>
+
+
+                                    {% for bed in beds %}
+
+                                        {% if tenant.bed and tenant.bed.id == bed.id %}
+
+                                            <option
+                                                value="{{ bed.id }}"
+                                                selected>
+
+                                                {{ bed.room.pg.name }}
+                                                - Room {{ bed.room.room_number }}
+                                                - Bed {{ bed.bed_number }}
+
+                                            </option>
+
+                                        {% else %}
+
+                                            <option
+                                                value="{{ bed.id }}">
+
+                                                {{ bed.room.pg.name }}
+                                                - Room {{ bed.room.room_number }}
+                                                - Bed {{ bed.bed_number }}
+
+                                            </option>
+
+                                        {% endif %}
+
+                                    {% endfor %}
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- Bed Status -->
+                            <div
+                                class="bed-status-box mt-3"
+                                id="bedStatusBox">
+
+                                <div class="d-flex align-items-center gap-3">
+
+                                    <div class="bed-status-icon">
+
+                                        <i class="bi bi-house-door-fill"></i>
+
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            Current Accommodation
+                                        </strong>
+
+
+                                        <small
+                                            class="d-block text-muted"
+                                            id="bedStatusText">
+
+
+                                            {% if tenant.bed %}
+
+                                                {{ tenant.bed.room.pg.name }}
+                                                · Room {{ tenant.bed.room.room_number }}
+                                                · Bed {{ tenant.bed.bed_number }}
+
+                                            {% else %}
+
+                                                No bed is currently assigned.
+
+                                            {% endif %}
+
+
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================= RENTAL INFORMATION ================= -->
+                        <div class="form-section mb-4">
+
+                            <div class="section-heading">
+
+                                <div class="section-heading-icon bg-warning-subtle text-warning">
+
+                                    <i class="bi bi-cash-coin"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <h5 class="fw-bold mb-1">
+                                        Rental Information
+                                    </h5>
+
+                                    <p class="text-muted small mb-0">
+                                        Update monthly rent and security deposit.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="row g-3">
+
+
+                                <!-- Monthly Rent -->
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Monthly Rent
+
+                                        <span class="text-danger">*</span>
+
+                                    </label>
+
+                                    <div class="input-group input-group-lg">
+
+                                        <span class="input-group-text">
+
+                                            <i class="bi bi-currency-rupee text-warning"></i>
+
+                                        </span>
+
+                                        <input
+                                            type="number"
+                                            name="rent_amount"
+                                            id="rentAmount"
+                                            class="form-control"
+                                            value="{{ tenant.rent_amount }}"
+                                            min="0"
+                                            step="0.01"
+                                            required>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Security Deposit -->
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+                                        Security Deposit
+                                    </label>
+
+                                    <div class="input-group input-group-lg">
+
+                                        <span class="input-group-text">
+
+                                            <i class="bi bi-safe2 text-primary"></i>
+
+                                        </span>
+
+                                        <input
+                                            type="number"
+                                            name="security_deposit"
+                                            id="securityDeposit"
+                                            class="form-control"
+                                            value="{{ tenant.security_deposit }}"
+                                            min="0"
+                                            step="0.01">
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Money Preview -->
+                            <div class="rent-summary mt-4">
+
+                                <div class="row g-3">
+
+                                    <div class="col-sm-6">
+
+                                        <small class="text-muted d-block">
+                                            Monthly Rent
+                                        </small>
+
+                                        <strong id="rentPreview">
+                                            ₹0.00
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="col-sm-6 text-sm-end">
+
+                                        <small class="text-muted d-block">
+                                            Security Deposit
+                                        </small>
+
+                                        <strong id="depositPreview">
+                                            ₹0.00
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================= WARNING ================= -->
+                        <div class="alert alert-warning-subtle border border-warning-subtle d-flex gap-3 align-items-start mb-4">
+
+                            <i class="bi bi-exclamation-circle-fill text-warning fs-5"></i>
+
+                            <div>
+
+                                <strong class="d-block mb-1">
+                                    Review before updating
+                                </strong>
+
+                                <small class="text-muted">
+
+                                    Make sure the tenant's contact information,
+                                    accommodation, joining date and rent details
+                                    are correct.
+
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================= BUTTONS ================= -->
+                        <div class="d-flex flex-column flex-sm-row justify-content-end gap-2 pt-2">
+
+
+                            <a
+                                href="{% url 'tenant_list' %}"
+                                class="btn btn-light border px-4 py-2">
+
+                                <i class="bi bi-x-circle me-2"></i>
+
+                                Cancel
+
+                            </a>
+
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary px-4 py-2">
+
+                                <i class="bi bi-check-circle-fill me-2"></i>
+
+                                Update Tenant
+
+                            </button>
+
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= CSS ================= -->
+<style>
+
+    .tenant-profile-card,
+    .tenant-form-card {
+        border-radius: 22px;
+    }
+
+
+    .tenant-image-wrapper {
+        height: 390px;
+        position: relative;
+        overflow: hidden;
+    }
+
+
+    .tenant-main-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+
+    .tenant-image-overlay {
+        position: absolute;
+        inset: 0;
+
+        background:
+            linear-gradient(
+                180deg,
+                rgba(15, 23, 42, 0.05) 10%,
+                rgba(15, 23, 42, 0.86) 100%
+            );
+    }
+
+
+    .tenant-image-content {
+        position: absolute;
+        left: 28px;
+        right: 28px;
+        bottom: 28px;
+    }
+
+
+    .profile-detail {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 15px 0;
+        border-bottom: 1px solid #eef2f7;
+    }
+
+
+    .detail-icon {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+
+        border-radius: 12px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 17px;
+    }
+
+
+    .tenant-form-icon {
+        width: 52px;
+        height: 52px;
+        min-width: 52px;
+
+        border-radius: 15px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background:
+            linear-gradient(
+                135deg,
+                #4f46e5,
+                #7c3aed
+            );
+
+        color: white;
+
+        font-size: 21px;
+
+        box-shadow:
+            0 10px 25px
+            rgba(79, 70, 229, 0.20);
+    }
+
+
+    .form-section {
+        background: #fbfcff;
+
+        border: 1px solid #e8edf5;
+
+        border-radius: 18px;
+
+        padding: 22px;
+    }
+
+
+    .section-heading {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+
+        margin-bottom: 22px;
+    }
+
+
+    .section-heading-icon {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+
+        border-radius: 12px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 18px;
+    }
+
+
+    .form-control,
+    .form-select,
+    .input-group-text {
+        border-color: #dfe5ef;
+    }
+
+
+    .form-control:focus,
+    .form-select:focus {
+
+        border-color: #6366f1;
+
+        box-shadow:
+            0 0 0 0.2rem
+            rgba(99, 102, 241, 0.12);
+    }
+
+
+    .input-group-text {
+        background: #f8fafc;
+        color: #64748b;
+    }
+
+
+    .bed-status-box {
+
+        border: 1px dashed #cbd5e1;
+
+        border-radius: 14px;
+
+        padding: 15px;
+
+        background: white;
+
+        transition: all 0.2s ease;
+    }
+
+
+    .bed-status-icon {
+
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+
+        border-radius: 12px;
+
+        background: #ecfeff;
+
+        color: #0891b2;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    .rent-summary {
+
+        background:
+            linear-gradient(
+                135deg,
+                rgba(79, 70, 229, 0.06),
+                rgba(124, 58, 237, 0.05)
+            );
+
+        border:
+            1px solid
+            rgba(99, 102, 241, 0.12);
+
+        border-radius: 14px;
+
+        padding: 16px 18px;
+    }
+
+
+    .rent-summary strong {
+
+        font-size: 18px;
+
+        color: #312e81;
+    }
+
+
+    .btn-primary {
+
+        border: none;
+
+        box-shadow:
+            0 8px 18px
+            rgba(79, 70, 229, 0.18);
+
+        transition: all 0.2s ease;
+    }
+
+
+    .btn-primary:hover {
+
+        transform: translateY(-1px);
+    }
+
+
+    .form-control,
+    .form-select {
+        min-height: 44px;
+    }
+
+
+    @media (max-width: 991.98px) {
+
+        .tenant-image-wrapper {
+            height: 320px;
+        }
+
+    }
+
+
+    @media (max-width: 575.98px) {
+
+        .tenant-image-wrapper {
+            height: 280px;
+        }
+
+
+        .tenant-image-content {
+
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+        }
+
+
+        .form-section {
+            padding: 17px;
+        }
+
+
+        .tenant-form-card .card-body {
+            padding: 18px !important;
+        }
+
+    }
+
+</style>
+
+
+<!-- ================= JAVASCRIPT ================= -->
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    /* ==========================================
+       PHONE VALIDATION
+    ========================================== */
+
+    const phoneInput =
+        document.getElementById("phone");
+
+
+    if (phoneInput) {
+
+        phoneInput.addEventListener(
+            "input",
+            function () {
+
+                this.value =
+                    this.value
+                        .replace(/\D/g, "")
+                        .slice(0, 10);
+
+            }
+        );
+
+    }
+
+
+    /* ==========================================
+       RENT + DEPOSIT PREVIEW
+    ========================================== */
+
+    const rentAmount =
+        document.getElementById("rentAmount");
+
+    const securityDeposit =
+        document.getElementById("securityDeposit");
+
+    const rentPreview =
+        document.getElementById("rentPreview");
+
+    const depositPreview =
+        document.getElementById("depositPreview");
+
+
+    function updateMoneyPreview() {
+
+        const rent =
+            rentAmount
+                ? parseFloat(rentAmount.value) || 0
+                : 0;
+
+
+        const deposit =
+            securityDeposit
+                ? parseFloat(securityDeposit.value) || 0
+                : 0;
+
+
+        if (rentPreview) {
+
+            rentPreview.textContent =
+                "₹" +
+                rent.toLocaleString(
+                    "en-IN",
+                    {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }
+                );
+
+        }
+
+
+        if (depositPreview) {
+
+            depositPreview.textContent =
+                "₹" +
+                deposit.toLocaleString(
+                    "en-IN",
+                    {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }
+                );
+
+        }
+
+    }
+
+
+    if (rentAmount) {
+
+        rentAmount.addEventListener(
+            "input",
+            updateMoneyPreview
+        );
+
+    }
+
+
+    if (securityDeposit) {
+
+        securityDeposit.addEventListener(
+            "input",
+            updateMoneyPreview
+        );
+
+    }
+
+
+    updateMoneyPreview();
+
+
+    /* ==========================================
+       BED SELECTION
+    ========================================== */
+
+    const bedSelect =
+        document.getElementById("bed");
+
+    const bedStatusText =
+        document.getElementById("bedStatusText");
+
+    const bedStatusBox =
+        document.getElementById("bedStatusBox");
+
+
+    if (bedSelect) {
+
+        bedSelect.addEventListener(
+            "change",
+            function () {
+
+
+                if (this.value) {
+
+                    const selectedText =
+                        this.options[
+                            this.selectedIndex
+                        ]
+                        .text
+                        .trim()
+                        .replace(/\s+/g, " ");
+
+
+                    if (bedStatusText) {
+
+                        bedStatusText.textContent =
+                            selectedText;
+
+                    }
+
+
+                    if (bedStatusBox) {
+
+                        bedStatusBox.style.borderColor =
+                            "#86efac";
+
+                        bedStatusBox.style.background =
+                            "#f0fdf4";
+
+                    }
+
+                }
+
+                else {
+
+                    if (bedStatusText) {
+
+                        bedStatusText.textContent =
+                            "No bed is currently assigned.";
+
+                    }
+
+
+                    if (bedStatusBox) {
+
+                        bedStatusBox.style.borderColor =
+                            "#cbd5e1";
+
+                        bedStatusBox.style.background =
+                            "white";
+
+                    }
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* ==========================================
+       FORM VALIDATION
+    ========================================== */
+
+    const form =
+        document.getElementById(
+            "tenantEditForm"
+        );
+
+
+    if (form) {
+
+        form.addEventListener(
+            "submit",
+            function (event) {
+
+
+                /* Phone */
+
+                if (
+                    phoneInput &&
+                    phoneInput.value.length !== 10
+                ) {
+
+                    event.preventDefault();
+
+                    phoneInput.focus();
+
+                    alert(
+                        "Please enter a valid 10 digit phone number."
+                    );
+
+                    return;
+
+                }
+
+
+                /* Rent */
+
+                if (rentAmount) {
+
+                    const rent =
+                        parseFloat(
+                            rentAmount.value
+                        );
+
+
+                    if (
+                        isNaN(rent) ||
+                        rent < 0
+                    ) {
+
+                        event.preventDefault();
+
+                        rentAmount.focus();
+
+                        alert(
+                            "Please enter a valid monthly rent."
+                        );
+
+                        return;
+
+                    }
+
+                }
+
+
+                /* Security Deposit */
+
+                if (securityDeposit) {
+
+                    const deposit =
+                        parseFloat(
+                            securityDeposit.value
+                        );
+
+
+                    if (
+                        !isNaN(deposit) &&
+                        deposit < 0
+                    ) {
+
+                        event.preventDefault();
+
+                        securityDeposit.focus();
+
+                        alert(
+                            "Security deposit cannot be negative."
+                        );
+
+                        return;
+
+                    }
+
+                }
+
+            }
+        );
+
+    }
+
+});
+
+</script>
+
+{% endblock %}

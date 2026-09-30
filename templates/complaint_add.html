@@ -1,0 +1,720 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Complaint | PG Management{% endblock %}
+
+{% block content %}
+
+<div class="page-container">
+
+```
+<!-- Page Header -->
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+
+    <div>
+        <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge rounded-pill bg-danger-subtle text-danger px-3 py-2">
+                <i class="bi bi-headset me-1"></i>
+                Complaint Management
+            </span>
+        </div>
+
+        <h2 class="fw-bold mb-1">
+            Add New Complaint
+        </h2>
+
+        <p class="text-muted mb-0">
+            Submit a complaint and provide complete details for management.
+        </p>
+    </div>
+
+    <a href="{% url 'complaint_list' %}"
+       class="btn btn-outline-secondary px-4">
+
+        <i class="bi bi-arrow-left me-1"></i>
+        Back to Complaints
+
+    </a>
+
+</div>
+
+
+<div class="row g-4">
+
+    <!-- Left Information Panel -->
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow-sm overflow-hidden h-100">
+
+            <div class="position-relative">
+
+                <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=1000&q=85"
+                     class="w-100"
+                     style="height: 260px; object-fit: cover;"
+                     alt="PG Complaint Management">
+
+                <div class="position-absolute top-0 start-0 w-100 h-100"
+                     style="background: linear-gradient(180deg, rgba(15,23,42,0.05), rgba(15,23,42,0.78));">
+                </div>
+
+                <div class="position-absolute bottom-0 start-0 p-4 text-white">
+
+                    <div class="mb-2">
+                        <span class="badge bg-danger">
+                            <i class="bi bi-exclamation-triangle me-1"></i>
+                            Support Center
+                        </span>
+                    </div>
+
+                    <h4 class="fw-bold mb-1">
+                        Need Help?
+                    </h4>
+
+                    <p class="mb-0 small opacity-75">
+                        Register your complaint with the required details.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body p-4">
+
+                <h6 class="fw-bold mb-3">
+                    <i class="bi bi-info-circle text-primary me-2"></i>
+                    Complaint Guidelines
+                </h6>
+
+                <div class="d-flex gap-3 mb-3">
+
+                    <div class="flex-shrink-0">
+                        <span class="d-flex align-items-center justify-content-center rounded-circle bg-primary-subtle text-primary"
+                              style="width:40px;height:40px;">
+                            <i class="bi bi-person"></i>
+                        </span>
+                    </div>
+
+                    <div>
+                        <strong class="d-block">
+                            Select Tenant
+                        </strong>
+
+                        <small class="text-muted">
+                            Choose the tenant associated with the complaint.
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="d-flex gap-3 mb-3">
+
+                    <div class="flex-shrink-0">
+                        <span class="d-flex align-items-center justify-content-center rounded-circle bg-warning-subtle text-warning"
+                              style="width:40px;height:40px;">
+                            <i class="bi bi-flag"></i>
+                        </span>
+                    </div>
+
+                    <div>
+                        <strong class="d-block">
+                            Set Priority
+                        </strong>
+
+                        <small class="text-muted">
+                            Select Low, Medium or High based on urgency.
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="d-flex gap-3">
+
+                    <div class="flex-shrink-0">
+                        <span class="d-flex align-items-center justify-content-center rounded-circle bg-success-subtle text-success"
+                              style="width:40px;height:40px;">
+                            <i class="bi bi-check-circle"></i>
+                        </span>
+                    </div>
+
+                    <div>
+                        <strong class="d-block">
+                            Track Status
+                        </strong>
+
+                        <small class="text-muted">
+                            Complaint status can be Pending, In Progress or Resolved.
+                        </small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Complaint Form -->
+    <div class="col-lg-8">
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-header border-0 bg-white p-4">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="d-flex align-items-center justify-content-center rounded-3 bg-danger-subtle text-danger"
+                         style="width:50px;height:50px;">
+
+                        <i class="bi bi-chat-left-text fs-4"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h5 class="fw-bold mb-1">
+                            Complaint Details
+                        </h5>
+
+                        <p class="text-muted small mb-0">
+                            Fill in the information below to create a complaint.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body p-4 pt-2">
+
+                <form method="POST" id="complaintForm">
+
+                    {% csrf_token %}
+
+
+                    <!-- Tenant -->
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+
+                            <i class="bi bi-person-circle text-primary me-1"></i>
+                            Tenant
+
+                            <span class="text-danger">*</span>
+
+                        </label>
+
+                        <select name="tenant"
+                                id="tenant"
+                                class="form-select form-select-lg"
+                                required>
+
+                            <option value="">
+                                Select Tenant
+                            </option>
+
+                            {% for tenant in tenants %}
+
+                                <option value="{{ tenant.id }}">
+                                    {{ tenant.full_name }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                        <div class="form-text">
+                            Select the tenant for whom this complaint is being registered.
+                        </div>
+
+                    </div>
+
+
+                    <!-- Subject -->
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+
+                            <i class="bi bi-card-text text-primary me-1"></i>
+                            Complaint Subject
+
+                            <span class="text-danger">*</span>
+
+                        </label>
+
+                        <input type="text"
+                               name="subject"
+                               id="subject"
+                               class="form-control form-control-lg"
+                               placeholder="Example: Water leakage in bathroom"
+                               maxlength="200"
+                               required>
+
+                        <div class="d-flex justify-content-between mt-1">
+
+                            <div class="form-text">
+                                Enter a short and clear complaint title.
+                            </div>
+
+                            <small class="text-muted">
+                                <span id="subjectCount">0</span>/200
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Description -->
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+
+                            <i class="bi bi-text-paragraph text-primary me-1"></i>
+                            Description
+
+                            <span class="text-danger">*</span>
+
+                        </label>
+
+                        <textarea name="description"
+                                  id="description"
+                                  class="form-control"
+                                  rows="6"
+                                  maxlength="1000"
+                                  placeholder="Describe the complaint in detail..."
+                                  required></textarea>
+
+                        <div class="d-flex justify-content-between mt-1">
+
+                            <div class="form-text">
+                                Provide enough details to help resolve the issue.
+                            </div>
+
+                            <small class="text-muted">
+                                <span id="descriptionCount">0</span>/1000
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Priority + Status -->
+                    <div class="row g-4">
+
+                        <!-- Priority -->
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+
+                                <i class="bi bi-flag text-warning me-1"></i>
+                                Priority
+
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            <select name="priority"
+                                    id="priority"
+                                    class="form-select form-select-lg"
+                                    required>
+
+                                <option value="Low">
+                                    Low
+                                </option>
+
+                                <option value="Medium" selected>
+                                    Medium
+                                </option>
+
+                                <option value="High">
+                                    High
+                                </option>
+
+                            </select>
+
+                            <div class="mt-2"
+                                 id="priorityInfo">
+
+                                <span class="badge rounded-pill bg-warning-subtle text-warning-emphasis px-3 py-2">
+                                    <i class="bi bi-dash-circle me-1"></i>
+                                    Medium Priority
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Status -->
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+
+                                <i class="bi bi-activity text-success me-1"></i>
+                                Status
+
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            <select name="status"
+                                    id="status"
+                                    class="form-select form-select-lg"
+                                    required>
+
+                                <option value="Pending" selected>
+                                    Pending
+                                </option>
+
+                                <option value="In Progress">
+                                    In Progress
+                                </option>
+
+                                <option value="Resolved">
+                                    Resolved
+                                </option>
+
+                            </select>
+
+                            <div class="mt-2"
+                                 id="statusInfo">
+
+                                <span class="badge rounded-pill bg-warning-subtle text-warning-emphasis px-3 py-2">
+                                    <i class="bi bi-clock me-1"></i>
+                                    Pending
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Preview -->
+                    <div class="mt-4">
+
+                        <div class="rounded-4 border bg-light p-4">
+
+                            <div class="d-flex align-items-center gap-2 mb-3">
+
+                                <i class="bi bi-eye text-primary"></i>
+
+                                <h6 class="fw-bold mb-0">
+                                    Complaint Preview
+                                </h6>
+
+                            </div>
+
+                            <div class="row g-3">
+
+                                <div class="col-sm-6">
+
+                                    <small class="text-muted d-block mb-1">
+                                        Tenant
+                                    </small>
+
+                                    <strong id="previewTenant">
+                                        Not selected
+                                    </strong>
+
+                                </div>
+
+                                <div class="col-sm-6">
+
+                                    <small class="text-muted d-block mb-1">
+                                        Subject
+                                    </small>
+
+                                    <strong id="previewSubject">
+                                        No subject entered
+                                    </strong>
+
+                                </div>
+
+                                <div class="col-sm-6">
+
+                                    <small class="text-muted d-block mb-1">
+                                        Priority
+                                    </small>
+
+                                    <span id="previewPriority"
+                                          class="badge bg-warning text-dark">
+                                        Medium
+                                    </span>
+
+                                </div>
+
+                                <div class="col-sm-6">
+
+                                    <small class="text-muted d-block mb-1">
+                                        Status
+                                    </small>
+
+                                    <span id="previewStatus"
+                                          class="badge bg-warning text-dark">
+                                        Pending
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Buttons -->
+                    <div class="d-flex flex-wrap justify-content-end gap-2 mt-4 pt-3 border-top">
+
+                        <a href="{% url 'complaint_list' %}"
+                           class="btn btn-outline-secondary px-4">
+
+                            <i class="bi bi-x-circle me-1"></i>
+                            Cancel
+
+                        </a>
+
+                        <button type="submit"
+                                class="btn btn-danger px-4">
+
+                            <i class="bi bi-check-circle me-1"></i>
+                            Save Complaint
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const tenant = document.getElementById("tenant");
+    const subject = document.getElementById("subject");
+    const description = document.getElementById("description");
+    const priority = document.getElementById("priority");
+    const status = document.getElementById("status");
+
+    const previewTenant = document.getElementById("previewTenant");
+    const previewSubject = document.getElementById("previewSubject");
+    const previewPriority = document.getElementById("previewPriority");
+    const previewStatus = document.getElementById("previewStatus");
+
+    const subjectCount = document.getElementById("subjectCount");
+    const descriptionCount = document.getElementById("descriptionCount");
+
+    const priorityInfo = document.getElementById("priorityInfo");
+    const statusInfo = document.getElementById("statusInfo");
+
+
+    /* Tenant Preview */
+
+    tenant.addEventListener("change", function () {
+
+        if (this.value) {
+
+            previewTenant.textContent =
+                this.options[this.selectedIndex].text;
+
+        } else {
+
+            previewTenant.textContent = "Not selected";
+
+        }
+
+    });
+
+
+    /* Subject Preview + Counter */
+
+    subject.addEventListener("input", function () {
+
+        previewSubject.textContent =
+            this.value.trim() || "No subject entered";
+
+        subjectCount.textContent =
+            this.value.length;
+
+    });
+
+
+    /* Description Counter */
+
+    description.addEventListener("input", function () {
+
+        descriptionCount.textContent =
+            this.value.length;
+
+    });
+
+
+    /* Priority */
+
+    priority.addEventListener("change", function () {
+
+        const value = this.value;
+
+        previewPriority.textContent = value;
+
+        if (value === "High") {
+
+            previewPriority.className =
+                "badge bg-danger";
+
+            priorityInfo.innerHTML = `
+                <span class="badge rounded-pill bg-danger-subtle text-danger px-3 py-2">
+                    <i class="bi bi-exclamation-triangle me-1"></i>
+                    High Priority
+                </span>
+            `;
+
+        } else if (value === "Medium") {
+
+            previewPriority.className =
+                "badge bg-warning text-dark";
+
+            priorityInfo.innerHTML = `
+                <span class="badge rounded-pill bg-warning-subtle text-warning-emphasis px-3 py-2">
+                    <i class="bi bi-dash-circle me-1"></i>
+                    Medium Priority
+                </span>
+            `;
+
+        } else {
+
+            previewPriority.className =
+                "badge bg-success";
+
+            priorityInfo.innerHTML = `
+                <span class="badge rounded-pill bg-success-subtle text-success px-3 py-2">
+                    <i class="bi bi-check-circle me-1"></i>
+                    Low Priority
+                </span>
+            `;
+
+        }
+
+    });
+
+
+    /* Status */
+
+    status.addEventListener("change", function () {
+
+        const value = this.value;
+
+        previewStatus.textContent = value;
+
+        if (value === "Resolved") {
+
+            previewStatus.className =
+                "badge bg-success";
+
+            statusInfo.innerHTML = `
+                <span class="badge rounded-pill bg-success-subtle text-success px-3 py-2">
+                    <i class="bi bi-check-circle me-1"></i>
+                    Resolved
+                </span>
+            `;
+
+        } else if (value === "In Progress") {
+
+            previewStatus.className =
+                "badge bg-primary";
+
+            statusInfo.innerHTML = `
+                <span class="badge rounded-pill bg-primary-subtle text-primary px-3 py-2">
+                    <i class="bi bi-arrow-repeat me-1"></i>
+                    In Progress
+                </span>
+            `;
+
+        } else {
+
+            previewStatus.className =
+                "badge bg-warning text-dark";
+
+            statusInfo.innerHTML = `
+                <span class="badge rounded-pill bg-warning-subtle text-warning-emphasis px-3 py-2">
+                    <i class="bi bi-clock me-1"></i>
+                    Pending
+                </span>
+            `;
+
+        }
+
+    });
+
+
+    /* Form Validation */
+
+    document.getElementById("complaintForm").addEventListener("submit", function (event) {
+
+        if (!tenant.value) {
+
+            event.preventDefault();
+
+            tenant.focus();
+
+            alert("Please select a tenant.");
+
+            return;
+
+        }
+
+        if (!subject.value.trim()) {
+
+            event.preventDefault();
+
+            subject.focus();
+
+            alert("Please enter complaint subject.");
+
+            return;
+
+        }
+
+        if (!description.value.trim()) {
+
+            event.preventDefault();
+
+            description.focus();
+
+            alert("Please enter complaint description.");
+
+            return;
+
+        }
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

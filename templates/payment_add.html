@@ -1,0 +1,1038 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Payment | PG Management{% endblock %}
+
+{% block content %}
+
+<div class="container py-4 py-lg-5">
+
+```
+<!-- ==================== PAGE HEADER ==================== -->
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+
+    <div>
+        <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge rounded-pill bg-primary-subtle text-primary px-3 py-2">
+                <i class="bi bi-wallet2 me-1"></i>
+                Payment Management
+            </span>
+        </div>
+
+        <h2 class="fw-bold mb-1">
+            Add Payment
+        </h2>
+
+        <p class="text-muted mb-0">
+            Record a new tenant payment securely and accurately.
+        </p>
+    </div>
+
+    <a href="{% url 'payment_list' %}"
+       class="btn btn-outline-secondary px-4">
+
+        <i class="bi bi-arrow-left me-1"></i>
+        Back to Payments
+
+    </a>
+
+</div>
+
+
+<!-- ==================== MAIN CONTENT ==================== -->
+<div class="row g-4 align-items-stretch">
+
+    <!-- ==================== LEFT IMAGE PANEL ==================== -->
+    <div class="col-lg-4">
+
+        <div class="payment-add-image-card h-100">
+
+            <img
+                src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=85"
+                alt="PG Payment Management"
+                class="payment-add-image">
+
+            <div class="payment-add-overlay"></div>
+
+            <div class="payment-add-content">
+
+                <div class="payment-icon-box mb-3">
+                    <i class="bi bi-credit-card-2-front"></i>
+                </div>
+
+                <h3 class="fw-bold text-white mb-2">
+                    Easy Payment Management
+                </h3>
+
+                <p class="text-white-50 mb-4">
+                    Keep track of tenant rent payments, transaction details
+                    and payment status from one place.
+                </p>
+
+
+                <div class="payment-feature">
+
+                    <div class="payment-feature-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+
+                    <div>
+                        <strong class="text-white d-block">
+                            Secure Records
+                        </strong>
+
+                        <small class="text-white-50">
+                            Maintain organized payment information.
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="payment-feature">
+
+                    <div class="payment-feature-icon">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+
+                    <div>
+                        <strong class="text-white d-block">
+                            Payment Tracking
+                        </strong>
+
+                        <small class="text-white-50">
+                            Track Pending and Paid transactions.
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="payment-feature">
+
+                    <div class="payment-feature-icon">
+                        <i class="bi bi-receipt"></i>
+                    </div>
+
+                    <div>
+                        <strong class="text-white d-block">
+                            Transaction Details
+                        </strong>
+
+                        <small class="text-white-50">
+                            Store UPI or Card transaction references.
+                        </small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================== RIGHT FORM ==================== -->
+    <div class="col-lg-8">
+
+        <div class="card border-0 shadow-sm payment-form-card h-100">
+
+            <!-- Card Header -->
+            <div class="payment-form-header">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="payment-header-icon">
+                        <i class="bi bi-wallet2"></i>
+                    </div>
+
+                    <div>
+                        <h5 class="fw-bold mb-1">
+                            Payment Information
+                        </h5>
+
+                        <p class="text-muted mb-0 small">
+                            Enter the payment details below.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body p-4 p-lg-5">
+
+                <form method="POST" id="paymentForm">
+
+                    {% csrf_token %}
+
+
+                    <!-- ==================== TENANT SECTION ==================== -->
+                    <div class="form-section-title">
+
+                        <div class="section-icon">
+                            <i class="bi bi-person"></i>
+                        </div>
+
+                        <div>
+                            <h6 class="fw-bold mb-0">
+                                Tenant Information
+                            </h6>
+
+                            <small class="text-muted">
+                                Select the tenant for this payment.
+                            </small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+                            Tenant
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <div class="input-group custom-input-group">
+
+                            <span class="input-group-text">
+                                <i class="bi bi-person-fill"></i>
+                            </span>
+
+                            <select
+                                name="tenant"
+                                id="tenant"
+                                class="form-select"
+                                required>
+
+                                <option value="">
+                                    Select Tenant
+                                </option>
+
+                                {% for tenant in tenants %}
+
+                                <option value="{{ tenant.id }}">
+                                    {{ tenant.full_name }}
+                                </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+                        <div class="form-text">
+                            Choose the tenant whose payment is being recorded.
+                        </div>
+
+                    </div>
+
+
+                    <!-- ==================== PAYMENT DETAILS ==================== -->
+                    <div class="form-section-title mt-4">
+
+                        <div class="section-icon">
+                            <i class="bi bi-cash-stack"></i>
+                        </div>
+
+                        <div>
+                            <h6 class="fw-bold mb-0">
+                                Payment Details
+                            </h6>
+
+                            <small class="text-muted">
+                                Enter amount and payment method.
+                            </small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row g-3">
+
+                        <!-- Amount -->
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Amount
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <div class="input-group custom-input-group">
+
+                                <span class="input-group-text amount-symbol">
+                                    ₹
+                                </span>
+
+                                <input
+                                    type="number"
+                                    name="amount"
+                                    id="amount"
+                                    class="form-control"
+                                    placeholder="Enter amount"
+                                    min="1"
+                                    step="0.01"
+                                    required>
+
+                            </div>
+
+                            <div class="form-text">
+                                Enter the payment amount in Indian Rupees.
+                            </div>
+
+                        </div>
+
+
+                        <!-- Payment Method -->
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Payment Method
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <select
+                                name="payment_method"
+                                id="payment_method"
+                                class="form-select custom-select"
+                                required>
+
+                                <option value="">
+                                    Select Method
+                                </option>
+
+                                <option value="Cash">
+                                    Cash
+                                </option>
+
+                                <option value="UPI">
+                                    UPI
+                                </option>
+
+                                <option value="Card">
+                                    Card
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ==================== PAYMENT METHOD QUICK CARDS ==================== -->
+                    <div class="row g-2 mt-2 mb-4">
+
+                        <div class="col-4">
+
+                            <button
+                                type="button"
+                                class="method-card"
+                                data-method="Cash">
+
+                                <i class="bi bi-cash"></i>
+                                <span>Cash</span>
+
+                            </button>
+
+                        </div>
+
+                        <div class="col-4">
+
+                            <button
+                                type="button"
+                                class="method-card"
+                                data-method="UPI">
+
+                                <i class="bi bi-qr-code"></i>
+                                <span>UPI</span>
+
+                            </button>
+
+                        </div>
+
+                        <div class="col-4">
+
+                            <button
+                                type="button"
+                                class="method-card"
+                                data-method="Card">
+
+                                <i class="bi bi-credit-card"></i>
+                                <span>Card</span>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ==================== STATUS ==================== -->
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Payment Status
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <select
+                                name="status"
+                                id="status"
+                                class="form-select custom-select"
+                                required>
+
+                                <option value="Paid">
+                                    Paid
+                                </option>
+
+                                <option value="Pending">
+                                    Pending
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Transaction ID -->
+                        <div class="col-md-6">
+
+                            <label class="form-label fw-semibold">
+                                Transaction ID
+                                <span class="text-muted fw-normal">
+                                    (Optional)
+                                </span>
+                            </label>
+
+                            <input
+                                type="text"
+                                name="transaction_id"
+                                id="transaction_id"
+                                class="form-control"
+                                placeholder="e.g. UPI123456789">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Transaction Info -->
+                    <div class="transaction-info mt-3 mb-4">
+
+                        <div class="transaction-info-icon">
+                            <i class="bi bi-info-circle"></i>
+                        </div>
+
+                        <div>
+                            <strong>
+                                Transaction ID
+                            </strong>
+
+                            <p class="mb-0 small text-muted">
+                                For UPI or Card payments, enter the transaction
+                                reference number if available.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <!-- ==================== DESCRIPTION ==================== -->
+                    <div class="form-section-title mt-4">
+
+                        <div class="section-icon">
+                            <i class="bi bi-chat-left-text"></i>
+                        </div>
+
+                        <div>
+                            <h6 class="fw-bold mb-0">
+                                Additional Information
+                            </h6>
+
+                            <small class="text-muted">
+                                Add an optional note about this payment.
+                            </small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+                            Description
+                            <span class="text-muted fw-normal">
+                                (Optional)
+                            </span>
+                        </label>
+
+                        <textarea
+                            name="description"
+                            id="description"
+                            class="form-control"
+                            rows="4"
+                            maxlength="500"
+                            placeholder="Enter payment description or note..."></textarea>
+
+                        <div class="d-flex justify-content-end mt-1">
+                            <small class="text-muted">
+                                <span id="descriptionCount">0</span>/500
+                            </small>
+                        </div>
+
+                    </div>
+
+
+                    <!-- ==================== LIVE PAYMENT PREVIEW ==================== -->
+                    <div class="payment-preview">
+
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+
+                            <div>
+                                <span class="small text-muted">
+                                    Payment Preview
+                                </span>
+
+                                <h5 class="fw-bold mb-0 mt-1">
+                                    <span id="previewAmount">₹0.00</span>
+                                </h5>
+                            </div>
+
+                            <span
+                                id="previewStatus"
+                                class="badge rounded-pill bg-success-subtle text-success px-3 py-2">
+
+                                <i class="bi bi-check-circle me-1"></i>
+                                Paid
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="row g-3">
+
+                            <div class="col-sm-4">
+
+                                <small class="text-muted d-block">
+                                    Tenant
+                                </small>
+
+                                <strong id="previewTenant">
+                                    Not selected
+                                </strong>
+
+                            </div>
+
+
+                            <div class="col-sm-4">
+
+                                <small class="text-muted d-block">
+                                    Method
+                                </small>
+
+                                <strong id="previewMethod">
+                                    Not selected
+                                </strong>
+
+                            </div>
+
+
+                            <div class="col-sm-4">
+
+                                <small class="text-muted d-block">
+                                    Status
+                                </small>
+
+                                <strong id="previewStatusText">
+                                    Paid
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ==================== ACTIONS ==================== -->
+                    <div class="d-flex flex-column flex-sm-row gap-2 mt-4 pt-4 border-top">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary btn-lg px-4">
+
+                            <i class="bi bi-check-circle me-1"></i>
+                            Save Payment
+
+                        </button>
+
+
+                        <a
+                            href="{% url 'payment_list' %}"
+                            class="btn btn-light border btn-lg px-4">
+
+                            <i class="bi bi-x-circle me-1"></i>
+                            Cancel
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+<!-- ==================== PAGE CSS ==================== -->
+
+<style>
+
+.payment-add-image-card {
+    position: relative;
+    min-height: 620px;
+    overflow: hidden;
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.16);
+}
+
+.payment-add-image {
+    width: 100%;
+    height: 100%;
+    min-height: 620px;
+    object-fit: cover;
+    display: block;
+}
+
+.payment-add-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(15, 23, 42, 0.18) 0%,
+            rgba(15, 23, 42, 0.52) 45%,
+            rgba(15, 23, 42, 0.94) 100%
+        );
+}
+
+.payment-add-content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 35px;
+}
+
+.payment-icon-box {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    backdrop-filter: blur(10px);
+    color: #fff;
+    font-size: 28px;
+}
+
+.payment-feature {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.payment-feature-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.payment-form-card {
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.payment-form-header {
+    padding: 22px 28px;
+    background: linear-gradient(135deg, #f8fafc, #eef2ff);
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.payment-header-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.22);
+}
+
+.form-section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.section-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    background: #eef2ff;
+    color: #4f46e5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-input-group .input-group-text {
+    background: #f8fafc;
+    border-color: #dbe2ea;
+    color: #4f46e5;
+}
+
+.custom-input-group .form-control,
+.custom-input-group .form-select {
+    border-color: #dbe2ea;
+}
+
+.custom-input-group:focus-within .input-group-text,
+.custom-input-group:focus-within .form-control,
+.custom-input-group:focus-within .form-select {
+    border-color: #4f46e5;
+}
+
+.amount-symbol {
+    font-weight: 700;
+    font-size: 17px;
+}
+
+.form-control,
+.form-select {
+    border-radius: 11px;
+    min-height: 46px;
+}
+
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.10);
+}
+
+.method-card {
+    width: 100%;
+    min-height: 65px;
+    border: 1px solid #e2e8f0;
+    border-radius: 13px;
+    background: #fff;
+    color: #475569;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.method-card i {
+    font-size: 19px;
+}
+
+.method-card span {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.method-card:hover,
+.method-card.active {
+    border-color: #4f46e5;
+    background: #eef2ff;
+    color: #4f46e5;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(79, 70, 229, 0.10);
+}
+
+.transaction-info {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 13px 15px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 13px;
+}
+
+.transaction-info-icon {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e0f2fe;
+    color: #0284c7;
+}
+
+.payment-preview {
+    padding: 20px;
+    border-radius: 17px;
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    border: 1px solid #e2e8f0;
+}
+
+.payment-preview h5 {
+    color: #059669;
+}
+
+@media (max-width: 991.98px) {
+
+    .payment-add-image-card {
+        min-height: 420px;
+    }
+
+    .payment-add-image {
+        min-height: 420px;
+    }
+
+}
+
+@media (max-width: 575.98px) {
+
+    .payment-add-content {
+        padding: 24px;
+    }
+
+    .payment-add-image-card,
+    .payment-add-image {
+        min-height: 430px;
+    }
+
+    .payment-form-header {
+        padding: 18px;
+    }
+
+}
+
+</style>
+
+<!-- ==================== PAGE JAVASCRIPT ==================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const tenantSelect = document.getElementById("tenant");
+    const amountInput = document.getElementById("amount");
+    const methodSelect = document.getElementById("payment_method");
+    const statusSelect = document.getElementById("status");
+    const descriptionInput = document.getElementById("description");
+
+    const previewTenant = document.getElementById("previewTenant");
+    const previewAmount = document.getElementById("previewAmount");
+    const previewMethod = document.getElementById("previewMethod");
+    const previewStatusText = document.getElementById("previewStatusText");
+    const previewStatus = document.getElementById("previewStatus");
+
+    const descriptionCount = document.getElementById("descriptionCount");
+
+    const methodCards = document.querySelectorAll(".method-card");
+
+
+    /* ==================== TENANT PREVIEW ==================== */
+
+    tenantSelect.addEventListener("change", function () {
+
+        if (this.value) {
+
+            const selectedText =
+                this.options[this.selectedIndex].text.trim();
+
+            previewTenant.textContent = selectedText;
+
+        } else {
+
+            previewTenant.textContent = "Not selected";
+
+        }
+
+    });
+
+
+    /* ==================== AMOUNT PREVIEW ==================== */
+
+    amountInput.addEventListener("input", function () {
+
+        const amount = parseFloat(this.value);
+
+        if (!isNaN(amount) && amount > 0) {
+
+            previewAmount.textContent =
+                "₹" + amount.toFixed(2);
+
+        } else {
+
+            previewAmount.textContent = "₹0.00";
+
+        }
+
+    });
+
+
+    /* ==================== PAYMENT METHOD ==================== */
+
+    methodSelect.addEventListener("change", function () {
+
+        previewMethod.textContent =
+            this.value || "Not selected";
+
+        methodCards.forEach(function (card) {
+
+            card.classList.remove("active");
+
+            if (card.dataset.method === methodSelect.value) {
+                card.classList.add("active");
+            }
+
+        });
+
+    });
+
+
+    /* ==================== QUICK METHOD BUTTONS ==================== */
+
+    methodCards.forEach(function (card) {
+
+        card.addEventListener("click", function () {
+
+            const method = this.dataset.method;
+
+            methodSelect.value = method;
+
+            methodSelect.dispatchEvent(new Event("change"));
+
+        });
+
+    });
+
+
+    /* ==================== STATUS PREVIEW ==================== */
+
+    statusSelect.addEventListener("change", function () {
+
+        const status = this.value;
+
+        previewStatusText.textContent = status;
+
+        if (status === "Pending") {
+
+            previewStatus.className =
+                "badge rounded-pill bg-warning-subtle text-warning-emphasis px-3 py-2";
+
+            previewStatus.innerHTML =
+                '<i class="bi bi-clock me-1"></i> Pending';
+
+        } else {
+
+            previewStatus.className =
+                "badge rounded-pill bg-success-subtle text-success px-3 py-2";
+
+            previewStatus.innerHTML =
+                '<i class="bi bi-check-circle me-1"></i> Paid';
+
+        }
+
+    });
+
+
+    /* ==================== DESCRIPTION COUNTER ==================== */
+
+    descriptionInput.addEventListener("input", function () {
+
+        descriptionCount.textContent = this.value.length;
+
+    });
+
+
+    /* ==================== FORM VALIDATION ==================== */
+
+    document.getElementById("paymentForm").addEventListener("submit", function (event) {
+
+        const amount = parseFloat(amountInput.value);
+
+        if (isNaN(amount) || amount <= 0) {
+
+            event.preventDefault();
+
+            amountInput.focus();
+
+            alert("Please enter a valid payment amount.");
+
+            return;
+
+        }
+
+        if (!tenantSelect.value) {
+
+            event.preventDefault();
+
+            tenantSelect.focus();
+
+            alert("Please select a tenant.");
+
+            return;
+
+        }
+
+        if (!methodSelect.value) {
+
+            event.preventDefault();
+
+            methodSelect.focus();
+
+            alert("Please select a payment method.");
+
+            return;
+
+        }
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,623 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Add Notice | PG Management
+{% endblock %}
+
+{% block content %}
+
+<div class="page-container">
+
+```
+<!-- Page Header -->
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+
+    <div>
+
+        <div class="d-flex align-items-center gap-2 mb-2">
+
+            <span class="badge rounded-pill bg-primary-subtle text-primary px-3 py-2">
+                <i class="bi bi-megaphone-fill me-1"></i>
+                Notice Management
+            </span>
+
+        </div>
+
+        <h2 class="fw-bold mb-1">
+            Create New Notice
+        </h2>
+
+        <p class="text-muted mb-0">
+            Create an important announcement for your PG tenants.
+        </p>
+
+    </div>
+
+
+    <a href="{% url 'notice_list' %}"
+       class="btn btn-outline-secondary px-4">
+
+        <i class="bi bi-arrow-left me-1"></i>
+        Back to Notices
+
+    </a>
+
+</div>
+
+
+<div class="row g-4">
+
+    <!-- Left Information Panel -->
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow-sm overflow-hidden h-100">
+
+            <!-- Image -->
+            <div class="position-relative">
+
+                <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1000&q=85"
+                     class="w-100"
+                     style="height:270px; object-fit:cover;"
+                     alt="PG Notice Management">
+
+                <div class="position-absolute top-0 start-0 w-100 h-100"
+                     style="background:linear-gradient(180deg, rgba(15,23,42,0.05), rgba(15,23,42,0.82));">
+                </div>
+
+
+                <div class="position-absolute bottom-0 start-0 p-4 text-white">
+
+                    <span class="badge bg-primary mb-2">
+
+                        <i class="bi bi-bell-fill me-1"></i>
+                        Announcement Center
+
+                    </span>
+
+                    <h4 class="fw-bold mb-1">
+                        Keep Tenants Informed
+                    </h4>
+
+                    <p class="small mb-0 opacity-75">
+                        Publish important information quickly and clearly.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Information -->
+            <div class="card-body p-4">
+
+                <h6 class="fw-bold mb-4">
+
+                    <i class="bi bi-info-circle text-primary me-2"></i>
+                    Notice Guidelines
+
+                </h6>
+
+
+                <!-- Item 1 -->
+                <div class="d-flex gap-3 mb-4">
+
+                    <div class="flex-shrink-0">
+
+                        <span class="d-flex align-items-center justify-content-center rounded-circle bg-primary-subtle text-primary"
+                              style="width:42px;height:42px;">
+
+                            <i class="bi bi-card-heading"></i>
+
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <strong class="d-block mb-1">
+                            Clear Title
+                        </strong>
+
+                        <small class="text-muted">
+                            Use a short and meaningful title for your notice.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Item 2 -->
+                <div class="d-flex gap-3 mb-4">
+
+                    <div class="flex-shrink-0">
+
+                        <span class="d-flex align-items-center justify-content-center rounded-circle bg-warning-subtle text-warning"
+                              style="width:42px;height:42px;">
+
+                            <i class="bi bi-chat-left-text"></i>
+
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <strong class="d-block mb-1">
+                            Detailed Message
+                        </strong>
+
+                        <small class="text-muted">
+                            Explain the announcement with useful information.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Item 3 -->
+                <div class="d-flex gap-3">
+
+                    <div class="flex-shrink-0">
+
+                        <span class="d-flex align-items-center justify-content-center rounded-circle bg-success-subtle text-success"
+                              style="width:42px;height:42px;">
+
+                            <i class="bi bi-eye"></i>
+
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <strong class="d-block mb-1">
+                            Visibility
+                        </strong>
+
+                        <small class="text-muted">
+                            Active notices can be shown to tenants.
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Form Section -->
+    <div class="col-lg-8">
+
+        <div class="card border-0 shadow-sm">
+
+            <!-- Form Header -->
+            <div class="card-header bg-white border-0 p-4">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="d-flex align-items-center justify-content-center rounded-3 bg-primary-subtle text-primary"
+                         style="width:52px;height:52px;">
+
+                        <i class="bi bi-megaphone-fill fs-4"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h5 class="fw-bold mb-1">
+                            Notice Details
+                        </h5>
+
+                        <p class="text-muted small mb-0">
+                            Enter the announcement information below.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body p-4 pt-2">
+
+                <form method="POST"
+                      id="noticeForm">
+
+                    {% csrf_token %}
+
+
+                    <!-- Notice Title -->
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+
+                            <i class="bi bi-card-heading text-primary me-1"></i>
+                            Notice Title
+
+                            <span class="text-danger">*</span>
+
+                        </label>
+
+                        <input type="text"
+                               name="title"
+                               id="title"
+                               class="form-control form-control-lg"
+                               placeholder="Example: Water Supply Maintenance"
+                               maxlength="200"
+                               required>
+
+                        <div class="d-flex justify-content-between mt-1">
+
+                            <div class="form-text">
+                                Enter a short and clear notice title.
+                            </div>
+
+                            <small class="text-muted">
+                                <span id="titleCount">0</span>/200
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Notice Message -->
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+
+                            <i class="bi bi-chat-left-text text-primary me-1"></i>
+                            Notice Message
+
+                            <span class="text-danger">*</span>
+
+                        </label>
+
+                        <textarea name="message"
+                                  id="message"
+                                  class="form-control"
+                                  rows="7"
+                                  maxlength="1500"
+                                  placeholder="Enter the notice details..."
+                                  required></textarea>
+
+                        <div class="d-flex justify-content-between mt-1">
+
+                            <div class="form-text">
+                                Provide complete information for tenants.
+                            </div>
+
+                            <small class="text-muted">
+                                <span id="messageCount">0</span>/1500
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Active Notice -->
+                    <div class="mb-4">
+
+                        <div class="rounded-4 border bg-light p-4">
+
+                            <div class="d-flex align-items-center justify-content-between gap-3">
+
+                                <div class="d-flex align-items-center gap-3">
+
+                                    <div class="d-flex align-items-center justify-content-center rounded-circle bg-success-subtle text-success"
+                                         style="width:48px;height:48px;">
+
+                                        <i class="bi bi-eye-fill fs-5"></i>
+
+                                    </div>
+
+                                    <div>
+
+                                        <h6 class="fw-bold mb-1">
+                                            Show this notice to tenants
+                                        </h6>
+
+                                        <small class="text-muted">
+                                            Active notices are visible to tenants.
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="form-check form-switch mb-0">
+
+                                    <input type="checkbox"
+                                           name="is_active"
+                                           class="form-check-input"
+                                           id="is_active"
+                                           checked
+                                           style="width:48px;height:24px;cursor:pointer;">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Live Preview -->
+                    <div class="mb-4">
+
+                        <div class="rounded-4 border bg-light p-4">
+
+                            <div class="d-flex align-items-center gap-2 mb-3">
+
+                                <i class="bi bi-eye text-primary"></i>
+
+                                <h6 class="fw-bold mb-0">
+                                    Notice Preview
+                                </h6>
+
+                            </div>
+
+
+                            <div class="card border-0 shadow-sm overflow-hidden">
+
+                                <div class="p-3 bg-success text-white"
+                                     id="previewHeader">
+
+                                    <div class="d-flex justify-content-between align-items-center">
+
+                                        <div class="d-flex align-items-center gap-2">
+
+                                            <i class="bi bi-megaphone-fill"></i>
+
+                                            <strong>
+                                                New Notice
+                                            </strong>
+
+                                        </div>
+
+                                        <span class="badge bg-white text-success"
+                                              id="previewStatus">
+
+                                            Active
+
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="p-4">
+
+                                    <h5 class="fw-bold mb-2"
+                                        id="previewTitle">
+
+                                        Your notice title will appear here
+
+                                    </h5>
+
+                                    <p class="text-muted mb-0"
+                                       id="previewMessage">
+
+                                        Your notice message will appear here.
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Buttons -->
+                    <div class="d-flex flex-wrap justify-content-between gap-2 pt-3 border-top">
+
+                        <a href="{% url 'notice_list' %}"
+                           class="btn btn-outline-secondary px-4">
+
+                            <i class="bi bi-x-circle me-1"></i>
+                            Cancel
+
+                        </a>
+
+
+                        <button type="submit"
+                                class="btn btn-primary px-4">
+
+                            <i class="bi bi-send-fill me-1"></i>
+                            Publish Notice
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+#is_active:checked {
+    background-color: #198754;
+    border-color: #198754;
+}
+
+</style>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const title = document.getElementById("title");
+    const message = document.getElementById("message");
+    const active = document.getElementById("is_active");
+
+    const titleCount = document.getElementById("titleCount");
+    const messageCount = document.getElementById("messageCount");
+
+    const previewTitle =
+        document.getElementById("previewTitle");
+
+    const previewMessage =
+        document.getElementById("previewMessage");
+
+    const previewStatus =
+        document.getElementById("previewStatus");
+
+    const previewHeader =
+        document.getElementById("previewHeader");
+
+
+    /* Title Preview */
+
+    function updateTitle() {
+
+        const value = title.value.trim();
+
+        previewTitle.textContent =
+            value || "Your notice title will appear here";
+
+        titleCount.textContent =
+            title.value.length;
+
+    }
+
+
+    /* Message Preview */
+
+    function updateMessage() {
+
+        const value = message.value.trim();
+
+        previewMessage.textContent =
+            value || "Your notice message will appear here.";
+
+        messageCount.textContent =
+            message.value.length;
+
+    }
+
+
+    /* Active / Inactive Preview */
+
+    function updateStatus() {
+
+        if (active.checked) {
+
+            previewHeader.classList.remove("bg-secondary");
+            previewHeader.classList.add("bg-success");
+
+            previewStatus.textContent =
+                "Active";
+
+            previewStatus.className =
+                "badge bg-white text-success";
+
+        } else {
+
+            previewHeader.classList.remove("bg-success");
+            previewHeader.classList.add("bg-secondary");
+
+            previewStatus.textContent =
+                "Inactive";
+
+            previewStatus.className =
+                "badge bg-white text-secondary";
+
+        }
+
+    }
+
+
+    /* Events */
+
+    title.addEventListener(
+        "input",
+        updateTitle
+    );
+
+    message.addEventListener(
+        "input",
+        updateMessage
+    );
+
+    active.addEventListener(
+        "change",
+        updateStatus
+    );
+
+
+    /* Initial State */
+
+    updateTitle();
+    updateMessage();
+    updateStatus();
+
+
+    /* Form Validation */
+
+    document.getElementById("noticeForm")
+        .addEventListener("submit", function (event) {
+
+            if (!title.value.trim()) {
+
+                event.preventDefault();
+
+                title.focus();
+
+                alert("Please enter notice title.");
+
+                return;
+
+            }
+
+
+            if (!message.value.trim()) {
+
+                event.preventDefault();
+
+                message.focus();
+
+                alert("Please enter notice message.");
+
+                return;
+
+            }
+
+        });
+
+});
+
+</script>
+
+{% endblock %}

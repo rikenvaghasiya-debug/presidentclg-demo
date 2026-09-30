@@ -1,0 +1,531 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Edit Room | PG Management System
+{% endblock %}
+
+{% block content %}
+
+<div class="page-container py-4 py-lg-5">
+
+    <div class="row g-0 justify-content-center">
+
+        <!-- LEFT IMAGE PANEL -->
+        <div class="col-lg-5 d-none d-lg-block">
+
+            <div class="h-100 position-relative overflow-hidden"
+                 style="min-height: 720px; border-radius: 24px 0 0 24px;">
+
+                <img
+                    src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=1200&q=85"
+                    alt="PG Room"
+                    class="w-100 h-100"
+                    style="object-fit: cover;"
+                >
+
+                <!-- Image Overlay -->
+                <div class="position-absolute top-0 start-0 w-100 h-100"
+                     style="background: linear-gradient(180deg, rgba(15,23,42,.15), rgba(15,23,42,.88));">
+                </div>
+
+                <!-- Image Content -->
+                <div class="position-absolute bottom-0 start-0 end-0 p-4 p-xl-5 text-white">
+
+                    <span class="badge rounded-pill bg-white text-primary px-3 py-2 mb-3">
+                        <i class="bi bi-pencil-square me-1"></i>
+                        Room Management
+                    </span>
+
+                    <h2 class="fw-bold mb-3">
+                        Update Your PG Room
+                    </h2>
+
+                    <p class="mb-4 opacity-75">
+                        Keep your room information accurate and
+                        manage beds, room type and availability easily.
+                    </p>
+
+                    <div class="d-flex flex-wrap gap-2">
+
+                        <span class="badge bg-white bg-opacity-10 border border-light border-opacity-25 px-3 py-2">
+                            <i class="bi bi-building me-1"></i>
+                            PG
+                        </span>
+
+                        <span class="badge bg-white bg-opacity-10 border border-light border-opacity-25 px-3 py-2">
+                            <i class="bi bi-door-open me-1"></i>
+                            Room
+                        </span>
+
+                        <span class="badge bg-white bg-opacity-10 border border-light border-opacity-25 px-3 py-2">
+                            <i class="bi bi-house-check me-1"></i>
+                            Beds
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT FORM PANEL -->
+        <div class="col-lg-7">
+
+            <div class="card border-0 shadow-lg h-100"
+                 style="border-radius: 0 24px 24px 0; overflow: hidden;">
+
+                <!-- Header -->
+                <div class="card-header border-0 text-white p-4 p-lg-5"
+                     style="background: linear-gradient(135deg, #4f46e5, #7c3aed);">
+
+                    <div class="d-flex align-items-center gap-3">
+
+                        <div class="d-flex align-items-center justify-content-center rounded-3 bg-white bg-opacity-10"
+                             style="width: 55px; height: 55px;">
+
+                            <i class="bi bi-pencil-square fs-3"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h3 class="fw-bold mb-1">
+                                Edit Room
+                            </h3>
+
+                            <p class="mb-0 opacity-75">
+                                Update room information
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Form Body -->
+                <div class="card-body p-4 p-lg-5">
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+
+                        <!-- PROPERTY INFORMATION -->
+                        <div class="mb-4">
+
+                            <div class="d-flex align-items-center gap-2 mb-3">
+
+                                <div class="text-primary">
+                                    <i class="bi bi-building fs-5"></i>
+                                </div>
+
+                                <div>
+                                    <h5 class="fw-bold mb-0">
+                                        Property Information
+                                    </h5>
+
+                                    <small class="text-muted">
+                                        Select the PG for this room
+                                    </small>
+                                </div>
+
+                            </div>
+
+
+                            <label class="form-label fw-semibold">
+                                Select PG
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <select
+                                name="pg"
+                                class="form-select form-select-lg"
+                                required>
+
+                                {% for pg in pgs %}
+
+                                <option
+                                    value="{{ pg.id }}"
+                                    {% if pg.id == room.pg.id %}
+                                        selected
+                                    {% endif %}>
+
+                                    {{ pg.name }} - {{ pg.city }}
+
+                                </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                            <div class="form-text">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Select the PG where this room is located.
+                            </div>
+
+                        </div>
+
+
+                        <hr class="my-4">
+
+
+                        <!-- ROOM DETAILS -->
+                        <div class="mb-4">
+
+                            <div class="d-flex align-items-center gap-2 mb-3">
+
+                                <div class="text-primary">
+                                    <i class="bi bi-door-open fs-5"></i>
+                                </div>
+
+                                <div>
+                                    <h5 class="fw-bold mb-0">
+                                        Room Details
+                                    </h5>
+
+                                    <small class="text-muted">
+                                        Update basic room information
+                                    </small>
+                                </div>
+
+                            </div>
+
+
+                            <div class="row g-3">
+
+                                <!-- Room Number -->
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+                                        Room Number
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <div class="input-group input-group-lg">
+
+                                        <span class="input-group-text bg-light">
+                                            <i class="bi bi-door-closed text-primary"></i>
+                                        </span>
+
+                                        <input
+                                            type="text"
+                                            name="room_number"
+                                            class="form-control"
+                                            value="{{ room.room_number }}"
+                                            placeholder="e.g. 101"
+                                            required>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Floor -->
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+                                        Floor
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <div class="input-group input-group-lg">
+
+                                        <span class="input-group-text bg-light">
+                                            <i class="bi bi-layers text-primary"></i>
+                                        </span>
+
+                                        <input
+                                            type="number"
+                                            name="floor"
+                                            class="form-control"
+                                            value="{{ room.floor }}"
+                                            min="0"
+                                            placeholder="e.g. 1"
+                                            required>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Room Type -->
+                                <div class="col-12">
+
+                                    <label class="form-label fw-semibold">
+                                        Room Type
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <select
+                                        name="room_type"
+                                        class="form-select form-select-lg"
+                                        required>
+
+                                        <option
+                                            value="Single"
+                                            {% if room.room_type == "Single" %}
+                                                selected
+                                            {% endif %}>
+                                            Single
+                                        </option>
+
+                                        <option
+                                            value="Double"
+                                            {% if room.room_type == "Double" %}
+                                                selected
+                                            {% endif %}>
+                                            Double
+                                        </option>
+
+                                        <option
+                                            value="Triple"
+                                            {% if room.room_type == "Triple" %}
+                                                selected
+                                            {% endif %}>
+                                            Triple
+                                        </option>
+
+                                        <option
+                                            value="Shared"
+                                            {% if room.room_type == "Shared" %}
+                                                selected
+                                            {% endif %}>
+                                            Shared
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <hr class="my-4">
+
+
+                        <!-- BED INFORMATION -->
+                        <div class="mb-4">
+
+                            <div class="d-flex align-items-center gap-2 mb-3">
+
+                                <div class="text-primary">
+                                    <i class="bi bi-bed fs-5"></i>
+                                </div>
+
+                                <div>
+                                    <h5 class="fw-bold mb-0">
+                                        Bed Information
+                                    </h5>
+
+                                    <small class="text-muted">
+                                        Update total and available beds
+                                    </small>
+                                </div>
+
+                            </div>
+
+
+                            <div class="row g-3">
+
+                                <!-- Total Beds -->
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+                                        Total Beds
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <div class="input-group input-group-lg">
+
+                                        <span class="input-group-text bg-light">
+                                            <i class="bi bi-grid-3x3-gap text-primary"></i>
+                                        </span>
+
+                                        <input
+                                            type="number"
+                                            id="totalBeds"
+                                            name="total_beds"
+                                            class="form-control"
+                                            value="{{ room.total_beds }}"
+                                            min="1"
+                                            required>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Available Beds -->
+                                <div class="col-md-6">
+
+                                    <label class="form-label fw-semibold">
+                                        Available Beds
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <div class="input-group input-group-lg">
+
+                                        <span class="input-group-text bg-light">
+                                            <i class="bi bi-check2-circle text-success"></i>
+                                        </span>
+
+                                        <input
+                                            type="number"
+                                            id="availableBeds"
+                                            name="available_beds"
+                                            class="form-control"
+                                            value="{{ room.available_beds }}"
+                                            min="0"
+                                            required>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Bed Availability Info -->
+                            <div class="alert alert-light border mt-3 mb-0">
+
+                                <div class="d-flex gap-2">
+
+                                    <i class="bi bi-info-circle text-primary fs-5"></i>
+
+                                    <div>
+
+                                        <strong>Bed Availability</strong>
+
+                                        <div class="small text-muted">
+                                            Available beds cannot be greater than total beds.
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CURRENT ROOM INFO -->
+                        <div class="rounded-4 p-3 mb-4"
+                             style="background: #f8fafc; border: 1px solid #e2e8f0;">
+
+                            <div class="d-flex align-items-center gap-2 mb-2">
+
+                                <i class="bi bi-clock-history text-primary"></i>
+
+                                <span class="fw-semibold">
+                                    Currently Editing
+                                </span>
+
+                            </div>
+
+                            <div class="small text-muted">
+
+                                Room
+                                <strong class="text-dark">
+                                    {{ room.room_number }}
+                                </strong>
+
+                                in
+                                <strong class="text-dark">
+                                    {{ room.pg.name }}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- BUTTONS -->
+                        <div class="d-flex flex-column flex-sm-row gap-2 pt-2">
+
+                            <a
+                                href="{% url 'room_list' %}"
+                                class="btn btn-light border btn-lg px-4">
+
+                                <i class="bi bi-arrow-left me-1"></i>
+                                Cancel
+
+                            </a>
+
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-lg px-4 flex-grow-1">
+
+                                <i class="bi bi-check-circle me-1"></i>
+                                Update Room
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- BED VALIDATION -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const totalBeds = document.getElementById("totalBeds");
+    const availableBeds = document.getElementById("availableBeds");
+
+    function validateBeds() {
+
+        const total = parseInt(totalBeds.value) || 0;
+        const available = parseInt(availableBeds.value) || 0;
+
+        availableBeds.max = total;
+
+        if (available > total) {
+
+            availableBeds.setCustomValidity(
+                "Available beds cannot be greater than total beds."
+            );
+
+            availableBeds.classList.add("is-invalid");
+
+        } else {
+
+            availableBeds.setCustomValidity("");
+
+            availableBeds.classList.remove("is-invalid");
+
+        }
+
+    }
+
+    totalBeds.addEventListener("input", validateBeds);
+    availableBeds.addEventListener("input", validateBeds);
+
+    validateBeds();
+
+});
+
+</script>
+
+{% endblock %}
+```

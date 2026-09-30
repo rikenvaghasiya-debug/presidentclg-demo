@@ -1,0 +1,920 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Payment Management | PG Management System
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-4 py-lg-5">
+
+```
+<!-- Header -->
+<div class="page-container mb-4">
+
+    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+
+        <div>
+
+            <div class="d-flex align-items-center gap-2 mb-2">
+
+                <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill">
+                    <i class="bi bi-wallet2 me-1"></i>
+                    Finance Management
+                </span>
+
+            </div>
+
+            <h1 class="fw-bold mb-1">
+                Payment Management
+            </h1>
+
+            <p class="text-muted mb-0">
+                Track tenant rent payments, transactions and payment status.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'payment_add' %}"
+            class="btn btn-primary px-4">
+
+            <i class="bi bi-plus-circle-fill me-2"></i>
+            Add Payment
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- Summary Cards -->
+<div class="row g-3 mb-4">
+
+    <!-- Total Payments -->
+    <div class="col-sm-6 col-xl-3">
+
+        <div class="payment-stat-card">
+
+            <div class="payment-stat-icon bg-primary-subtle text-primary">
+                <i class="bi bi-credit-card-2-front-fill"></i>
+            </div>
+
+            <div>
+
+                <span class="payment-stat-label">
+                    Total Payments
+                </span>
+
+                <h3 class="payment-stat-value mb-0" id="totalPaymentCount">
+                    {% if payments %}
+                        {{ payments|length }}
+                    {% else %}
+                        0
+                    {% endif %}
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Paid -->
+    <div class="col-sm-6 col-xl-3">
+
+        <div class="payment-stat-card">
+
+            <div class="payment-stat-icon bg-success-subtle text-success">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+
+            <div>
+
+                <span class="payment-stat-label">
+                    Paid
+                </span>
+
+                <h3 class="payment-stat-value mb-0" id="paidCount">
+                    0
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Pending -->
+    <div class="col-sm-6 col-xl-3">
+
+        <div class="payment-stat-card">
+
+            <div class="payment-stat-icon bg-warning-subtle text-warning">
+                <i class="bi bi-clock-history"></i>
+            </div>
+
+            <div>
+
+                <span class="payment-stat-label">
+                    Pending
+                </span>
+
+                <h3 class="payment-stat-value mb-0" id="pendingCount">
+                    0
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Total Amount -->
+    <div class="col-sm-6 col-xl-3">
+
+        <div class="payment-stat-card">
+
+            <div class="payment-stat-icon bg-info-subtle text-info">
+                <i class="bi bi-currency-rupee"></i>
+            </div>
+
+            <div>
+
+                <span class="payment-stat-label">
+                    Total Amount
+                </span>
+
+                <h3 class="payment-stat-value mb-0" id="totalAmount">
+                    ₹0
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Search & Filter -->
+<div class="card border-0 shadow-sm mb-4 payment-filter-card">
+
+    <div class="card-body p-3">
+
+        <div class="row g-3 align-items-center">
+
+            <div class="col-lg-7">
+
+                <div class="input-group">
+
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="bi bi-search text-muted"></i>
+                    </span>
+
+                    <input
+                        type="text"
+                        id="paymentSearch"
+                        class="form-control border-start-0"
+                        placeholder="Search tenant, payment method or transaction ID...">
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-3">
+
+                <select
+                    id="statusFilter"
+                    class="form-select">
+
+                    <option value="all">
+                        All Payment Status
+                    </option>
+
+                    <option value="paid">
+                        Paid
+                    </option>
+
+                    <option value="pending">
+                        Pending
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="col-lg-2">
+
+                <button
+                    type="button"
+                    class="btn btn-light border w-100"
+                    id="resetFilters">
+
+                    <i class="bi bi-arrow-counterclockwise me-1"></i>
+                    Reset
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Payments -->
+{% if payments %}
+
+    <div class="row g-4" id="paymentContainer">
+
+        {% for payment in payments %}
+
+        <div
+            class="col-md-6 col-xl-4 payment-item"
+            data-name="{{ payment.tenant.full_name|lower }}"
+            data-method="{{ payment.payment_method|lower }}"
+            data-transaction="{{ payment.transaction_id|default:''|lower }}"
+            data-status="{{ payment.status|lower }}"
+            data-amount="{{ payment.amount }}">
+
+            <div class="payment-card h-100">
+
+                <!-- Card Top -->
+                <div class="payment-card-top">
+
+                    <div class="d-flex align-items-center gap-3">
+
+                        <div class="tenant-avatar">
+
+                            {{ payment.tenant.full_name|first|upper }}
+
+                        </div>
+
+                        <div class="overflow-hidden">
+
+                            <h5 class="fw-bold mb-1 text-truncate">
+                                {{ payment.tenant.full_name }}
+                            </h5>
+
+                            <small class="text-muted">
+                                Tenant Payment
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    {% if payment.status == "Paid" %}
+
+                        <span class="status-badge status-paid">
+                            <i class="bi bi-check-circle-fill me-1"></i>
+                            Paid
+                        </span>
+
+                    {% else %}
+
+                        <span class="status-badge status-pending">
+                            <i class="bi bi-clock-fill me-1"></i>
+                            Pending
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Amount -->
+                <div class="payment-amount-section">
+
+                    <small class="text-muted d-block mb-1">
+                        Payment Amount
+                    </small>
+
+                    <h2 class="payment-amount mb-0">
+                        ₹{{ payment.amount }}
+                    </h2>
+
+                </div>
+
+
+                <!-- Details -->
+                <div class="payment-details">
+
+                    <!-- Date -->
+                    <div class="payment-detail-row">
+
+                        <div class="payment-detail-icon bg-primary-subtle text-primary">
+                            <i class="bi bi-calendar3"></i>
+                        </div>
+
+                        <div>
+
+                            <small class="text-muted d-block">
+                                Payment Date
+                            </small>
+
+                            <span class="fw-semibold">
+                                {{ payment.payment_date }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Method -->
+                    <div class="payment-detail-row">
+
+                        <div class="payment-detail-icon bg-info-subtle text-info">
+                            <i class="bi bi-wallet2"></i>
+                        </div>
+
+                        <div>
+
+                            <small class="text-muted d-block">
+                                Payment Method
+                            </small>
+
+                            <span class="fw-semibold">
+                                {{ payment.payment_method }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Transaction -->
+                    {% if payment.transaction_id %}
+
+                    <div class="payment-detail-row">
+
+                        <div class="payment-detail-icon bg-success-subtle text-success">
+                            <i class="bi bi-receipt"></i>
+                        </div>
+
+                        <div class="overflow-hidden">
+
+                            <small class="text-muted d-block">
+                                Transaction ID
+                            </small>
+
+                            <span
+                                class="fw-semibold text-truncate d-block"
+                                title="{{ payment.transaction_id }}">
+
+                                {{ payment.transaction_id }}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- Description -->
+                    {% if payment.description %}
+
+                    <div class="payment-description">
+
+                        <i class="bi bi-chat-left-text me-2"></i>
+
+                        {{ payment.description }}
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Actions -->
+                <div class="payment-actions">
+
+                    <a
+                        href="{% url 'payment_edit' payment.id %}"
+                        class="btn btn-sm btn-outline-primary">
+
+                        <i class="bi bi-pencil me-1"></i>
+                        Edit
+
+                    </a>
+
+
+                    <a
+                        href="{% url 'payment_delete' payment.id %}"
+                        class="btn btn-sm btn-outline-danger">
+
+                        <i class="bi bi-trash me-1"></i>
+                        Delete
+
+                    </a>
+
+
+                    {% if payment.status == "Pending" %}
+
+                    <form
+                        method="POST"
+                        action="{% url 'payment_mark_paid' payment.id %}"
+                        class="d-inline flex-grow-1">
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="btn btn-sm btn-success w-100">
+
+                            <i class="bi bi-check-circle-fill me-1"></i>
+                            Mark as Paid
+
+                        </button>
+
+                    </form>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- No Search Result -->
+    <div
+        id="noSearchResult"
+        class="card border-0 shadow-sm d-none">
+
+        <div class="card-body text-center py-5">
+
+            <div class="empty-icon">
+                <i class="bi bi-search"></i>
+            </div>
+
+            <h4 class="fw-bold mt-3">
+                No Payments Found
+            </h4>
+
+            <p class="text-muted mb-3">
+                No payment matches your current search or filter.
+            </p>
+
+            <button
+                type="button"
+                class="btn btn-outline-primary"
+                id="clearSearch">
+
+                Clear Filters
+
+            </button>
+
+        </div>
+
+    </div>
+
+{% else %}
+
+    <!-- Empty State -->
+    <div class="card border-0 shadow-sm empty-payment-card">
+
+        <div class="card-body text-center py-5">
+
+            <div class="empty-icon mx-auto">
+
+                <i class="bi bi-credit-card-2-front"></i>
+
+            </div>
+
+            <h4 class="fw-bold mt-4">
+                No Payments Found
+            </h4>
+
+            <p class="text-muted mb-4">
+                No payment records are available yet.
+                Add the first payment to start tracking rent.
+            </p>
+
+            <a
+                href="{% url 'payment_add' %}"
+                class="btn btn-primary px-4">
+
+                <i class="bi bi-plus-circle-fill me-2"></i>
+                Add First Payment
+
+            </a>
+
+        </div>
+
+    </div>
+
+{% endif %}
+```
+
+</div>
+
+<style>
+
+    .payment-stat-card {
+        background: #ffffff;
+        border: 1px solid #e8edf5;
+        border-radius: 18px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        height: 100%;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+        transition: all 0.25s ease;
+    }
+
+    .payment-stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.09);
+    }
+
+    .payment-stat-icon {
+        width: 52px;
+        height: 52px;
+        min-width: 52px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+
+    .payment-stat-label {
+        display: block;
+        color: #64748b;
+        font-size: 13px;
+        margin-bottom: 3px;
+    }
+
+    .payment-stat-value {
+        font-size: 24px;
+        color: #0f172a;
+    }
+
+    .payment-filter-card {
+        border-radius: 16px;
+    }
+
+    .payment-filter-card .form-control,
+    .payment-filter-card .form-select,
+    .payment-filter-card .input-group-text {
+        min-height: 44px;
+        border-color: #e2e8f0;
+    }
+
+    .payment-card {
+        background: #ffffff;
+        border: 1px solid #e7ecf3;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 7px 22px rgba(15, 23, 42, 0.06);
+        transition: all 0.25s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .payment-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 16px 35px rgba(15, 23, 42, 0.11);
+    }
+
+    .payment-card-top {
+        padding: 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        border-bottom: 1px solid #eef2f7;
+    }
+
+    .tenant-avatar {
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 18px;
+        box-shadow: 0 7px 16px rgba(79, 70, 229, 0.18);
+    }
+
+    .status-badge {
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .status-paid {
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #b45309;
+    }
+
+    .payment-amount-section {
+        padding: 20px 18px 16px;
+        background: linear-gradient(
+            135deg,
+            rgba(16, 185, 129, 0.05),
+            rgba(79, 70, 229, 0.04)
+        );
+    }
+
+    .payment-amount {
+        color: #059669;
+        font-size: 30px;
+        letter-spacing: -0.5px;
+    }
+
+    .payment-details {
+        padding: 16px 18px;
+        flex-grow: 1;
+    }
+
+    .payment-detail-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .payment-detail-row:last-child {
+        border-bottom: none;
+    }
+
+    .payment-detail-icon {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .payment-description {
+        margin-top: 12px;
+        padding: 11px 12px;
+        border-radius: 10px;
+        background: #f8fafc;
+        color: #64748b;
+        font-size: 13px;
+    }
+
+    .payment-actions {
+        padding: 14px 18px 18px;
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+        border-top: 1px solid #eef2f7;
+    }
+
+    .payment-actions .btn {
+        border-radius: 9px;
+    }
+
+    .payment-actions form {
+        min-width: 130px;
+    }
+
+    .empty-payment-card {
+        border-radius: 20px;
+    }
+
+    .empty-icon {
+        width: 75px;
+        height: 75px;
+        border-radius: 22px;
+        background: #eef2ff;
+        color: #4f46e5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        margin: 0 auto;
+    }
+
+    @media (max-width: 575.98px) {
+
+        .payment-card-top {
+            align-items: flex-start;
+        }
+
+        .payment-amount {
+            font-size: 26px;
+        }
+
+        .payment-actions {
+            flex-direction: column;
+        }
+
+        .payment-actions .btn,
+        .payment-actions form {
+            width: 100%;
+            min-width: 100%;
+        }
+
+    }
+
+</style>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const searchInput = document.getElementById("paymentSearch");
+        const statusFilter = document.getElementById("statusFilter");
+        const resetButton = document.getElementById("resetFilters");
+        const clearSearch = document.getElementById("clearSearch");
+
+        const paymentItems =
+            document.querySelectorAll(".payment-item");
+
+        const noSearchResult =
+            document.getElementById("noSearchResult");
+
+        const paidCount =
+            document.getElementById("paidCount");
+
+        const pendingCount =
+            document.getElementById("pendingCount");
+
+        const totalAmount =
+            document.getElementById("totalAmount");
+
+
+        function updatePayments() {
+
+            const searchValue =
+                searchInput
+                    ? searchInput.value.toLowerCase().trim()
+                    : "";
+
+            const selectedStatus =
+                statusFilter
+                    ? statusFilter.value
+                    : "all";
+
+
+            let visibleCount = 0;
+            let paid = 0;
+            let pending = 0;
+            let amount = 0;
+
+
+            paymentItems.forEach(function (item) {
+
+                const name =
+                    item.dataset.name || "";
+
+                const method =
+                    item.dataset.method || "";
+
+                const transaction =
+                    item.dataset.transaction || "";
+
+                const status =
+                    item.dataset.status || "";
+
+                const paymentAmount =
+                    parseFloat(item.dataset.amount) || 0;
+
+
+                const matchesSearch =
+                    name.includes(searchValue) ||
+                    method.includes(searchValue) ||
+                    transaction.includes(searchValue);
+
+
+                const matchesStatus =
+                    selectedStatus === "all" ||
+                    status === selectedStatus;
+
+
+                if (matchesSearch && matchesStatus) {
+
+                    item.classList.remove("d-none");
+
+                    visibleCount++;
+
+                    amount += paymentAmount;
+
+                    if (status === "paid") {
+                        paid++;
+                    }
+
+                    if (status === "pending") {
+                        pending++;
+                    }
+
+                } else {
+
+                    item.classList.add("d-none");
+
+                }
+
+            });
+
+
+            if (paidCount) {
+                paidCount.textContent = paid;
+            }
+
+            if (pendingCount) {
+                pendingCount.textContent = pending;
+            }
+
+            if (totalAmount) {
+
+                totalAmount.textContent =
+                    "₹" + amount.toLocaleString("en-IN", {
+                        maximumFractionDigits: 2
+                    });
+
+            }
+
+
+            if (noSearchResult) {
+
+                if (visibleCount === 0) {
+                    noSearchResult.classList.remove("d-none");
+                } else {
+                    noSearchResult.classList.add("d-none");
+                }
+
+            }
+
+        }
+
+
+        function resetFilters() {
+
+            if (searchInput) {
+                searchInput.value = "";
+            }
+
+            if (statusFilter) {
+                statusFilter.value = "all";
+            }
+
+            updatePayments();
+
+        }
+
+
+        if (searchInput) {
+            searchInput.addEventListener("input", updatePayments);
+        }
+
+        if (statusFilter) {
+            statusFilter.addEventListener("change", updatePayments);
+        }
+
+        if (resetButton) {
+            resetButton.addEventListener("click", resetFilters);
+        }
+
+        if (clearSearch) {
+            clearSearch.addEventListener("click", resetFilters);
+        }
+
+
+        updatePayments();
+
+    });
+
+</script>
+
+{% endblock %}

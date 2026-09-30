@@ -1,0 +1,2997 @@
+{% extends "base.html" %}
+
+{% block title %}
+Admin Dashboard | PG Management System
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   ADMIN DASHBOARD
+========================================================= */
+
+.admin-dashboard{
+    background:#f5f7fb;
+    min-height:100vh;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.dashboard-header{
+    background:
+        linear-gradient(
+            135deg,
+            #0f172a 0%,
+            #1e293b 45%,
+            #312e81 100%
+        );
+
+    border-radius:24px;
+
+    padding:30px;
+
+    color:#fff;
+
+    position:relative;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 18px 45px rgba(15,23,42,.15);
+}
+
+
+.dashboard-header::before{
+    content:"";
+
+    position:absolute;
+
+    width:260px;
+    height:260px;
+
+    border-radius:50%;
+
+    background:rgba(99,102,241,.15);
+
+    top:-120px;
+    right:-80px;
+}
+
+
+.dashboard-header::after{
+    content:"";
+
+    position:absolute;
+
+    width:180px;
+    height:180px;
+
+    border-radius:50%;
+
+    background:rgba(124,58,237,.12);
+
+    bottom:-110px;
+    left:35%;
+}
+
+
+.dashboard-header-content{
+    position:relative;
+    z-index:2;
+}
+
+
+.dashboard-kicker{
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    padding:7px 12px;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.10);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    color:#c7d2fe;
+
+    font-size:.72rem;
+
+    font-weight:800;
+
+    letter-spacing:.1em;
+
+    margin-bottom:12px;
+}
+
+
+.dashboard-title{
+    font-size:2rem;
+
+    font-weight:800;
+
+    margin-bottom:8px;
+
+    letter-spacing:-.7px;
+}
+
+
+.dashboard-subtitle{
+    color:#cbd5e1;
+
+    margin:0;
+
+    max-width:600px;
+
+    font-size:.95rem;
+}
+
+
+.dashboard-action{
+    background:#fff;
+
+    color:#4f46e5;
+
+    border:0;
+
+    border-radius:12px;
+
+    padding:12px 18px;
+
+    font-weight:700;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.12);
+}
+
+
+.dashboard-action:hover{
+    background:#eef2ff;
+
+    color:#3730a3;
+}
+
+
+/* =========================================================
+   ATTENDANCE SUMMARY
+========================================================= */
+
+.section-label{
+    font-size:.75rem;
+
+    font-weight:800;
+
+    letter-spacing:.1em;
+
+    color:#64748b;
+
+    text-transform:uppercase;
+}
+
+
+.summary-card{
+    background:#fff;
+
+    border:1px solid #e8edf3;
+
+    border-radius:18px;
+
+    padding:22px;
+
+    height:100%;
+
+    position:relative;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 8px 25px rgba(15,23,42,.05);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+}
+
+
+.summary-card:hover{
+    transform:translateY(-4px);
+
+    box-shadow:
+        0 16px 35px rgba(15,23,42,.09);
+}
+
+
+.summary-icon{
+    width:52px;
+    height:52px;
+
+    border-radius:15px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:1.35rem;
+
+    margin-bottom:16px;
+}
+
+
+.summary-number{
+    font-size:1.85rem;
+
+    font-weight:800;
+
+    color:#0f172a;
+
+    line-height:1.1;
+}
+
+
+.summary-label{
+    color:#64748b;
+
+    font-size:.84rem;
+
+    font-weight:600;
+
+    margin-top:5px;
+}
+
+
+.summary-decoration{
+    position:absolute;
+
+    width:80px;
+    height:80px;
+
+    border-radius:50%;
+
+    right:-35px;
+    bottom:-35px;
+
+    opacity:.45;
+}
+
+
+/* =========================================================
+   ANALYTICS
+========================================================= */
+
+.analytics-section{
+    margin-top:8px;
+}
+
+
+.analytics-heading{
+    margin-bottom:20px;
+}
+
+
+.analytics-kicker{
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    font-size:.72rem;
+
+    font-weight:800;
+
+    letter-spacing:.12em;
+
+    color:#4f46e5;
+
+    margin-bottom:5px;
+}
+
+
+.analytics-title{
+    font-size:1.55rem;
+
+    font-weight:800;
+
+    color:#0f172a;
+
+    margin-bottom:4px;
+}
+
+
+.analytics-description{
+    color:#64748b;
+
+    margin:0;
+
+    font-size:.9rem;
+}
+
+
+.analytics-live{
+    background:#f0fdf4;
+
+    color:#15803d;
+
+    border:1px solid #bbf7d0;
+
+    border-radius:999px;
+
+    padding:8px 14px;
+
+    font-size:.82rem;
+
+    font-weight:700;
+}
+
+
+.live-dot{
+    display:inline-block;
+
+    width:8px;
+    height:8px;
+
+    background:#22c55e;
+
+    border-radius:50%;
+
+    margin-right:6px;
+
+    box-shadow:
+        0 0 0 4px rgba(34,197,94,.12);
+}
+
+
+.analytics-card{
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f8fbff
+        );
+
+    border:1px solid #e7edf5;
+
+    border-radius:20px;
+
+    padding:20px;
+
+    height:100%;
+
+    box-shadow:
+        0 10px 30px rgba(15,23,42,.06);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+}
+
+
+.analytics-card:hover{
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 16px 38px rgba(15,23,42,.10);
+}
+
+
+.analytics-card-head{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    gap:15px;
+}
+
+
+.analytics-card-title{
+    font-size:1rem;
+
+    font-weight:800;
+
+    color:#0f172a;
+
+    margin-bottom:4px;
+}
+
+
+.chart-select{
+    width:125px;
+
+    border-radius:10px;
+
+    font-size:.8rem;
+}
+
+
+.chart-badge{
+    background:#eff6ff;
+
+    color:#2563eb;
+
+    border-radius:999px;
+
+    padding:6px 11px;
+
+    font-size:.75rem;
+
+    font-weight:700;
+}
+
+
+.chart-box{
+    position:relative;
+
+    height:270px;
+
+    margin-top:15px;
+}
+
+
+.chart-box-lg{
+    height:320px;
+}
+
+
+.chart-box canvas{
+    width:100% !important;
+
+    height:100% !important;
+}
+
+
+/* =========================================================
+   MINI ANALYTICS
+========================================================= */
+
+.mini-analytics-card{
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    background:#fff;
+
+    border:1px solid #e8edf3;
+
+    border-radius:16px;
+
+    padding:18px;
+
+    box-shadow:
+        0 7px 22px rgba(15,23,42,.05);
+
+    height:100%;
+
+    transition:all .2s ease;
+}
+
+
+.mini-analytics-card:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 12px 28px rgba(15,23,42,.08);
+}
+
+
+.mini-icon{
+    width:48px;
+    height:48px;
+
+    border-radius:14px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:1.25rem;
+
+    flex-shrink:0;
+}
+
+
+.mini-label{
+    color:#64748b;
+
+    font-size:.75rem;
+
+    font-weight:600;
+}
+
+
+.mini-number{
+    margin:3px 0 0;
+
+    font-weight:800;
+
+    color:#0f172a;
+}
+
+
+/* =========================================================
+   RECORD CARD
+========================================================= */
+
+.dashboard-card{
+    background:#fff;
+
+    border:1px solid #e7edf5;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 8px 28px rgba(15,23,42,.05);
+}
+
+
+.dashboard-card-header{
+    padding:18px 20px;
+
+    border-bottom:1px solid #e8edf3;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+}
+
+
+.dashboard-card-header h5{
+    margin:0;
+
+    font-size:1rem;
+
+    font-weight:800;
+
+    color:#0f172a;
+}
+
+
+.dashboard-card-header p{
+    margin:3px 0 0;
+
+    color:#64748b;
+
+    font-size:.78rem;
+}
+
+
+.dashboard-card-body{
+    padding:0;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.admin-table{
+    margin:0;
+}
+
+
+.admin-table thead th{
+    background:#f8fafc;
+
+    color:#64748b;
+
+    font-size:.72rem;
+
+    font-weight:800;
+
+    text-transform:uppercase;
+
+    letter-spacing:.05em;
+
+    border-bottom:1px solid #e8edf3;
+
+    padding:14px 16px;
+
+    white-space:nowrap;
+}
+
+
+.admin-table tbody td{
+    padding:15px 16px;
+
+    border-bottom:1px solid #f1f5f9;
+
+    color:#334155;
+
+    font-size:.86rem;
+
+    vertical-align:middle;
+}
+
+
+.admin-table tbody tr:last-child td{
+    border-bottom:0;
+}
+
+
+.admin-table tbody tr:hover{
+    background:#f8fafc;
+}
+
+
+.tenant-avatar{
+    width:38px;
+    height:38px;
+
+    border-radius:11px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:#eef2ff;
+
+    color:#4f46e5;
+
+    font-weight:800;
+
+    flex-shrink:0;
+}
+
+
+/* =========================================================
+   ATTENDANCE STATUS
+========================================================= */
+
+.status-badge{
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:5px;
+
+    border-radius:999px;
+
+    padding:6px 10px;
+
+    font-size:.72rem;
+
+    font-weight:700;
+
+    white-space:nowrap;
+}
+
+
+.status-present{
+    background:#ecfdf5;
+
+    color:#047857;
+}
+
+
+.status-absent{
+    background:#fef2f2;
+
+    color:#dc2626;
+}
+
+
+.status-checkin{
+    background:#eff6ff;
+
+    color:#2563eb;
+}
+
+
+.status-checkout{
+    background:#fff7ed;
+
+    color:#c2410c;
+}
+
+
+.status-neutral{
+    background:#f1f5f9;
+
+    color:#64748b;
+}
+
+
+/* =========================================================
+   ABSENT TENANTS
+========================================================= */
+
+.absent-header{
+    background:
+        linear-gradient(
+            135deg,
+            #fff7ed,
+            #fffbeb
+        );
+
+    border-bottom:1px solid #fde68a;
+}
+
+
+.absent-count{
+    background:#0f172a;
+
+    color:#fff;
+
+    border-radius:999px;
+
+    padding:6px 11px;
+
+    font-size:.72rem;
+
+    font-weight:700;
+}
+
+
+.mark-btn{
+    border-radius:9px;
+
+    font-size:.76rem;
+
+    font-weight:700;
+
+    padding:7px 11px;
+}
+
+
+/* =========================================================
+   MANAGEMENT
+========================================================= */
+
+.management-heading{
+    display:flex;
+
+    align-items:end;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    margin-bottom:20px;
+}
+
+
+.management-title{
+    font-size:1.45rem;
+
+    font-weight:800;
+
+    color:#0f172a;
+
+    margin:0;
+}
+
+
+.management-subtitle{
+    color:#64748b;
+
+    font-size:.84rem;
+
+    margin:4px 0 0;
+}
+
+
+.management-card{
+    background:#fff;
+
+    border:1px solid #e7edf5;
+
+    border-radius:18px;
+
+    padding:22px;
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    box-shadow:
+        0 8px 25px rgba(15,23,42,.05);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+}
+
+
+.management-card:hover{
+    transform:translateY(-5px);
+
+    box-shadow:
+        0 18px 38px rgba(15,23,42,.10);
+
+    border-color:#c7d2fe;
+}
+
+
+.management-icon{
+    width:54px;
+    height:54px;
+
+    border-radius:15px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:1.35rem;
+
+    margin-bottom:16px;
+}
+
+
+.management-card h5{
+    font-weight:800;
+
+    color:#0f172a;
+
+    margin-bottom:7px;
+}
+
+
+.management-card p{
+    color:#64748b;
+
+    font-size:.82rem;
+
+    line-height:1.6;
+
+    margin-bottom:18px;
+}
+
+
+.management-card .btn{
+    margin-top:auto;
+
+    border-radius:10px;
+
+    font-size:.78rem;
+
+    font-weight:700;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.dashboard-empty{
+    text-align:center;
+
+    padding:55px 20px;
+}
+
+
+.dashboard-empty-icon{
+    width:72px;
+    height:72px;
+
+    border-radius:20px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:#f1f5f9;
+
+    color:#94a3b8;
+
+    font-size:2rem;
+
+    margin:0 auto 15px;
+}
+
+
+.dashboard-empty h5{
+    font-weight:800;
+
+    color:#334155;
+}
+
+
+.dashboard-empty p{
+    color:#64748b;
+
+    font-size:.86rem;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.dashboard-footer{
+    color:#94a3b8;
+
+    font-size:.78rem;
+
+    padding:10px 0 5px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:991.98px){
+
+    .dashboard-header{
+        padding:25px;
+    }
+
+    .dashboard-title{
+        font-size:1.7rem;
+    }
+
+}
+
+
+@media(max-width:575.98px){
+
+    .dashboard-header{
+        border-radius:18px;
+
+        padding:22px;
+    }
+
+    .dashboard-title{
+        font-size:1.45rem;
+    }
+
+    .dashboard-action{
+        width:100%;
+
+        margin-top:15px;
+    }
+
+    .analytics-card{
+        padding:15px;
+
+        border-radius:16px;
+    }
+
+    .analytics-card-head{
+        flex-direction:column;
+    }
+
+    .chart-select{
+        width:100%;
+    }
+
+    .chart-box,
+    .chart-box-lg{
+        height:250px;
+    }
+
+    .management-heading{
+        display:block;
+    }
+
+}
+
+</style>
+
+
+<div class="admin-dashboard">
+
+<div class="container-fluid py-4">
+
+
+<!-- =========================================================
+     DASHBOARD HEADER
+========================================================= -->
+
+<div class="dashboard-header mb-4">
+
+    <div class="dashboard-header-content">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-8">
+
+                <span class="dashboard-kicker">
+
+                    <i class="bi bi-stars"></i>
+
+                    ADMIN CONTROL CENTER
+
+                </span>
+
+
+                <h1 class="dashboard-title">
+
+                    Admin Dashboard
+
+                </h1>
+
+
+                <p class="dashboard-subtitle">
+
+                    Manage your PG, rooms, beds, tenants,
+                    payments, complaints and attendance
+                    from one centralized dashboard.
+
+                </p>
+
+            </div>
+
+
+            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+
+                <a
+                    href="{% url 'attendance_add' %}"
+                    class="btn dashboard-action"
+                >
+
+                    <i class="bi bi-calendar-plus me-2"></i>
+
+                    Add Attendance
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     TODAY ATTENDANCE
+========================================================= -->
+
+<div class="d-flex justify-content-between align-items-end mb-3">
+
+    <div>
+
+        <div class="section-label">
+            Today's Overview
+        </div>
+
+        <h4 class="fw-bold mb-0 mt-1">
+            Attendance Summary
+        </h4>
+
+    </div>
+
+
+    <span
+        class="badge rounded-pill bg-primary-subtle text-primary px-3 py-2"
+    >
+
+        <i class="bi bi-people-fill me-1"></i>
+
+        {{ total_tenants }} Active Tenants
+
+    </span>
+
+</div>
+
+
+<div class="row g-4 mb-5">
+
+
+    <!-- TOTAL TENANTS -->
+
+    <div class="col-sm-6 col-xl-3">
+
+        <div class="summary-card">
+
+            <div
+                class="summary-icon"
+                style="
+                    background:#eef2ff;
+                    color:#4f46e5;
+                "
+            >
+
+                <i class="bi bi-people-fill"></i>
+
+            </div>
+
+
+            <div class="summary-number">
+                {{ total_tenants }}
+            </div>
+
+
+            <div class="summary-label">
+                Total Active Tenants
+            </div>
+
+
+            <div
+                class="summary-decoration"
+                style="background:#c7d2fe;"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PRESENT -->
+
+    <div class="col-sm-6 col-xl-3">
+
+        <div class="summary-card">
+
+            <div
+                class="summary-icon"
+                style="
+                    background:#ecfdf5;
+                    color:#059669;
+                "
+            >
+
+                <i class="bi bi-person-check-fill"></i>
+
+            </div>
+
+
+            <div class="summary-number">
+                {{ present_today }}
+            </div>
+
+
+            <div class="summary-label">
+                Present Today
+            </div>
+
+
+            <div
+                class="summary-decoration"
+                style="background:#a7f3d0;"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CHECKED IN -->
+
+    <div class="col-sm-6 col-xl-3">
+
+        <div class="summary-card">
+
+            <div
+                class="summary-icon"
+                style="
+                    background:#eff6ff;
+                    color:#2563eb;
+                "
+            >
+
+                <i class="bi bi-box-arrow-in-right"></i>
+
+            </div>
+
+
+            <div class="summary-number">
+                {{ checked_in_today }}
+            </div>
+
+
+            <div class="summary-label">
+                Checked In
+            </div>
+
+
+            <div
+                class="summary-decoration"
+                style="background:#bfdbfe;"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CHECKED OUT -->
+
+    <div class="col-sm-6 col-xl-3">
+
+        <div class="summary-card">
+
+            <div
+                class="summary-icon"
+                style="
+                    background:#fff7ed;
+                    color:#ea580c;
+                "
+            >
+
+                <i class="bi bi-box-arrow-right"></i>
+
+            </div>
+
+
+            <div class="summary-number">
+                {{ checked_out_today }}
+            </div>
+
+
+            <div class="summary-label">
+                Checked Out
+            </div>
+
+
+            <div
+                class="summary-decoration"
+                style="background:#fed7aa;"
+            ></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     ANALYTICS
+========================================================= -->
+
+<section class="analytics-section mb-5">
+
+
+    <div
+        class="analytics-heading d-flex flex-wrap
+               justify-content-between align-items-center
+               gap-3"
+    >
+
+        <div>
+
+            <span class="analytics-kicker">
+
+                <i class="bi bi-bar-chart-fill"></i>
+
+                LIVE ANALYTICS
+
+            </span>
+
+
+            <h3 class="analytics-title">
+                Dashboard Insights
+            </h3>
+
+
+            <p class="analytics-description">
+                Interactive attendance analytics for today's operations.
+            </p>
+
+        </div>
+
+
+        <div class="analytics-live">
+
+            <span class="live-dot"></span>
+
+            Live Dashboard
+
+        </div>
+
+    </div>
+
+
+    <div class="row g-4">
+
+
+        <!-- =================================================
+             ATTENDANCE CHART
+        ================================================= -->
+
+        <div class="col-xl-7">
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-head">
+
+                    <div>
+
+                        <div class="analytics-card-title">
+
+                            <i
+                                class="bi bi-pie-chart-fill me-2"
+                                style="color:#4f46e5;"
+                            ></i>
+
+                            Attendance Overview
+
+                        </div>
+
+
+                        <small class="text-muted">
+
+                            Present and attendance not marked
+
+                        </small>
+
+                    </div>
+
+
+                    <select
+                        id="adminAttendanceType"
+                        class="form-select form-select-sm chart-select"
+                    >
+
+                        <option value="doughnut">
+                            Doughnut
+                        </option>
+
+                        <option value="pie">
+                            Pie
+                        </option>
+
+                        <option value="polarArea">
+                            Polar Area
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="chart-box chart-box-lg">
+
+                    <canvas
+                        id="adminAttendanceChart"
+                    ></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ACTIVITY CHART
+        ================================================= -->
+
+        <div class="col-xl-5">
+
+            <div class="analytics-card">
+
+                <div class="analytics-card-head">
+
+                    <div>
+
+                        <div class="analytics-card-title">
+
+                            <i
+                                class="bi bi-bar-chart-fill me-2"
+                                style="color:#2563eb;"
+                            ></i>
+
+                            Attendance Activity
+
+                        </div>
+
+
+                        <small class="text-muted">
+
+                            Check-in and check-out comparison
+
+                        </small>
+
+                    </div>
+
+
+                    <span class="chart-badge">
+                        Today
+                    </span>
+
+                </div>
+
+
+                <div class="chart-box">
+
+                    <canvas
+                        id="adminActivityChart"
+                    ></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             MINI CARD 1
+        ================================================= -->
+
+        <div class="col-md-4">
+
+            <div class="mini-analytics-card">
+
+                <div
+                    class="mini-icon bg-primary-subtle text-primary"
+                >
+
+                    <i class="bi bi-people-fill"></i>
+
+                </div>
+
+
+                <div>
+
+                    <div class="mini-label">
+                        Total Active Tenants
+                    </div>
+
+                    <h3 class="mini-number">
+                        {{ total_tenants }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             MINI CARD 2
+        ================================================= -->
+
+        <div class="col-md-4">
+
+            <div class="mini-analytics-card">
+
+                <div
+                    class="mini-icon bg-success-subtle text-success"
+                >
+
+                    <i class="bi bi-person-check-fill"></i>
+
+                </div>
+
+
+                <div>
+
+                    <div class="mini-label">
+                        Present Today
+                    </div>
+
+                    <h3 class="mini-number">
+                        {{ present_today }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             MINI CARD 3
+        ================================================= -->
+
+        <div class="col-md-4">
+
+            <div class="mini-analytics-card">
+
+                <div
+                    class="mini-icon bg-danger-subtle text-danger"
+                >
+
+                    <i class="bi bi-person-x-fill"></i>
+
+                </div>
+
+
+                <div>
+
+                    <div class="mini-label">
+                        Not Marked
+                    </div>
+
+                    <h3 class="mini-number">
+                        {{ absent_count }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     TODAY ATTENDANCE RECORDS
+========================================================= -->
+
+<div class="dashboard-card mb-5">
+
+
+    <div class="dashboard-card-header">
+
+        <div>
+
+            <h5>
+
+                <i
+                    class="bi bi-calendar-check me-2"
+                    style="color:#059669;"
+                ></i>
+
+                Today's Attendance Records
+
+            </h5>
+
+
+            <p>
+                Latest attendance activity of active tenants
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'attendance_add' %}"
+            class="btn btn-sm btn-primary"
+            style="border-radius:9px;font-weight:700;"
+        >
+
+            <i class="bi bi-plus-circle me-1"></i>
+
+            Add Attendance
+
+        </a>
+
+    </div>
+
+
+    <div class="dashboard-card-body">
+
+        {% if attendance_records %}
+
+        <div class="table-responsive">
+
+            <table class="table admin-table align-middle">
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Tenant</th>
+
+                        <th>Date</th>
+
+                        <th>Check-In</th>
+
+                        <th>Check-Out</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for attendance in attendance_records %}
+
+                    <tr>
+
+                        <td>
+                            <span
+                                class="text-muted fw-semibold"
+                            >
+                                {{ forloop.counter }}
+                            </span>
+                        </td>
+
+
+                        <td>
+
+                            <div
+                                class="d-flex align-items-center gap-2"
+                            >
+
+                                <div class="tenant-avatar">
+
+                                    {{ attendance.tenant.full_name|first|upper }}
+
+                                </div>
+
+
+                                <div>
+
+                                    <strong
+                                        style="color:#0f172a;"
+                                    >
+                                        {{ attendance.tenant.full_name }}
+                                    </strong>
+
+
+                                    <div
+                                        class="small text-muted"
+                                    >
+                                        {{ attendance.tenant.email }}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            {{ attendance.date|date:"d M Y" }}
+
+                        </td>
+
+
+                        <td>
+
+                            {% if attendance.check_in %}
+
+                            <span
+                                class="status-badge status-checkin"
+                            >
+
+                                <i class="bi bi-box-arrow-in-right"></i>
+
+                                {{ attendance.check_in|date:"h:i A" }}
+
+                            </span>
+
+                            {% else %}
+
+                            <span
+                                class="status-badge status-neutral"
+                            >
+                                Not Checked In
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            {% if attendance.check_out %}
+
+                            <span
+                                class="status-badge status-checkout"
+                            >
+
+                                <i class="bi bi-box-arrow-right"></i>
+
+                                {{ attendance.check_out|date:"h:i A" }}
+
+                            </span>
+
+                            {% else %}
+
+                            <span
+                                class="status-badge status-neutral"
+                            >
+                                Not Checked Out
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            {% if attendance.status == "Present" %}
+
+                            <span
+                                class="status-badge status-present"
+                            >
+
+                                <i class="bi bi-check-circle-fill"></i>
+
+                                Present
+
+                            </span>
+
+                            {% else %}
+
+                            <span
+                                class="status-badge status-absent"
+                            >
+
+                                <i class="bi bi-x-circle-fill"></i>
+
+                                Absent
+
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+        <div class="dashboard-empty">
+
+            <div class="dashboard-empty-icon">
+
+                <i class="bi bi-calendar-x"></i>
+
+            </div>
+
+
+            <h5>
+                No Attendance Records Today
+            </h5>
+
+
+            <p>
+                No attendance has been marked yet.
+            </p>
+
+
+            <a
+                href="{% url 'attendance_add' %}"
+                class="btn btn-primary"
+            >
+
+                <i class="bi bi-plus-circle me-1"></i>
+
+                Add Attendance
+
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     ATTENDANCE NOT MARKED
+========================================================= -->
+
+<div class="dashboard-card mb-5">
+
+
+    <div class="dashboard-card-header absent-header">
+
+        <div>
+
+            <h5>
+
+                <i
+                    class="bi bi-person-x me-2"
+                    style="color:#ea580c;"
+                ></i>
+
+                Attendance Not Marked Today
+
+            </h5>
+
+
+            <p>
+                Tenants whose attendance is still pending
+            </p>
+
+        </div>
+
+
+        <span class="absent-count">
+
+            {{ absent_count }} Tenants
+
+        </span>
+
+    </div>
+
+
+    <div class="dashboard-card-body">
+
+        {% if absent_tenants %}
+
+        <div class="table-responsive">
+
+            <table class="table admin-table align-middle">
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Tenant Name</th>
+
+                        <th>Email</th>
+
+                        <th>Phone</th>
+
+                        <th>Attendance</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for tenant in absent_tenants %}
+
+                    <tr>
+
+                        <td>
+                            {{ forloop.counter }}
+                        </td>
+
+
+                        <td>
+
+                            <div
+                                class="d-flex align-items-center gap-2"
+                            >
+
+                                <div class="tenant-avatar">
+
+                                    {{ tenant.full_name|first|upper }}
+
+                                </div>
+
+
+                                <strong>
+                                    {{ tenant.full_name }}
+                                </strong>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+                            {{ tenant.email }}
+                        </td>
+
+
+                        <td>
+                            {{ tenant.phone }}
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="status-badge status-absent"
+                            >
+
+                                <i class="bi bi-x-circle-fill"></i>
+
+                                Not Marked
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <a
+                                href="{% url 'attendance_add' %}"
+                                class="btn btn-sm btn-primary mark-btn"
+                            >
+
+                                <i class="bi bi-plus-circle me-1"></i>
+
+                                Mark Attendance
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+        <div class="dashboard-empty">
+
+            <div
+                class="dashboard-empty-icon"
+                style="
+                    background:#ecfdf5;
+                    color:#10b981;
+                "
+            >
+
+                <i class="bi bi-check-circle-fill"></i>
+
+            </div>
+
+
+            <h5>
+                All Tenants Marked Attendance
+            </h5>
+
+
+            <p class="mb-0">
+                Every active tenant has marked attendance today.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MANAGEMENT
+========================================================= -->
+
+<div class="management-heading">
+
+    <div>
+
+        <div class="section-label">
+            Administration
+        </div>
+
+        <h3 class="management-title mt-1">
+            Management
+        </h3>
+
+        <p class="management-subtitle">
+            Quickly access and manage all PG modules.
+        </p>
+
+    </div>
+
+</div>
+
+
+<div class="row g-4 mb-5">
+
+
+    <!-- PG -->
+
+    <div class="col-sm-6 col-lg-3">
+
+        <div class="management-card">
+
+            <div
+                class="management-icon"
+                style="
+                    background:#eef2ff;
+                    color:#4f46e5;
+                "
+            >
+
+                <i class="bi bi-building"></i>
+
+            </div>
+
+
+            <h5>
+                PG Management
+            </h5>
+
+
+            <p>
+                Manage PG properties, details,
+                contact information and locations.
+            </p>
+
+
+            <a
+                href="{% url 'pg_list' %}"
+                class="btn btn-primary"
+            >
+
+                Manage PG
+
+                <i class="bi bi-arrow-right ms-1"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ROOM -->
+
+    <div class="col-sm-6 col-lg-3">
+
+        <div class="management-card">
+
+            <div
+                class="management-icon"
+                style="
+                    background:#ecfdf5;
+                    color:#059669;
+                "
+            >
+
+                <i class="bi bi-door-open"></i>
+
+            </div>
+
+
+            <h5>
+                Room Management
+            </h5>
+
+
+            <p>
+                Manage rooms, floors,
+                room types and capacity.
+            </p>
+
+
+            <a
+                href="{% url 'room_list' %}"
+                class="btn btn-success"
+            >
+
+                Manage Rooms
+
+                <i class="bi bi-arrow-right ms-1"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- BED -->
+
+    <div class="col-sm-6 col-lg-3">
+
+        <div class="management-card">
+
+            <div
+                class="management-icon"
+                style="
+                    background:#ecfeff;
+                    color:#0891b2;
+                "
+            >
+
+                <i class="bi bi-layout-three-columns"></i>
+
+            </div>
+
+
+            <h5>
+                Bed Management
+            </h5>
+
+
+            <p>
+                Manage beds and monitor
+                available or occupied status.
+            </p>
+
+
+            <a
+                href="{% url 'bed_list' %}"
+                class="btn btn-info text-white"
+            >
+
+                Manage Beds
+
+                <i class="bi bi-arrow-right ms-1"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- TENANT -->
+
+    <div class="col-sm-6 col-lg-3">
+
+        <div class="management-card">
+
+            <div
+                class="management-icon"
+                style="
+                    background:#fff7ed;
+                    color:#ea580c;
+                "
+            >
+
+                <i class="bi bi-people"></i>
+
+            </div>
+
+
+            <h5>
+                Tenant Management
+            </h5>
+
+
+            <p>
+                Manage tenant profiles,
+                contact details and allocation.
+            </p>
+
+
+            <a
+                href="{% url 'tenant_list' %}"
+                class="btn btn-warning"
+            >
+
+                Manage Tenants
+
+                <i class="bi bi-arrow-right ms-1"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- PAYMENT -->
+
+    <div class="col-sm-6 col-lg-3">
+
+        <div class="management-card">
+
+            <div
+                class="management-icon"
+                style="
+                    background:#ecfdf5;
+                    color:#059669;
+                "
+            >
+
+                <i class="bi bi-cash-stack"></i>
+
+            </div>
+
+
+            <h5>
+                Payment Management
+            </h5>
+
+
+            <p>
+                Track tenant rent and
+                payment records.
+            </p>
+
+
+            <a
+                href="{% url 'payment_list' %}"
+                class="btn btn-success"
+            >
+
+                Manage Payments
+
+                <i class="bi bi-arrow-right ms-1"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- COMPLAINT -->
+
+    <div class="col-sm-6 col-lg-3">
+
+        <div class="management-card">
+
+            <div
+                class="management-icon"
+                style="
+                    background:#fef2f2;
+                    color:#dc2626;
+                "
+            >
+
+                <i class="bi bi-exclamation-circle"></i>
+
+            </div>
+
+
+            <h5>
+                Complaint Management
+            </h5>
+
+
+            <p>
+                Review, manage and
+                respond to tenant complaints.
+            </p>
+
+
+            <a
+                href="{% url 'complaint_list' %}"
+                class="btn btn-danger"
+            >
+
+                Manage Complaints
+
+                <i class="bi bi-arrow-right ms-1"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- NOTICE -->
+
+    <div class="col-sm-6 col-lg-3">
+
+        <div class="management-card">
+
+            <div
+                class="management-icon"
+                style="
+                    background:#f1f5f9;
+                    color:#475569;
+                "
+            >
+
+                <i class="bi bi-megaphone"></i>
+
+            </div>
+
+
+            <h5>
+                Notice Management
+            </h5>
+
+
+            <p>
+                Create and manage important
+                PG announcements and notices.
+            </p>
+
+
+            <a
+                href="{% url 'notice_list' %}"
+                class="btn btn-secondary"
+            >
+
+                Manage Notices
+
+                <i class="bi bi-arrow-right ms-1"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ATTENDANCE -->
+
+    <div class="col-sm-6 col-lg-3">
+
+        <div class="management-card">
+
+            <div
+                class="management-icon"
+                style="
+                    background:#eff6ff;
+                    color:#2563eb;
+                "
+            >
+
+                <i class="bi bi-calendar-check"></i>
+
+            </div>
+
+
+            <h5>
+                Attendance Management
+            </h5>
+
+
+            <p>
+                Add attendance and
+                manage tenant attendance records.
+            </p>
+
+
+            <div class="d-grid gap-2 mt-auto">
+
+
+                <a
+                    href="{% url 'attendance_add' %}"
+                    class="btn btn-primary"
+                >
+
+                    <i class="bi bi-plus-circle me-1"></i>
+
+                    Add Attendance
+
+                </a>
+
+
+                <a
+                    href="/admin/pg_app/attendance/"
+                    class="btn btn-outline-primary"
+                >
+
+                    <i class="bi bi-gear me-1"></i>
+
+                    Manage Attendance
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<div class="dashboard-footer text-center">
+
+    <i class="bi bi-building me-1"></i>
+
+    PG Management System
+
+    <span class="mx-1">
+        •
+    </span>
+
+    Admin Control Center
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<!-- =========================================================
+     CHART.JS
+     IMPORTANT:
+     Keep Chart.js outside the title block.
+========================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+
+<script>
+
+(function(){
+
+    "use strict";
+
+
+    function getNumber(value){
+
+        const number = Number(value);
+
+        return Number.isFinite(number)
+            ? number
+            : 0;
+
+    }
+
+
+    function initAdminCharts(){
+
+        if(typeof Chart === "undefined"){
+
+            console.error(
+                "Chart.js could not be loaded."
+            );
+
+            return;
+
+        }
+
+
+        const attendanceCanvas =
+            document.getElementById(
+                "adminAttendanceChart"
+            );
+
+
+        const activityCanvas =
+            document.getElementById(
+                "adminActivityChart"
+            );
+
+
+        if(
+            !attendanceCanvas ||
+            !activityCanvas
+        ){
+
+            console.error(
+                "Admin chart canvas not found."
+            );
+
+            return;
+
+        }
+
+
+        const total =
+            getNumber(
+                "{{ total_tenants|default:0 }}"
+            );
+
+
+        const present =
+            getNumber(
+                "{{ present_today|default:0 }}"
+            );
+
+
+        const checkedIn =
+            getNumber(
+                "{{ checked_in_today|default:0 }}"
+            );
+
+
+        const checkedOut =
+            getNumber(
+                "{{ checked_out_today|default:0 }}"
+            );
+
+
+        const absent =
+            getNumber(
+                "{{ absent_count|default:0 }}"
+            );
+
+
+        /* =====================================================
+           CENTER TEXT PLUGIN
+        ===================================================== */
+
+        const centerTextPlugin = {
+
+            id:"adminCenterText",
+
+
+            afterDraw(chart){
+
+                if(
+                    chart.config.type !==
+                    "doughnut"
+                ){
+
+                    return;
+
+                }
+
+
+                const {
+                    ctx,
+                    chartArea
+                } = chart;
+
+
+                if(!chartArea){
+
+                    return;
+
+                }
+
+
+                const centerX =
+                    (
+                        chartArea.left +
+                        chartArea.right
+                    ) / 2;
+
+
+                const centerY =
+                    (
+                        chartArea.top +
+                        chartArea.bottom
+                    ) / 2;
+
+
+                const percentage =
+                    total > 0
+                        ? Math.round(
+                            (
+                                present /
+                                total
+                            ) * 100
+                        )
+                        : 0;
+
+
+                ctx.save();
+
+
+                ctx.font =
+                    "800 27px system-ui";
+
+
+                ctx.fillStyle =
+                    "#0f172a";
+
+
+                ctx.textAlign =
+                    "center";
+
+
+                ctx.textBaseline =
+                    "middle";
+
+
+                ctx.fillText(
+                    percentage + "%",
+                    centerX,
+                    centerY - 8
+                );
+
+
+                ctx.font =
+                    "600 12px system-ui";
+
+
+                ctx.fillStyle =
+                    "#64748b";
+
+
+                ctx.fillText(
+                    "Attendance",
+                    centerX,
+                    centerY + 18
+                );
+
+
+                ctx.restore();
+
+            }
+
+        };
+
+
+        /* =====================================================
+           ATTENDANCE DATA
+        ===================================================== */
+
+        const attendanceData = {
+
+            labels:[
+                "Present",
+                "Not Marked"
+            ],
+
+
+            datasets:[{
+
+                data:[
+                    present,
+                    absent
+                ],
+
+
+                backgroundColor:[
+                    "#22c55e",
+                    "#ef4444"
+                ],
+
+
+                borderWidth:0,
+
+
+                hoverOffset:12
+
+            }]
+
+        };
+
+
+        /* =====================================================
+           ATTENDANCE CHART
+        ===================================================== */
+
+        let attendanceChart =
+            new Chart(
+
+                attendanceCanvas,
+
+                {
+
+                    type:"doughnut",
+
+
+                    data:attendanceData,
+
+
+                    plugins:[
+                        centerTextPlugin
+                    ],
+
+
+                    options:{
+
+                        responsive:true,
+
+                        maintainAspectRatio:false,
+
+                        cutout:"68%",
+
+
+                        animation:{
+                            duration:800
+                        },
+
+
+                        plugins:{
+
+                            legend:{
+
+                                position:"bottom",
+
+
+                                labels:{
+
+                                    usePointStyle:true,
+
+                                    padding:18
+
+                                }
+
+                            },
+
+
+                            tooltip:{
+
+                                callbacks:{
+
+                                    label:function(ctx){
+
+                                        return " " +
+                                            ctx.label +
+                                            ": " +
+                                            ctx.raw;
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            );
+
+
+        /* =====================================================
+           ACTIVITY CHART
+        ===================================================== */
+
+        new Chart(
+
+            activityCanvas,
+
+            {
+
+                type:"bar",
+
+
+                data:{
+
+                    labels:[
+                        "Check-In",
+                        "Check-Out"
+                    ],
+
+
+                    datasets:[{
+
+                        label:"Tenants",
+
+
+                        data:[
+                            checkedIn,
+                            checkedOut
+                        ],
+
+
+                        backgroundColor:[
+                            "#3b82f6",
+                            "#f59e0b"
+                        ],
+
+
+                        borderRadius:10,
+
+
+                        maxBarThickness:55
+
+                    }]
+
+                },
+
+
+                options:{
+
+                    responsive:true,
+
+                    maintainAspectRatio:false,
+
+
+                    animation:{
+                        duration:800
+                    },
+
+
+                    scales:{
+
+                        y:{
+
+                            beginAtZero:true,
+
+
+                            ticks:{
+                                precision:0
+                            }
+
+                        }
+
+                    },
+
+
+                    plugins:{
+
+                        legend:{
+                            display:false
+                        },
+
+
+                        tooltip:{
+
+                            callbacks:{
+
+                                label:function(ctx){
+
+                                    return " " +
+                                        ctx.raw +
+                                        " tenants";
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+
+        /* =====================================================
+           CHART TYPE SWITCHER
+        ===================================================== */
+
+        const selector =
+            document.getElementById(
+                "adminAttendanceType"
+            );
+
+
+        if(selector){
+
+            selector.addEventListener(
+                "change",
+                function(){
+
+                    attendanceChart.destroy();
+
+
+                    const selectedType =
+                        this.value;
+
+
+                    attendanceChart =
+                        new Chart(
+
+                            attendanceCanvas,
+
+                            {
+
+                                type:selectedType,
+
+
+                                data:attendanceData,
+
+
+                                plugins:
+                                    selectedType ===
+                                    "doughnut"
+                                        ? [
+                                            centerTextPlugin
+                                          ]
+                                        : [],
+
+
+                                options:{
+
+                                    responsive:true,
+
+                                    maintainAspectRatio:false,
+
+
+                                    cutout:
+                                        selectedType ===
+                                        "doughnut"
+                                            ? "68%"
+                                            : undefined,
+
+
+                                    plugins:{
+
+                                        legend:{
+
+                                            position:"bottom",
+
+
+                                            labels:{
+
+                                                usePointStyle:true,
+
+                                                padding:18
+
+                                            }
+
+                                        },
+
+
+                                        tooltip:{
+
+                                            callbacks:{
+
+                                                label:function(ctx){
+
+                                                    return " " +
+                                                        ctx.label +
+                                                        ": " +
+                                                        ctx.raw;
+
+                                                }
+
+                                            }
+
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+
+                        );
+
+                }
+
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       DOM READY
+    ===================================================== */
+
+    if(
+        document.readyState ===
+        "loading"
+    ){
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            initAdminCharts
+        );
+
+    }
+    else{
+
+        initAdminCharts();
+
+    }
+
+
+})();
+
+</script>
+
+{% endblock %}
+```

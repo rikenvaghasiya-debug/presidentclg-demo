@@ -1,0 +1,651 @@
+{% extends 'base.html' %}
+
+{% block title %}
+PG Management | PG Management System
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .pg-page {
+        padding: 35px 0 60px;
+    }
+
+    /* HEADER */
+    .pg-header {
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        border-radius: 24px;
+        padding: 32px;
+        color: white;
+        margin-bottom: 30px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(79, 70, 229, 0.18);
+    }
+
+    .pg-header::after {
+        content: "";
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.08);
+        right: -70px;
+        top: -80px;
+    }
+
+    .pg-header-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .pg-header h1 {
+        font-size: 30px;
+        font-weight: 800;
+        margin-bottom: 6px;
+    }
+
+    .pg-header p {
+        margin-bottom: 0;
+        opacity: 0.88;
+    }
+
+    .add-pg-btn {
+        background: white;
+        color: #4f46e5;
+        border: none;
+        font-weight: 700;
+        border-radius: 12px;
+        padding: 11px 20px;
+        transition: 0.25s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .add-pg-btn:hover {
+        transform: translateY(-2px);
+        color: #3730a3;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    /* SEARCH */
+    .filter-card {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        padding: 18px;
+        margin-bottom: 30px;
+        box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
+    }
+
+    .search-input {
+        height: 48px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        padding-left: 42px;
+    }
+
+    .search-input:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 4px rgba(99,102,241,0.10);
+    }
+
+    .search-wrapper {
+        position: relative;
+    }
+
+    .search-wrapper i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #64748b;
+        z-index: 2;
+    }
+
+    /* PG CARD */
+    .pg-card {
+        border: 1px solid #e2e8f0;
+        border-radius: 22px;
+        overflow: hidden;
+        background: white;
+        height: 100%;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(15,23,42,0.06);
+    }
+
+    .pg-card:hover {
+        transform: translateY(-7px);
+        box-shadow: 0 18px 40px rgba(15,23,42,0.13);
+        border-color: rgba(99,102,241,0.25);
+    }
+
+    .pg-image {
+        height: 210px;
+        width: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .pg-card:hover .pg-image {
+        transform: scale(1.04);
+    }
+
+    .pg-image-wrapper {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .pg-badge {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: rgba(15,23,42,0.78);
+        color: white;
+        padding: 7px 12px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 700;
+        backdrop-filter: blur(8px);
+    }
+
+    .pg-content {
+        padding: 22px;
+    }
+
+    .pg-name {
+        color: #0f172a;
+        font-size: 21px;
+        font-weight: 800;
+        margin-bottom: 7px;
+    }
+
+    .pg-location {
+        color: #64748b;
+        font-size: 14px;
+        margin-bottom: 18px;
+    }
+
+    .pg-info {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 11px;
+        color: #475569;
+        font-size: 14px;
+    }
+
+    .pg-info i {
+        color: #4f46e5;
+        font-size: 17px;
+        margin-top: 1px;
+    }
+
+    .pg-description {
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 12px;
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.6;
+        margin-top: 15px;
+        min-height: 55px;
+    }
+
+    .pg-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 18px;
+    }
+
+    .pg-action {
+        flex: 1;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 13px;
+        padding: 9px 10px;
+    }
+
+    .btn-view {
+        color: #0ea5e9;
+        border-color: #bae6fd;
+        background: #f0f9ff;
+    }
+
+    .btn-view:hover {
+        background: #e0f2fe;
+        color: #0284c7;
+    }
+
+    .btn-edit {
+        color: #4f46e5;
+        border-color: #c7d2fe;
+        background: #eef2ff;
+    }
+
+    .btn-edit:hover {
+        background: #e0e7ff;
+        color: #3730a3;
+    }
+
+    .btn-delete {
+        color: #ef4444;
+        border-color: #fecaca;
+        background: #fef2f2;
+    }
+
+    .btn-delete:hover {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    /* EMPTY STATE */
+    .empty-card {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 24px;
+        padding: 70px 25px;
+        text-align: center;
+        box-shadow: 0 8px 25px rgba(15,23,42,0.05);
+    }
+
+    .empty-icon {
+        width: 90px;
+        height: 90px;
+        margin: 0 auto 20px;
+        border-radius: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eef2ff;
+        color: #4f46e5;
+        font-size: 42px;
+    }
+
+    .empty-card h3 {
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    .empty-card p {
+        color: #64748b;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 767px) {
+
+        .pg-header {
+            padding: 25px 20px;
+        }
+
+        .pg-header h1 {
+            font-size: 25px;
+        }
+
+        .add-pg-btn {
+            margin-top: 18px;
+        }
+
+        .pg-image {
+            height: 190px;
+        }
+
+        .pg-actions {
+            flex-direction: column;
+        }
+    }
+</style>
+
+
+<div class="container pg-page">
+
+    <!-- PAGE HEADER -->
+    <div class="pg-header">
+
+        <div class="pg-header-content">
+
+            <div class="row align-items-center">
+
+                <div class="col-lg-8">
+
+                    <div class="d-flex align-items-center gap-2 mb-2">
+
+                        <i class="bi bi-building fs-4"></i>
+
+                        <span class="fw-semibold">
+                            Property Management
+                        </span>
+
+                    </div>
+
+                    <h1>
+                        PG Management
+                    </h1>
+
+                    <p>
+                        Manage your PG properties, locations and contact details
+                        from one place.
+                    </p>
+
+                </div>
+
+                <div class="col-lg-4 text-lg-end">
+
+                    <a href="{% url 'pg_add' %}"
+                       class="add-pg-btn">
+
+                        <i class="bi bi-plus-circle-fill"></i>
+
+                        Add New PG
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH / FILTER -->
+    <div class="filter-card">
+
+        <div class="row g-3 align-items-center">
+
+            <div class="col-lg-8">
+
+                <div class="search-wrapper">
+
+                    <i class="bi bi-search"></i>
+
+                    <input
+                        type="text"
+                        id="pgSearch"
+                        class="form-control search-input"
+                        placeholder="Search PG by name, city or address..."
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="d-flex align-items-center justify-content-lg-end gap-2">
+
+                    <span class="text-muted small">
+                        <i class="bi bi-buildings me-1"></i>
+                        Total PGs:
+                    </span>
+
+                    <span class="badge rounded-pill text-bg-primary px-3 py-2">
+                        {{ pgs|length }}
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    {% if pgs %}
+
+        <!-- PG CARDS -->
+        <div class="row g-4" id="pgList">
+
+            {% for pg in pgs %}
+
+                <div class="col-md-6 col-xl-4 pg-item"
+                     data-search="
+                     {{ pg.name|lower }}
+                     {{ pg.city|lower }}
+                     {{ pg.address|lower }}
+                     ">
+
+                    <div class="pg-card">
+
+                        <!-- IMAGE -->
+                        <div class="pg-image-wrapper">
+
+                            <img
+                                src="https://images.unsplash.com/photo-1560185008-b033106af5c3?auto=format&fit=crop&w=1000&q=85"
+                                alt="{{ pg.name }}"
+                                class="pg-image"
+                            >
+
+                            <div class="pg-badge">
+
+                                <i class="bi bi-house-fill me-1"></i>
+                                PG Property
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CONTENT -->
+                        <div class="pg-content">
+
+                            <div class="pg-name">
+                                {{ pg.name }}
+                            </div>
+
+                            <div class="pg-location">
+
+                                <i class="bi bi-geo-alt-fill me-1"></i>
+
+                                {{ pg.city }}
+
+                            </div>
+
+
+                            <!-- ADDRESS -->
+                            <div class="pg-info">
+
+                                <i class="bi bi-geo-alt"></i>
+
+                                <span>
+                                    {{ pg.address }}
+                                </span>
+
+                            </div>
+
+
+                            <!-- CONTACT -->
+                            <div class="pg-info">
+
+                                <i class="bi bi-telephone-fill"></i>
+
+                                <span>
+                                    {{ pg.contact_number }}
+                                </span>
+
+                            </div>
+
+
+                            <!-- EMAIL -->
+                            {% if pg.email %}
+
+                                <div class="pg-info">
+
+                                    <i class="bi bi-envelope-fill"></i>
+
+                                    <span class="text-break">
+                                        {{ pg.email }}
+                                    </span>
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <!-- DESCRIPTION -->
+                            {% if pg.description %}
+
+                                <div class="pg-description">
+
+                                    <i class="bi bi-info-circle me-1"></i>
+
+                                    {{ pg.description|truncatechars:100 }}
+
+                                </div>
+
+                            {% else %}
+
+                                <div class="pg-description">
+
+                                    <i class="bi bi-info-circle me-1"></i>
+
+                                    No description available.
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <!-- ACTIONS -->
+                            <div class="pg-actions">
+
+                                <a href="{% url 'pg_edit' pg.id %}"
+                                   class="btn pg-action btn-edit">
+
+                                    <i class="bi bi-pencil-square me-1"></i>
+                                    Edit
+
+                                </a>
+
+                                <a href="{% url 'pg_delete' pg.id %}"
+                                   class="btn pg-action btn-delete">
+
+                                    <i class="bi bi-trash3 me-1"></i>
+                                    Delete
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- NO SEARCH RESULT -->
+        <div id="noSearchResult"
+             class="empty-card mt-4"
+             style="display:none;">
+
+            <div class="empty-icon">
+
+                <i class="bi bi-search"></i>
+
+            </div>
+
+            <h3>
+                No PG Found
+            </h3>
+
+            <p>
+                Try searching with another PG name, city or address.
+            </p>
+
+        </div>
+
+    {% else %}
+
+        <!-- EMPTY STATE -->
+        <div class="empty-card">
+
+            <div class="empty-icon">
+
+                <i class="bi bi-building"></i>
+
+            </div>
+
+            <h3>
+                No PG Added Yet
+            </h3>
+
+            <p>
+                Start managing your properties by adding your first PG.
+            </p>
+
+            <a href="{% url 'pg_add' %}"
+               class="btn btn-primary px-4 py-2 rounded-3 fw-semibold">
+
+                <i class="bi bi-plus-circle-fill me-1"></i>
+
+                Add First PG
+
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const searchInput = document.getElementById("pgSearch");
+    const pgItems = document.querySelectorAll(".pg-item");
+    const noResult = document.getElementById("noSearchResult");
+
+    if (!searchInput) {
+        return;
+    }
+
+    searchInput.addEventListener("input", function () {
+
+        const searchValue = this.value.toLowerCase().trim();
+
+        let visibleCount = 0;
+
+        pgItems.forEach(function (item) {
+
+            const text = item.dataset.search.toLowerCase();
+
+            if (text.includes(searchValue)) {
+
+                item.style.display = "";
+
+                visibleCount++;
+
+            } else {
+
+                item.style.display = "none";
+
+            }
+
+        });
+
+        if (noResult) {
+
+            noResult.style.display =
+                visibleCount === 0 ? "block" : "none";
+
+        }
+
+    });
+
+});
+
+</script>
+
+{% endblock %}
+

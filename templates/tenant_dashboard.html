@@ -1,0 +1,2621 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Tenant Dashboard | PG Management System
+{% endblock %}
+
+{% block content %}
+
+<style>
+/* =========================================================
+   TENANT DASHBOARD
+========================================================= */
+
+.tenant-dashboard {
+    padding: 28px 0 50px;
+}
+
+/* ---------- Welcome Banner ---------- */
+
+.tenant-welcome {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    min-height: 245px;
+    margin-bottom: 28px;
+    background:
+        linear-gradient(90deg, rgba(15,23,42,.94) 0%, rgba(30,41,59,.82) 48%, rgba(30,41,59,.35) 100%),
+        url("https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=1600&q=85")
+        center/cover;
+    box-shadow: 0 18px 45px rgba(15,23,42,.15);
+}
+
+.tenant-welcome::after {
+    content: "";
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: rgba(124,58,237,.18);
+    right: -80px;
+    top: -100px;
+}
+
+.tenant-welcome-content {
+    position: relative;
+    z-index: 2;
+    padding: 38px;
+    color: #fff;
+    max-width: 760px;
+}
+
+.welcome-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,.13);
+    border: 1px solid rgba(255,255,255,.18);
+    padding: 7px 13px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.welcome-kicker i {
+    color: #a78bfa;
+}
+
+.tenant-welcome h1 {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800;
+    margin-bottom: 10px;
+    letter-spacing: -.8px;
+}
+
+.tenant-welcome p {
+    color: rgba(255,255,255,.78);
+    margin-bottom: 22px;
+    font-size: 15px;
+}
+
+.welcome-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.welcome-actions .btn {
+    border-radius: 12px;
+    padding: 10px 17px;
+    font-weight: 600;
+}
+
+.btn-white {
+    background: #fff;
+    color: #4f46e5;
+    border: none;
+}
+
+.btn-white:hover {
+    background: #f8fafc;
+    color: #3730a3;
+}
+
+.btn-glass {
+    background: rgba(255,255,255,.1);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.25);
+}
+
+.btn-glass:hover {
+    background: rgba(255,255,255,.18);
+    color: #fff;
+}
+
+/* ---------- Section ---------- */
+
+.dashboard-section {
+    margin-top: 32px;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 15px;
+    margin-bottom: 16px;
+}
+
+.section-heading h3 {
+    font-size: 21px;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+}
+
+.section-heading p {
+    margin: 4px 0 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+/* ---------- Quick Stats ---------- */
+
+.quick-stat {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 20px;
+    height: 100%;
+    box-shadow: 0 8px 25px rgba(15,23,42,.05);
+    transition: .25s ease;
+}
+
+.quick-stat:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(15,23,42,.09);
+}
+
+.quick-stat-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    font-size: 21px;
+}
+
+.icon-purple {
+    background: #ede9fe;
+    color: #7c3aed;
+}
+
+.icon-green {
+    background: #d1fae5;
+    color: #059669;
+}
+
+.icon-orange {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.icon-blue {
+    background: #e0f2fe;
+    color: #0284c7;
+}
+
+.stat-label {
+    color: #64748b;
+    font-size: 13px;
+    margin-top: 16px;
+}
+
+.stat-value {
+    color: #0f172a;
+    font-size: 24px;
+    font-weight: 800;
+    margin-top: 3px;
+}
+
+/* ---------- Main Cards ---------- */
+
+.dashboard-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    box-shadow: 0 8px 28px rgba(15,23,42,.05);
+    overflow: hidden;
+    height: 100%;
+}
+
+.dashboard-card-header {
+    padding: 19px 21px;
+    border-bottom: 1px solid #eef2f7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.dashboard-card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dashboard-card-title .title-icon {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 11px;
+    background: #eef2ff;
+    color: #4f46e5;
+}
+
+.dashboard-card-title h5 {
+    margin: 0;
+    font-weight: 750;
+    font-size: 16px;
+    color: #0f172a;
+}
+
+.dashboard-card-body {
+    padding: 21px;
+}
+
+/* ---------- Profile ---------- */
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.profile-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg,#4f46e5,#7c3aed);
+    color: white;
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.profile-header h5 {
+    margin: 0;
+    font-weight: 800;
+}
+
+.profile-header small {
+    color: #64748b;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 12px;
+}
+
+.info-item {
+    background: #f8fafc;
+    border-radius: 13px;
+    padding: 12px;
+}
+
+.info-item span {
+    display: block;
+    font-size: 11px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    margin-bottom: 4px;
+}
+
+.info-item strong {
+    font-size: 13px;
+    color: #334155;
+}
+
+/* ---------- Room Card ---------- */
+
+.room-banner {
+    height: 105px;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 18px;
+}
+
+.room-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.room-banner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg,rgba(15,23,42,.7),transparent);
+}
+
+.room-banner-content {
+    position: absolute;
+    z-index: 2;
+    left: 17px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+}
+
+.room-banner-content small {
+    opacity: .75;
+}
+
+.room-banner-content h4 {
+    margin: 2px 0 0;
+    font-weight: 800;
+}
+
+.room-details {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 12px;
+}
+
+.room-detail {
+    padding: 13px;
+    background: #f8fafc;
+    border-radius: 13px;
+}
+
+.room-detail i {
+    color: #4f46e5;
+    margin-right: 5px;
+}
+
+.room-detail small {
+    display: block;
+    color: #64748b;
+    font-size: 11px;
+}
+
+.room-detail strong {
+    font-size: 14px;
+}
+
+/* ---------- Attendance ---------- */
+
+.attendance-status {
+    padding: 18px;
+    border-radius: 16px;
+    background: linear-gradient(135deg,#eef2ff,#f8fafc);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 17px;
+}
+
+.attendance-left {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.attendance-icon {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: #4f46e5;
+    color: white;
+    font-size: 20px;
+}
+
+.attendance-status h5 {
+    margin: 0;
+    font-weight: 800;
+}
+
+.attendance-status small {
+    color: #64748b;
+}
+
+.status-present {
+    color: #059669;
+    background: #d1fae5;
+    padding: 7px 11px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.status-absent {
+    color: #dc2626;
+    background: #fee2e2;
+    padding: 7px 11px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.attendance-times {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.time-box {
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 14px;
+}
+
+.time-box small {
+    display: block;
+    color: #64748b;
+    margin-bottom: 5px;
+}
+
+.time-box strong {
+    font-size: 14px;
+}
+
+/* ---------- Analytics ---------- */
+
+.analytics-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.analytics-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #059669;
+    background: #ecfdf5;
+    padding: 7px 10px;
+    border-radius: 30px;
+}
+
+.live-dot {
+    width: 7px;
+    height: 7px;
+    background: #10b981;
+    border-radius: 50%;
+}
+
+.chart-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 18px;
+    height: 100%;
+    box-shadow: 0 8px 25px rgba(15,23,42,.04);
+}
+
+.chart-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.chart-card-head h6 {
+    margin: 0;
+    font-weight: 800;
+}
+
+.chart-card-head small {
+    color: #64748b;
+}
+
+.chart-select {
+    border: 1px solid #e2e8f0;
+    border-radius: 9px;
+    padding: 6px 9px;
+    font-size: 12px;
+    outline: none;
+}
+
+.chart-box {
+    height: 245px;
+    position: relative;
+}
+
+.chart-box-sm {
+    height: 245px;
+}
+
+/* ---------- Analytics Insights ---------- */
+
+.insight-grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.insight-item {
+    background: #f8fafc;
+    border: 1px solid #eef2f7;
+    border-radius: 14px;
+    padding: 14px;
+}
+
+.insight-item small {
+    color: #64748b;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.insight-item strong {
+    font-size: 20px;
+    font-weight: 800;
+}
+
+/* ---------- Rent / Security ---------- */
+
+.finance-card {
+    padding: 22px;
+    border-radius: 20px;
+    color: white;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.finance-card::after {
+    content: "";
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    right: -50px;
+    top: -50px;
+    background: rgba(255,255,255,.12);
+}
+
+.rent-card {
+    background: linear-gradient(135deg,#4f46e5,#7c3aed);
+}
+
+.deposit-card {
+    background: linear-gradient(135deg,#0f766e,#0ea5e9);
+}
+
+.finance-label {
+    opacity: .78;
+    font-size: 13px;
+}
+
+.finance-amount {
+    font-size: 29px;
+    font-weight: 800;
+    margin: 7px 0 17px;
+}
+
+.finance-card .btn {
+    position: relative;
+    z-index: 2;
+}
+
+/* ---------- Tables ---------- */
+
+.table-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 28px rgba(15,23,42,.04);
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+}
+
+.table tbody td {
+    padding: 15px 18px;
+    vertical-align: middle;
+    font-size: 13px;
+    border-color: #f1f5f9;
+}
+
+.amount {
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.badge-soft {
+    padding: 6px 10px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.badge-paid {
+    background: #d1fae5;
+    color: #047857;
+}
+
+.badge-pending {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.badge-high {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.badge-medium {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.badge-low {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.badge-resolved {
+    background: #d1fae5;
+    color: #047857;
+}
+
+.badge-progress {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.badge-open {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+/* ---------- Complaint Cards ---------- */
+
+.complaint-item {
+    padding: 17px;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    margin-bottom: 12px;
+    background: #fff;
+}
+
+.complaint-item:last-child {
+    margin-bottom: 0;
+}
+
+.complaint-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.complaint-top h6 {
+    font-weight: 800;
+    margin: 0 0 5px;
+}
+
+.complaint-description {
+    color: #64748b;
+    font-size: 13px;
+    margin: 10px 0;
+}
+
+.complaint-meta {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+/* ---------- Notice ---------- */
+
+.notice-item {
+    display: flex;
+    gap: 14px;
+    padding: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    margin-bottom: 12px;
+    background: #fff;
+}
+
+.notice-item:last-child {
+    margin-bottom: 0;
+}
+
+.notice-icon {
+    flex: 0 0 43px;
+    height: 43px;
+    display: grid;
+    place-items: center;
+    border-radius: 13px;
+    background: #ede9fe;
+    color: #7c3aed;
+}
+
+.notice-item h6 {
+    margin: 0 0 5px;
+    font-weight: 800;
+}
+
+.notice-item p {
+    color: #64748b;
+    font-size: 13px;
+    margin: 0 0 5px;
+}
+
+.notice-item small {
+    color: #94a3b8;
+}
+
+/* ---------- Empty State ---------- */
+
+.empty-state {
+    text-align: center;
+    padding: 38px 20px;
+}
+
+.empty-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 15px;
+    display: grid;
+    place-items: center;
+    border-radius: 20px;
+    background: #eef2ff;
+    color: #4f46e5;
+    font-size: 30px;
+}
+
+.empty-state h5 {
+    font-weight: 800;
+}
+
+.empty-state p {
+    color: #64748b;
+    font-size: 13px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 991px) {
+    .insight-grid {
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+@media (max-width: 767px) {
+
+    .tenant-dashboard {
+        padding-top: 18px;
+    }
+
+    .tenant-welcome {
+        min-height: 300px;
+        border-radius: 19px;
+    }
+
+    .tenant-welcome-content {
+        padding: 27px 22px;
+    }
+
+    .tenant-welcome h1 {
+        font-size: 29px;
+    }
+
+    .info-grid,
+    .room-details,
+    .attendance-times {
+        grid-template-columns: 1fr;
+    }
+
+    .insight-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .analytics-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .chart-box {
+        height: 220px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .insight-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .welcome-actions {
+        flex-direction: column;
+    }
+
+    .welcome-actions .btn {
+        width: 100%;
+    }
+}
+</style>
+
+
+<div class="container tenant-dashboard">
+
+    {% if tenant %}
+
+    <!-- =====================================================
+         WELCOME BANNER
+    ====================================================== -->
+
+    <section class="tenant-welcome">
+
+        <div class="tenant-welcome-content">
+
+            <div class="welcome-kicker">
+                <i class="bi bi-stars"></i>
+                Tenant Dashboard
+            </div>
+
+            <h1>
+                Welcome, {{ request.user.username }} 👋
+            </h1>
+
+            <p>
+                Manage your PG profile, room details, rent, payments,
+                attendance and complaints from one place.
+            </p>
+
+            <div class="welcome-actions">
+
+                <a href="{% url 'tenant_payment' %}"
+                   class="btn btn-white">
+                    <i class="bi bi-credit-card me-1"></i>
+                    Pay Rent
+                </a>
+
+                <a href="{% url 'tenant_complaint_add' %}"
+                   class="btn btn-glass">
+                    <i class="bi bi-chat-left-text me-1"></i>
+                    Submit Complaint
+                </a>
+
+                <a href="{% url 'tenant_change_password' %}"
+                   class="btn btn-glass">
+                    <i class="bi bi-shield-lock me-1"></i>
+                    Security
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         QUICK STATS
+    ====================================================== -->
+
+    <section class="dashboard-section">
+
+        <div class="section-heading">
+            <div>
+                <h3>My Overview</h3>
+                <p>Your important PG information at a glance.</p>
+            </div>
+        </div>
+
+        <div class="row g-3">
+
+            <div class="col-6 col-lg-3">
+                <div class="quick-stat">
+
+                    <div class="quick-stat-top">
+                        <div class="stat-icon icon-purple">
+                            <i class="bi bi-house-door-fill"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-label">PG</div>
+
+                    <div class="stat-value"
+                         style="font-size:18px;">
+                        {{ tenant.bed.room.pg.name|default:"Not Assigned" }}
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="col-6 col-lg-3">
+                <div class="quick-stat">
+
+                    <div class="quick-stat-top">
+                        <div class="stat-icon icon-blue">
+                            <i class="bi bi-door-open-fill"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-label">Room</div>
+
+                    <div class="stat-value">
+                        {% if tenant.bed %}
+                            {{ tenant.bed.room.room_number }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="col-6 col-lg-3">
+                <div class="quick-stat">
+
+                    <div class="quick-stat-top">
+                        <div class="stat-icon icon-green">
+                            <i class="bi bi-currency-rupee"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-label">Monthly Rent</div>
+
+                    <div class="stat-value">
+                        ₹{{ tenant.rent_amount|default:"0" }}
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="col-6 col-lg-3">
+                <div class="quick-stat">
+
+                    <div class="quick-stat-top">
+                        <div class="stat-icon icon-orange">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-label">Security Deposit</div>
+
+                    <div class="stat-value">
+                        ₹{{ tenant.security_deposit|default:"0" }}
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PROFILE + ROOM
+    ====================================================== -->
+
+    <section class="dashboard-section">
+
+        <div class="row g-4">
+
+            <!-- PROFILE -->
+
+            <div class="col-lg-6">
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-header">
+
+                        <div class="dashboard-card-title">
+
+                            <div class="title-icon">
+                                <i class="bi bi-person"></i>
+                            </div>
+
+                            <h5>My Profile</h5>
+
+                        </div>
+
+                        <a href="{% url 'tenant_profile_edit' %}"
+                           class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-pencil me-1"></i>
+                            Edit
+                        </a>
+
+                    </div>
+
+                    <div class="dashboard-card-body">
+
+                        <div class="profile-header">
+
+                            <div class="profile-avatar">
+                                {{ tenant.full_name|default:request.user.username|slice:":1"|upper }}
+                            </div>
+
+                            <div>
+                                <h5>{{ tenant.full_name }}</h5>
+                                <small>
+                                    <i class="bi bi-envelope me-1"></i>
+                                    {{ tenant.email }}
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <div class="info-grid">
+
+                            <div class="info-item">
+                                <span>Phone</span>
+                                <strong>
+                                    {{ tenant.phone|default:"Not Added" }}
+                                </strong>
+                            </div>
+
+                            <div class="info-item">
+                                <span>Gender</span>
+                                <strong>
+                                    {{ tenant.gender|default:"Not Added" }}
+                                </strong>
+                            </div>
+
+                            <div class="info-item">
+                                <span>Joining Date</span>
+                                <strong>
+                                    {{ tenant.joining_date|date:"d M Y" }}
+                                </strong>
+                            </div>
+
+                            <div class="info-item">
+                                <span>Username</span>
+                                <strong>
+                                    {{ request.user.username }}
+                                </strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ROOM -->
+
+            <div class="col-lg-6">
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-header">
+
+                        <div class="dashboard-card-title">
+
+                            <div class="title-icon">
+                                <i class="bi bi-building"></i>
+                            </div>
+
+                            <h5>My Room & Bed</h5>
+
+                        </div>
+
+                    </div>
+
+                    <div class="dashboard-card-body">
+
+                        {% if tenant.bed %}
+
+                        <div class="room-banner">
+
+                            <img
+                                src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1000&q=85"
+                                alt="PG Room">
+
+                            <div class="room-banner-content">
+
+                                <small>
+                                    {{ tenant.bed.room.pg.name }}
+                                </small>
+
+                                <h4>
+                                    Room {{ tenant.bed.room.room_number }}
+                                </h4>
+
+                            </div>
+
+                        </div>
+
+                        <div class="room-details">
+
+                            <div class="room-detail">
+                                <small>
+                                    <i class="bi bi-door-open"></i>
+                                    Room Number
+                                </small>
+                                <strong>
+                                    {{ tenant.bed.room.room_number }}
+                                </strong>
+                            </div>
+
+                            <div class="room-detail">
+                                <small>
+                                    <i class="bi bi-layers"></i>
+                                    Floor
+                                </small>
+                                <strong>
+                                    {{ tenant.bed.room.floor }}
+                                </strong>
+                            </div>
+
+                            <div class="room-detail">
+                                <small>
+                                    <i class="bi bi-grid"></i>
+                                    Bed Number
+                                </small>
+                                <strong>
+                                    {{ tenant.bed.bed_number }}
+                                </strong>
+                            </div>
+
+                            <div class="room-detail">
+                                <small>
+                                    <i class="bi bi-house"></i>
+                                    Room Type
+                                </small>
+                                <strong>
+                                    {{ tenant.bed.room.room_type }}
+                                </strong>
+                            </div>
+
+                        </div>
+
+                        {% else %}
+
+                        <div class="empty-state">
+
+                            <div class="empty-icon">
+                                <i class="bi bi-house-x"></i>
+                            </div>
+
+                            <h5>No Bed Assigned</h5>
+
+                            <p>
+                                Your room and bed have not been assigned yet.
+                            </p>
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ATTENDANCE
+    ====================================================== -->
+
+    <section class="dashboard-section">
+
+        <div class="section-heading">
+            <div>
+                <h3>Today's Attendance</h3>
+                <p>Track your check-in and check-out activity.</p>
+            </div>
+
+            <a href="{% url 'tenant_attendance_history' %}"
+               class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-clock-history me-1"></i>
+                History
+            </a>
+        </div>
+
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-card-body">
+
+                <div class="attendance-status">
+
+                    <div class="attendance-left">
+
+                        <div class="attendance-icon">
+                            <i class="bi bi-calendar-check"></i>
+                        </div>
+
+                        <div>
+
+                            <h5>
+                                {% if today_attendance %}
+                                    Attendance Recorded
+                                {% else %}
+                                    Attendance Not Marked
+                                {% endif %}
+                            </h5>
+
+                            <small>
+                                Today's attendance status
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    {% if today_attendance and today_attendance.status == "Present" %}
+
+                        <span class="status-present">
+                            <i class="bi bi-check-circle me-1"></i>
+                            Present
+                        </span>
+
+                    {% else %}
+
+                        <span class="status-absent">
+                            <i class="bi bi-exclamation-circle me-1"></i>
+                            Absent
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="attendance-times">
+
+                    <div class="time-box">
+
+                        <small>
+                            <i class="bi bi-box-arrow-in-right me-1"></i>
+                            Check In
+                        </small>
+
+                        <strong>
+                            {% if today_attendance and today_attendance.check_in %}
+                                {{ today_attendance.check_in|date:"d M Y, h:i A" }}
+                            {% else %}
+                                Not Checked In
+                            {% endif %}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="time-box">
+
+                        <small>
+                            <i class="bi bi-box-arrow-right me-1"></i>
+                            Check Out
+                        </small>
+
+                        <strong>
+                            {% if today_attendance and today_attendance.check_out %}
+                                {{ today_attendance.check_out|date:"d M Y, h:i A" }}
+                            {% else %}
+                                Not Checked Out
+                            {% endif %}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="mt-3 d-flex flex-wrap gap-2">
+
+                    {% if not today_attendance %}
+
+                        <a href="{% url 'tenant_check_in' %}"
+                           class="btn btn-primary">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>
+                            Check In
+                        </a>
+
+                    {% elif not today_attendance.check_out %}
+
+                        <a href="{% url 'tenant_check_out' %}"
+                           class="btn btn-dark">
+                            <i class="bi bi-box-arrow-right me-1"></i>
+                            Check Out
+                        </a>
+
+                    {% else %}
+
+                        <span class="btn btn-success disabled">
+                            <i class="bi bi-check-circle me-1"></i>
+                            Attendance Completed
+                        </span>
+
+                    {% endif %}
+
+                    <a href="{% url 'tenant_attendance_history' %}"
+                       class="btn btn-outline-secondary">
+                        View History
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FINANCE
+    ====================================================== -->
+
+    <section class="dashboard-section">
+
+        <div class="section-heading">
+
+            <div>
+                <h3>Rent & Security</h3>
+                <p>Manage your monthly rent and security deposit.</p>
+            </div>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            <div class="col-md-6">
+
+                <div class="finance-card rent-card">
+
+                    <div class="finance-label">
+                        <i class="bi bi-calendar2-month me-1"></i>
+                        Monthly Rent
+                    </div>
+
+                    <div class="finance-amount">
+                        ₹{{ tenant.rent_amount|default:"0" }}
+                    </div>
+
+                    <a href="{% url 'tenant_payment' %}"
+                       class="btn btn-light">
+                        <i class="bi bi-credit-card me-1"></i>
+                        Pay Rent Online
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <div class="finance-card deposit-card">
+
+                    <div class="finance-label">
+                        <i class="bi bi-shield-check me-1"></i>
+                        Security Deposit
+                    </div>
+
+                    <div class="finance-amount">
+                        ₹{{ tenant.security_deposit|default:"0" }}
+                    </div>
+
+                    <span class="small opacity-75">
+                        Your registered security deposit
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ANALYTICS
+    ====================================================== -->
+
+    <section class="dashboard-section">
+
+        <div class="analytics-header">
+
+            <div>
+                <h3 class="mb-1 fw-bold">
+                    Personal Analytics
+                </h3>
+
+                <p class="text-muted mb-0">
+                    Visual overview of your payments and complaints.
+                </p>
+            </div>
+
+            <div class="analytics-live">
+                <span class="live-dot"></span>
+                Live Data
+            </div>
+
+        </div>
+
+
+        <!-- Insight Cards -->
+
+        <div class="insight-grid">
+
+            <div class="insight-item">
+
+                <small>Total Paid</small>
+
+                <strong id="tenantTotalPaid">
+                    ₹0
+                </strong>
+
+            </div>
+
+            <div class="insight-item">
+
+                <small>Paid Payments</small>
+
+                <strong id="tenantPaidCount">
+                    0
+                </strong>
+
+            </div>
+
+            <div class="insight-item">
+
+                <small>Pending Payments</small>
+
+                <strong id="tenantPendingCount">
+                    0
+                </strong>
+
+            </div>
+
+            <div class="insight-item">
+
+                <small>Complaints</small>
+
+                <strong id="tenantComplaintCount">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            <!-- Payment Chart -->
+
+            <div class="col-lg-7">
+
+                <div class="chart-card">
+
+                    <div class="chart-card-head">
+
+                        <div>
+                            <h6>Payment History</h6>
+                            <small>Payment amount over time</small>
+                        </div>
+
+                        <select id="tenantPaymentType"
+                                class="chart-select">
+
+                            <option value="line">
+                                Line Chart
+                            </option>
+
+                            <option value="bar">
+                                Bar Chart
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="chart-box">
+                        <canvas id="tenantPaymentChart"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Payment Status -->
+
+            <div class="col-lg-5">
+
+                <div class="chart-card">
+
+                    <div class="chart-card-head">
+
+                        <div>
+                            <h6>Payment Status</h6>
+                            <small>Paid vs pending</small>
+                        </div>
+
+                    </div>
+
+                    <div class="chart-box-sm">
+                        <canvas id="tenantPaymentStatusChart"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Complaints -->
+
+            <div class="col-lg-5">
+
+                <div class="chart-card">
+
+                    <div class="chart-card-head">
+
+                        <div>
+                            <h6>Complaint Overview</h6>
+                            <small>Current complaint status</small>
+                        </div>
+
+                    </div>
+
+                    <div class="chart-box-sm">
+                        <canvas id="tenantComplaintChart"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Analytics Summary -->
+
+            <div class="col-lg-7">
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-header">
+
+                        <div class="dashboard-card-title">
+
+                            <div class="title-icon">
+                                <i class="bi bi-bar-chart-fill"></i>
+                            </div>
+
+                            <h5>Dashboard Insights</h5>
+
+                        </div>
+
+                    </div>
+
+                    <div class="dashboard-card-body">
+
+                        <div class="d-flex align-items-start gap-3 mb-4">
+
+                            <div class="stat-icon icon-purple">
+                                <i class="bi bi-lightbulb"></i>
+                            </div>
+
+                            <div>
+
+                                <h6 class="fw-bold mb-1">
+                                    Your PG Activity
+                                </h6>
+
+                                <p class="text-muted small mb-0">
+                                    Keep your rent payments updated and
+                                    report complaints whenever required.
+                                    Your dashboard automatically reflects
+                                    your latest records.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row g-3">
+
+                            <div class="col-6">
+
+                                <div class="info-item">
+                                    <span>
+                                        Payment Records
+                                    </span>
+
+                                    <strong id="tenantPaidCount2">
+                                        0
+                                    </strong>
+                                </div>
+
+                            </div>
+
+                            <div class="col-6">
+
+                                <div class="info-item">
+                                    <span>
+                                        Pending Records
+                                    </span>
+
+                                    <strong id="tenantPendingCount2">
+                                        0
+                                    </strong>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PAYMENT HISTORY
+    ====================================================== -->
+
+    <section class="dashboard-section">
+
+        <div class="section-heading">
+
+            <div>
+                <h3>Payment History</h3>
+                <p>Your recent rent payment records.</p>
+            </div>
+
+            <a href="{% url 'tenant_payment' %}"
+               class="btn btn-sm btn-primary">
+                <i class="bi bi-plus-lg me-1"></i>
+                Make Payment
+            </a>
+
+        </div>
+
+
+        <div class="table-card">
+
+            {% if payments %}
+
+            <div class="table-responsive">
+
+                <table class="table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Method</th>
+                            <th>Status</th>
+                            <th>Transaction ID</th>
+                            <th>Receipt</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for payment in payments %}
+
+                        <tr>
+
+                            <td>
+                                <strong>
+                                    {{ payment.payment_date|date:"d M Y" }}
+                                </strong>
+                            </td>
+
+                            <td class="amount">
+                                ₹{{ payment.amount }}
+                            </td>
+
+                            <td>
+                                <i class="bi bi-wallet2 me-1 text-primary"></i>
+                                {{ payment.payment_method }}
+                            </td>
+
+                            <td>
+
+                                {% if payment.status == "Paid" %}
+
+                                    <span class="badge-soft badge-paid">
+                                        <i class="bi bi-check-circle me-1"></i>
+                                        Paid
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge-soft badge-pending">
+                                        <i class="bi bi-clock me-1"></i>
+                                        Pending
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+                                <small class="text-muted">
+                                    {{ payment.transaction_id|default:"—" }}
+                                </small>
+                            </td>
+
+                            <td>
+
+                                <a href="{% url 'payment_receipt' payment.id %}"
+                                   class="btn btn-sm btn-outline-primary">
+
+                                    <i class="bi bi-receipt me-1"></i>
+                                    Receipt
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    <i class="bi bi-receipt"></i>
+                </div>
+
+                <h5>No Payment Records</h5>
+
+                <p>
+                    Your payment history will appear here.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         COMPLAINTS + NOTICES
+    ====================================================== -->
+
+    <section class="dashboard-section">
+
+        <div class="row g-4">
+
+            <!-- Complaints -->
+
+            <div class="col-lg-7">
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-header">
+
+                        <div class="dashboard-card-title">
+
+                            <div class="title-icon">
+                                <i class="bi bi-chat-left-dots"></i>
+                            </div>
+
+                            <h5>My Complaints</h5>
+
+                        </div>
+
+                        <a href="{% url 'tenant_complaint_add' %}"
+                           class="btn btn-sm btn-primary">
+                            <i class="bi bi-plus-lg me-1"></i>
+                            Add
+                        </a>
+
+                    </div>
+
+                    <div class="dashboard-card-body">
+
+                        {% if complaints %}
+
+                            {% for complaint in complaints %}
+
+                            <div class="complaint-item">
+
+                                <div class="complaint-top">
+
+                                    <div>
+                                        <h6>
+                                            {{ complaint.subject }}
+                                        </h6>
+
+                                        <small class="text-muted">
+                                            {{ complaint.created_at|date:"d M Y, h:i A" }}
+                                        </small>
+                                    </div>
+
+                                    {% if complaint.priority == "High" %}
+
+                                        <span class="badge-soft badge-high">
+                                            High
+                                        </span>
+
+                                    {% elif complaint.priority == "Medium" %}
+
+                                        <span class="badge-soft badge-medium">
+                                            Medium
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge-soft badge-low">
+                                            Low
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div class="complaint-description">
+
+                                    {{ complaint.description }}
+
+                                </div>
+
+
+                                <div class="complaint-meta">
+
+                                    {% if complaint.status == "Resolved" %}
+
+                                        <span class="badge-soft badge-resolved">
+                                            <i class="bi bi-check-circle me-1"></i>
+                                            Resolved
+                                        </span>
+
+                                    {% elif complaint.status == "In Progress" %}
+
+                                        <span class="badge-soft badge-progress">
+                                            <i class="bi bi-arrow-repeat me-1"></i>
+                                            In Progress
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge-soft badge-open">
+                                            <i class="bi bi-clock me-1"></i>
+                                            Pending
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <div class="empty-state">
+
+                                <div class="empty-icon">
+                                    <i class="bi bi-chat-square-text"></i>
+                                </div>
+
+                                <h5>No Complaints</h5>
+
+                                <p>
+                                    You currently have no complaints.
+                                </p>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Notices -->
+
+            <div class="col-lg-5">
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-card-header">
+
+                        <div class="dashboard-card-title">
+
+                            <div class="title-icon">
+                                <i class="bi bi-megaphone"></i>
+                            </div>
+
+                            <h5>Latest Notices</h5>
+
+                        </div>
+
+                    </div>
+
+                    <div class="dashboard-card-body">
+
+                        {% if notices %}
+
+                            {% for notice in notices %}
+
+                            <div class="notice-item">
+
+                                <div class="notice-icon">
+                                    <i class="bi bi-megaphone-fill"></i>
+                                </div>
+
+                                <div>
+
+                                    <h6>
+                                        {{ notice.title }}
+                                    </h6>
+
+                                    <p>
+                                        {{ notice.message }}
+                                    </p>
+
+                                    <small>
+                                        <i class="bi bi-calendar3 me-1"></i>
+                                        {{ notice.created_at|date:"d M Y" }}
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <div class="empty-state">
+
+                                <div class="empty-icon">
+                                    <i class="bi bi-bell-slash"></i>
+                                </div>
+
+                                <h5>No Notices</h5>
+
+                                <p>
+                                    New PG notices will appear here.
+                                </p>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    {% else %}
+
+    <!-- =====================================================
+         TENANT PROFILE NOT FOUND
+    ====================================================== -->
+
+    <div class="dashboard-card">
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                <i class="bi bi-person-x"></i>
+            </div>
+
+            <h5>Tenant Profile Not Found</h5>
+
+            <p>
+                Your tenant profile has not been created or assigned yet.
+                Please contact the PG administrator.
+            </p>
+
+            <a href="{% url 'home' %}"
+               class="btn btn-primary">
+                <i class="bi bi-house me-1"></i>
+                Back to Home
+            </a>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<!-- =========================================================
+     CHART.JS
+========================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    function getNumber(value) {
+
+        const number = Number(value);
+
+        return Number.isFinite(number) ? number : 0;
+
+    }
+
+
+    if (typeof Chart === "undefined") {
+
+        console.warn("Chart.js could not be loaded.");
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       PAYMENT DATA
+    ====================================================== */
+
+    const paymentLabels = [
+
+        {% for payment in payments %}
+            "{{ payment.payment_date|date:'d M' }}",
+        {% endfor %}
+
+    ];
+
+
+    const paymentAmounts = [
+
+        {% for payment in payments %}
+            getNumber("{{ payment.amount }}"),
+        {% endfor %}
+
+    ];
+
+
+    /* =====================================================
+       PAYMENT STATUS
+    ====================================================== */
+
+    let paidCount = 0;
+    let pendingCount = 0;
+    let totalPaid = 0;
+
+
+    {% for payment in payments %}
+
+        {% if payment.status == "Paid" %}
+
+            paidCount++;
+            totalPaid += getNumber("{{ payment.amount }}");
+
+        {% elif payment.status == "Pending" %}
+
+            pendingCount++;
+
+        {% endif %}
+
+    {% endfor %}
+
+
+    /* =====================================================
+       COMPLAINT STATUS
+    ====================================================== */
+
+    let resolvedComplaints = 0;
+    let progressComplaints = 0;
+    let pendingComplaints = 0;
+
+
+    {% for complaint in complaints %}
+
+        {% if complaint.status == "Resolved" %}
+
+            resolvedComplaints++;
+
+        {% elif complaint.status == "In Progress" %}
+
+            progressComplaints++;
+
+        {% else %}
+
+            pendingComplaints++;
+
+        {% endif %}
+
+    {% endfor %}
+
+
+    /* =====================================================
+       UPDATE INSIGHTS
+    ====================================================== */
+
+    const totalPaidElement =
+        document.getElementById("tenantTotalPaid");
+
+    const paidCountElement =
+        document.getElementById("tenantPaidCount");
+
+    const pendingCountElement =
+        document.getElementById("tenantPendingCount");
+
+    const complaintCountElement =
+        document.getElementById("tenantComplaintCount");
+
+    const paidCount2 =
+        document.getElementById("tenantPaidCount2");
+
+    const pendingCount2 =
+        document.getElementById("tenantPendingCount2");
+
+
+    if (totalPaidElement) {
+
+        totalPaidElement.innerText =
+            "₹" + totalPaid.toLocaleString("en-IN");
+
+    }
+
+
+    if (paidCountElement) {
+
+        paidCountElement.innerText =
+            paidCount;
+
+    }
+
+
+    if (pendingCountElement) {
+
+        pendingCountElement.innerText =
+            pendingCount;
+
+    }
+
+
+    if (complaintCountElement) {
+
+        complaintCountElement.innerText =
+            resolvedComplaints +
+            progressComplaints +
+            pendingComplaints;
+
+    }
+
+
+    if (paidCount2) {
+
+        paidCount2.innerText =
+            paidCount;
+
+    }
+
+
+    if (pendingCount2) {
+
+        pendingCount2.innerText =
+            pendingCount;
+
+    }
+
+
+    /* =====================================================
+       PAYMENT LINE / BAR CHART
+    ====================================================== */
+
+    const paymentCanvas =
+        document.getElementById("tenantPaymentChart");
+
+    let paymentChart = null;
+
+
+    function createPaymentChart(type) {
+
+        if (!paymentCanvas) {
+            return;
+        }
+
+
+        if (paymentChart) {
+
+            paymentChart.destroy();
+
+        }
+
+
+        paymentChart = new Chart(
+            paymentCanvas.getContext("2d"),
+            {
+
+                type: type,
+
+                data: {
+
+                    labels: paymentLabels,
+
+                    datasets: [
+
+                        {
+
+                            label: "Payment Amount",
+
+                            data: paymentAmounts,
+
+                            borderWidth: 3,
+
+                            borderRadius: 8,
+
+                            tension: 0.4,
+
+                            fill: true,
+
+                            backgroundColor:
+                                "rgba(79, 70, 229, 0.10)",
+
+                            borderColor:
+                                "#4f46e5",
+
+                            pointBackgroundColor:
+                                "#4f46e5",
+
+                            pointBorderColor:
+                                "#ffffff",
+
+                            pointBorderWidth: 2,
+
+                            pointRadius: 4
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    interaction: {
+
+                        intersect: false,
+
+                        mode: "index"
+
+                    },
+
+                    plugins: {
+
+                        legend: {
+
+                            display: false
+
+                        },
+
+                        tooltip: {
+
+                            callbacks: {
+
+                                label: function (context) {
+
+                                    return " ₹" +
+                                        Number(
+                                            context.raw || 0
+                                        ).toLocaleString("en-IN");
+
+                                }
+
+                            }
+
+                        }
+
+                    },
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            grid: {
+
+                                color: "#eef2f7"
+
+                            },
+
+                            ticks: {
+
+                                callback: function (value) {
+
+                                    return "₹" +
+                                        Number(value)
+                                            .toLocaleString("en-IN");
+
+                                }
+
+                            }
+
+                        },
+
+                        x: {
+
+                            grid: {
+
+                                display: false
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+    }
+
+
+    createPaymentChart("line");
+
+
+    const paymentType =
+        document.getElementById("tenantPaymentType");
+
+
+    if (paymentType) {
+
+        paymentType.addEventListener(
+            "change",
+            function () {
+
+                createPaymentChart(this.value);
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       PAYMENT STATUS DOUGHNUT
+    ====================================================== */
+
+    const paymentStatusCanvas =
+        document.getElementById("tenantPaymentStatusChart");
+
+
+    if (paymentStatusCanvas) {
+
+        new Chart(
+
+            paymentStatusCanvas.getContext("2d"),
+
+            {
+
+                type: "doughnut",
+
+                data: {
+
+                    labels: [
+                        "Paid",
+                        "Pending"
+                    ],
+
+                    datasets: [
+
+                        {
+
+                            data: [
+                                paidCount,
+                                pendingCount
+                            ],
+
+                            backgroundColor: [
+                                "#10b981",
+                                "#f59e0b"
+                            ],
+
+                            borderWidth: 0,
+
+                            hoverOffset: 8
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    cutout: "70%",
+
+                    plugins: {
+
+                        legend: {
+
+                            position: "bottom",
+
+                            labels: {
+
+                                usePointStyle: true,
+
+                                padding: 18
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+    }
+
+
+    /* =====================================================
+       COMPLAINT DOUGHNUT
+    ====================================================== */
+
+    const complaintCanvas =
+        document.getElementById("tenantComplaintChart");
+
+
+    if (complaintCanvas) {
+
+        new Chart(
+
+            complaintCanvas.getContext("2d"),
+
+            {
+
+                type: "doughnut",
+
+                data: {
+
+                    labels: [
+                        "Resolved",
+                        "In Progress",
+                        "Pending"
+                    ],
+
+                    datasets: [
+
+                        {
+
+                            data: [
+
+                                resolvedComplaints,
+                                progressComplaints,
+                                pendingComplaints
+
+                            ],
+
+                            backgroundColor: [
+                                "#10b981",
+                                "#0ea5e9",
+                                "#f59e0b"
+                            ],
+
+                            borderWidth: 0,
+
+                            hoverOffset: 8
+
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    cutout: "70%",
+
+                    plugins: {
+
+                        legend: {
+
+                            position: "bottom",
+
+                            labels: {
+
+                                usePointStyle: true,
+
+                                padding: 15
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+    }
+
+});
+
+</script>
+
+{% endblock %}
+```

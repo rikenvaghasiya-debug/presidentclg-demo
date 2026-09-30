@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+.venv/
+venv/
+env/
+ENV/
+
+# Django
+*.log
+local_settings.py
+
+# Database
+db.sqlite3
+db.sqlite3-journal
+*.sqlite3
+
+# Environment Variables
+.env
+.env.*
+
+# PyCharm
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Mac
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Django Static
+staticfiles/
+
+# Uploaded Media
+media/
+
+# Backup
+*.bak
+*.backup
+*.tmp
+
+# Jupyter
+.ipynb_checkpoints/

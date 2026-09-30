@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Complaint{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-7">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header bg-danger text-white">
+
+                    <h5 class="mb-0">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        Delete Complaint
+                    </h5>
+
+                </div>
+
+
+                <div class="card-body p-4 text-center">
+
+                    <div class="mb-4">
+
+                        <i class="bi bi-trash3 text-danger"
+                           style="font-size: 70px;">
+                        </i>
+
+                    </div>
+
+
+                    <h3 class="fw-bold">
+                        Are you sure?
+                    </h3>
+
+
+                    <p class="text-muted">
+                        You are about to delete this complaint.
+                        This action cannot be undone.
+                    </p>
+
+
+                    <div class="alert alert-light border text-start">
+
+                        <p class="mb-2">
+
+                            <strong>Tenant:</strong>
+                            {{ complaint.tenant.full_name }}
+
+                        </p>
+
+
+                        <p class="mb-2">
+
+                            <strong>Subject:</strong>
+                            {{ complaint.subject }}
+
+                        </p>
+
+
+                        <p class="mb-2">
+
+                            <strong>Priority:</strong>
+                            {{ complaint.priority }}
+
+                        </p>
+
+
+                        <p class="mb-0">
+
+                            <strong>Status:</strong>
+                            {{ complaint.status }}
+
+                        </p>
+
+                    </div>
+
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <div class="d-flex justify-content-center gap-2">
+
+                            <a href="{% url 'complaint_list' %}"
+                               class="btn btn-secondary px-4">
+
+                                <i class="bi bi-arrow-left"></i>
+                                Cancel
+
+                            </a>
+
+
+                            <button type="submit"
+                                    class="btn btn-danger px-4">
+
+                                <i class="bi bi-trash"></i>
+                                Yes, Delete
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

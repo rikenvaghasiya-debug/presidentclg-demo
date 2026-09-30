@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+
+{% block title %}
+Attendance History
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+```
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2 class="fw-bold">
+            <i class="bi bi-calendar-check"></i>
+            Attendance History
+        </h2>
+
+        <p class="text-muted mb-0">
+            View your complete attendance records.
+        </p>
+    </div>
+
+    <a href="{% url 'tenant_dashboard' %}"
+       class="btn btn-secondary">
+
+        <i class="bi bi-arrow-left"></i>
+        Back to Dashboard
+
+    </a>
+
+</div>
+
+
+<!-- Tenant Information -->
+{% if tenant %}
+
+<div class="card shadow-sm border-0 mb-4">
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                <strong>
+                    <i class="bi bi-person"></i>
+                    Tenant
+                </strong>
+
+                <p class="mb-0">
+                    {{ tenant.full_name }}
+                </p>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <strong>
+                    <i class="bi bi-envelope"></i>
+                    Email
+                </strong>
+
+                <p class="mb-0">
+                    {{ tenant.email }}
+                </p>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <strong>
+                    <i class="bi bi-telephone"></i>
+                    Phone
+                </strong>
+
+                <p class="mb-0">
+                    {{ tenant.phone }}
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+
+<!-- Attendance Table -->
+<div class="card shadow border-0">
+
+    <div class="card-header bg-primary text-white">
+
+        <h5 class="mb-0">
+
+            <i class="bi bi-table"></i>
+            Attendance Records
+
+        </h5>
+
+    </div>
+
+
+    <div class="card-body p-0">
+
+        {% if attendance_records %}
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle mb-0">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>
+                            <i class="bi bi-calendar3"></i>
+                            Date
+                        </th>
+
+                        <th>
+                            <i class="bi bi-box-arrow-in-right"></i>
+                            Check-In
+                        </th>
+
+                        <th>
+                            <i class="bi bi-box-arrow-right"></i>
+                            Check-Out
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for attendance in attendance_records %}
+
+                    <tr>
+
+                        <td>
+                            {{ forloop.counter }}
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                {{ attendance.date|date:"d M Y" }}
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+
+                            {% if attendance.check_in %}
+
+                                <span class="text-success">
+
+                                    <i class="bi bi-clock"></i>
+
+                                    {{ attendance.check_in|date:"d M Y, h:i A" }}
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="text-muted">
+                                    Not Marked
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            {% if attendance.check_out %}
+
+                                <span class="text-primary">
+
+                                    <i class="bi bi-clock"></i>
+
+                                    {{ attendance.check_out|date:"d M Y, h:i A" }}
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="text-muted">
+                                    Not Marked
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            {% if attendance.status == "Present" %}
+
+                                <span class="badge bg-success">
+                                    <i class="bi bi-check-circle"></i>
+                                    Present
+                                </span>
+
+                            {% elif attendance.status == "Absent" %}
+
+                                <span class="badge bg-danger">
+                                    <i class="bi bi-x-circle"></i>
+                                    Absent
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-secondary">
+                                    {{ attendance.status }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+            <div class="text-center py-5">
+
+                <i class="bi bi-calendar-x display-3 text-muted"></i>
+
+                <h5 class="mt-3">
+                    No Attendance Records
+                </h5>
+
+                <p class="text-muted">
+                    Your attendance records will appear here.
+                </p>
+
+                <a href="{% url 'tenant_dashboard' %}"
+                   class="btn btn-primary">
+
+                    <i class="bi bi-house"></i>
+                    Back to Dashboard
+
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+```
+
+</div>
+
+{% endblock %}

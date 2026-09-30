@@ -1,0 +1,792 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Add Room | PG Management System
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .add-room-page {
+        padding: 40px 0 60px;
+    }
+
+    .room-form-card {
+        max-width: 1100px;
+        margin: auto;
+        background: #ffffff;
+        border-radius: 24px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 18px 50px rgba(15, 23, 42, 0.10);
+    }
+
+    /* LEFT IMAGE */
+    .room-form-image {
+        min-height: 720px;
+        background:
+            linear-gradient(
+                135deg,
+                rgba(15, 23, 42, 0.82),
+                rgba(79, 70, 229, 0.48)
+            ),
+            url("https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=1200&q=85")
+            center / cover no-repeat;
+        color: white;
+        padding: 45px;
+        display: flex;
+        align-items: flex-end;
+    }
+
+    .room-form-image-content {
+        width: 100%;
+    }
+
+    .room-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 15px;
+        border-radius: 50px;
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.25);
+        backdrop-filter: blur(8px);
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .room-form-image h2 {
+        font-size: 36px;
+        font-weight: 800;
+        line-height: 1.15;
+        margin-bottom: 15px;
+    }
+
+    .room-form-image p {
+        color: rgba(255,255,255,0.88);
+        line-height: 1.7;
+        max-width: 420px;
+    }
+
+    .room-features {
+        list-style: none;
+        padding: 0;
+        margin: 25px 0 0;
+    }
+
+    .room-features li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 13px;
+        color: rgba(255,255,255,0.94);
+        font-size: 14px;
+    }
+
+    .room-features i {
+        color: #a7f3d0;
+        font-size: 17px;
+    }
+
+    /* FORM CONTENT */
+    .room-form-content {
+        padding: 45px;
+    }
+
+    .page-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+        margin-bottom: 18px;
+        box-shadow: 0 10px 25px rgba(79,70,229,0.22);
+    }
+
+    .page-title {
+        font-size: 29px;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 6px;
+    }
+
+    .page-subtitle {
+        color: #64748b;
+        margin-bottom: 30px;
+    }
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-size: 15px;
+        font-weight: 800;
+        color: #0f172a;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 10px;
+        margin: 25px 0 17px;
+    }
+
+    .section-title i {
+        color: #4f46e5;
+    }
+
+    .form-label {
+        color: #334155;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .required {
+        color: #ef4444;
+    }
+
+    .input-box,
+    .select-box {
+        position: relative;
+    }
+
+    .input-box .form-control,
+    .select-box .form-select {
+        padding-left: 43px;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #64748b;
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    .form-control,
+    .form-select {
+        min-height: 49px;
+        border: 1px solid #e2e8f0;
+        border-radius: 11px;
+        color: #1e293b;
+        transition: all 0.25s ease;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 4px rgba(99,102,241,0.10);
+    }
+
+    .form-help {
+        color: #94a3b8;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    .bed-info {
+        display: flex;
+        gap: 10px;
+        background: #eff6ff;
+        border: 1px solid #dbeafe;
+        border-radius: 12px;
+        padding: 13px 15px;
+        color: #1e40af;
+        font-size: 13px;
+        line-height: 1.5;
+        margin-top: 22px;
+    }
+
+    .bed-info i {
+        font-size: 17px;
+        margin-top: 1px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 28px;
+        padding-top: 24px;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .add-btn {
+        flex: 1;
+        min-height: 50px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        color: white;
+        font-weight: 700;
+        box-shadow: 0 8px 20px rgba(79,70,229,0.20);
+        transition: 0.25s ease;
+    }
+
+    .add-btn:hover {
+        transform: translateY(-2px);
+        color: white;
+        box-shadow: 0 12px 28px rgba(79,70,229,0.28);
+    }
+
+    .cancel-btn {
+        min-height: 50px;
+        padding: 0 22px;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        text-decoration: none;
+        font-weight: 600;
+        color: #475569;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+    }
+
+    .cancel-btn:hover {
+        background: #f1f5f9;
+        color: #0f172a;
+    }
+
+    @media (max-width: 991px) {
+        .room-form-image {
+            min-height: 420px;
+        }
+
+        .room-form-content {
+            padding: 35px 30px;
+        }
+    }
+
+    @media (max-width: 575px) {
+        .add-room-page {
+            padding: 20px 10px 40px;
+        }
+
+        .room-form-image {
+            min-height: 350px;
+            padding: 30px;
+        }
+
+        .room-form-image h2 {
+            font-size: 28px;
+        }
+
+        .room-form-content {
+            padding: 30px 20px;
+        }
+
+        .page-title {
+            font-size: 25px;
+        }
+
+        .form-actions {
+            flex-direction: column-reverse;
+        }
+
+        .cancel-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="container add-room-page">
+
+```
+<div class="room-form-card">
+
+    <div class="row g-0">
+
+        <!-- LEFT IMAGE -->
+        <div class="col-lg-5">
+
+            <div class="room-form-image">
+
+                <div class="room-form-image-content">
+
+                    <div class="room-badge">
+
+                        <i class="bi bi-door-open-fill"></i>
+
+                        Room Management
+
+                    </div>
+
+
+                    <h2>
+                        Add a New Room
+                    </h2>
+
+
+                    <p>
+                        Create and organize rooms inside your PG.
+                        Add room details and manage bed availability
+                        easily.
+                    </p>
+
+
+                    <ul class="room-features">
+
+                        <li>
+                            <i class="bi bi-check-circle-fill"></i>
+                            Assign room to a PG
+                        </li>
+
+                        <li>
+                            <i class="bi bi-check-circle-fill"></i>
+                            Define room type
+                        </li>
+
+                        <li>
+                            <i class="bi bi-check-circle-fill"></i>
+                            Track total beds
+                        </li>
+
+                        <li>
+                            <i class="bi bi-check-circle-fill"></i>
+                            Track available beds
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT FORM -->
+        <div class="col-lg-7">
+
+            <div class="room-form-content">
+
+                <div class="page-icon">
+
+                    <i class="bi bi-door-open-fill"></i>
+
+                </div>
+
+
+                <h1 class="page-title">
+                    Add New Room
+                </h1>
+
+
+                <p class="page-subtitle">
+                    Enter the room details below to add a new room.
+                </p>
+
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+
+                    <!-- PROPERTY INFORMATION -->
+                    <div class="section-title">
+
+                        <i class="bi bi-building-fill"></i>
+
+                        Property Information
+
+                    </div>
+
+
+                    <!-- PG -->
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            Select PG
+
+                            <span class="required">*</span>
+
+                        </label>
+
+
+                        <div class="select-box">
+
+                            <i class="bi bi-building input-icon"></i>
+
+
+                            <select
+                                name="pg"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    -- Select PG --
+                                </option>
+
+
+                                {% for pg in pgs %}
+
+                                <option value="{{ pg.id }}">
+
+                                    {{ pg.name }} - {{ pg.city }}
+
+                                </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-help">
+                            Select the PG where this room belongs.
+                        </div>
+
+                    </div>
+
+
+                    <!-- ROOM DETAILS -->
+                    <div class="section-title">
+
+                        <i class="bi bi-door-open-fill"></i>
+
+                        Room Details
+
+                    </div>
+
+
+                    <div class="row">
+
+
+                        <!-- ROOM NUMBER -->
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Room Number
+
+                                <span class="required">*</span>
+
+                            </label>
+
+
+                            <div class="input-box">
+
+                                <i class="bi bi-hash input-icon"></i>
+
+
+                                <input
+                                    type="text"
+                                    name="room_number"
+                                    class="form-control"
+                                    placeholder="Example: 101"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- FLOOR -->
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Floor
+
+                                <span class="required">*</span>
+
+                            </label>
+
+
+                            <div class="input-box">
+
+                                <i class="bi bi-layers-fill input-icon"></i>
+
+
+                                <input
+                                    type="number"
+                                    name="floor"
+                                    class="form-control"
+                                    placeholder="Example: 1"
+                                    min="0"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ROOM TYPE -->
+                    <div class="mb-3">
+
+                        <label class="form-label">
+
+                            Room Type
+
+                            <span class="required">*</span>
+
+                        </label>
+
+
+                        <div class="select-box">
+
+                            <i class="bi bi-grid-3x3-gap-fill input-icon"></i>
+
+
+                            <select
+                                name="room_type"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    -- Select Room Type --
+                                </option>
+
+                                <option value="Single">
+                                    Single
+                                </option>
+
+                                <option value="Double">
+                                    Double
+                                </option>
+
+                                <option value="Triple">
+                                    Triple
+                                </option>
+
+                                <option value="Shared">
+                                    Shared
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- BED INFORMATION -->
+                    <div class="section-title">
+
+                        <i class="bi bi-people-fill"></i>
+
+                        Bed Information
+
+                    </div>
+
+
+                    <div class="row">
+
+
+                        <!-- TOTAL BEDS -->
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Total Beds
+
+                                <span class="required">*</span>
+
+                            </label>
+
+
+                            <div class="input-box">
+
+                                <i class="bi bi-grid-3x3-gap input-icon"></i>
+
+
+                                <input
+                                    type="number"
+                                    name="total_beds"
+                                    id="totalBeds"
+                                    class="form-control"
+                                    placeholder="Example: 2"
+                                    min="1"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="form-help">
+                                Total number of beds in this room.
+                            </div>
+
+                        </div>
+
+
+                        <!-- AVAILABLE BEDS -->
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Available Beds
+
+                                <span class="required">*</span>
+
+                            </label>
+
+
+                            <div class="input-box">
+
+                                <i class="bi bi-check-circle-fill input-icon"></i>
+
+
+                                <input
+                                    type="number"
+                                    name="available_beds"
+                                    id="availableBeds"
+                                    class="form-control"
+                                    placeholder="Example: 2"
+                                    min="0"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="form-help">
+                                Beds currently available for tenants.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- INFORMATION -->
+                    <div class="bed-info">
+
+                        <i class="bi bi-lightbulb-fill"></i>
+
+                        <span>
+                            Available beds should not be greater than
+                            total beds. For example, if the room has
+                            4 beds, available beds can be 0 to 4.
+                        </span>
+
+                    </div>
+
+
+                    <!-- ACTIONS -->
+                    <div class="form-actions">
+
+
+                        <a
+                            href="{% url 'room_list' %}"
+                            class="cancel-btn"
+                        >
+
+                            <i class="bi bi-arrow-left"></i>
+
+                            Cancel
+
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="add-btn"
+                        >
+
+                            <i class="bi bi-plus-circle-fill me-2"></i>
+
+                            Add Room
+
+                        </button>
+
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+<script>
+    const totalBeds = document.getElementById("totalBeds");
+    const availableBeds = document.getElementById("availableBeds");
+
+    if (totalBeds && availableBeds) {
+
+        totalBeds.addEventListener("input", function () {
+
+            availableBeds.max = this.value;
+
+        });
+
+        availableBeds.addEventListener("input", function () {
+
+            if (
+                totalBeds.value &&
+                Number(this.value) > Number(totalBeds.value)
+            ) {
+
+                this.setCustomValidity(
+                    "Available beds cannot be greater than total beds."
+                );
+
+            } else {
+
+                this.setCustomValidity("");
+
+            }
+
+        });
+
+    }
+</script>
+
+{% endblock %}
+
+````
+
+### ✅ Backend variables same rakhe hain
+
+Aapke original code ke:
+
+```text
+pgs
+pg.id
+pg.name
+pg.city
+````
+
+aur form fields:
+
+```text
+pg
+room_number
+floor
+room_type
+total_beds
+available_beds
+```
+
+same hain.
+
+URL bhi same:
+
+```text
+room_list
+```
+
+**Koi `views.py`, `models.py` ya `urls.py` change nahi karna.**
+
+Next logical page **`room_edit.html`** hai. Uska current code bhej dena, phir usko isi exact design ke matching professional **Edit Room** page me convert karenge.

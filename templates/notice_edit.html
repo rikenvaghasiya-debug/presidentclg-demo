@@ -1,0 +1,616 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Edit Notice | PG Management
+{% endblock %}
+
+{% block content %}
+
+<div class="page-container py-4 py-lg-5">
+
+```
+<!-- Page Header -->
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+
+    <div>
+        <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge rounded-pill bg-primary-subtle text-primary px-3 py-2">
+                <i class="bi bi-megaphone-fill me-1"></i>
+                Notice Management
+            </span>
+        </div>
+
+        <h1 class="fw-bold mb-1">
+            Edit Notice
+        </h1>
+
+        <p class="text-muted mb-0">
+            Update notice information and visibility for tenants.
+        </p>
+    </div>
+
+    <a href="{% url 'notice_list' %}" class="btn btn-light border shadow-sm">
+        <i class="bi bi-arrow-left me-1"></i>
+        Back to Notices
+    </a>
+
+</div>
+
+
+<div class="row g-4 align-items-start">
+
+    <!-- LEFT: FORM -->
+    <div class="col-lg-8">
+
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+            <!-- Card Header -->
+            <div class="p-4 text-white"
+                 style="background: linear-gradient(135deg, #0f172a, #3730a3);">
+
+                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="bg-white bg-opacity-10 rounded-3 p-2">
+                                <i class="bi bi-pencil-square fs-5"></i>
+                            </span>
+
+                            <span class="fw-semibold">
+                                Update Notice
+                            </span>
+                        </div>
+
+                        <h4 class="fw-bold mb-1">
+                            Edit announcement details
+                        </h4>
+
+                        <p class="mb-0 text-white-50 small">
+                            Make changes and save them for your PG tenants.
+                        </p>
+                    </div>
+
+                    <span class="badge bg-white text-dark rounded-pill px-3 py-2">
+                        Notice #{{ notice.id }}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Form Body -->
+            <div class="card-body p-4 p-lg-5">
+
+                <form method="POST" id="noticeEditForm">
+
+                    {% csrf_token %}
+
+
+                    <!-- Notice Title -->
+                    <div class="mb-4">
+
+                        <label for="title" class="form-label fw-semibold">
+
+                            <i class="bi bi-type me-1 text-primary"></i>
+                            Notice Title
+
+                            <span class="text-danger">*</span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="title"
+                            id="title"
+                            class="form-control form-control-lg"
+                            value="{{ notice.title }}"
+                            maxlength="200"
+                            placeholder="Enter notice title"
+                            required
+                        >
+
+                        <div class="d-flex justify-content-between mt-2">
+
+                            <small class="text-muted">
+                                Keep the title short and clear.
+                            </small>
+
+                            <small class="text-muted">
+                                <span id="titleCount">0</span>/200
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Notice Message -->
+                    <div class="mb-4">
+
+                        <label for="message" class="form-label fw-semibold">
+
+                            <i class="bi bi-chat-left-text me-1 text-primary"></i>
+                            Notice Message
+
+                            <span class="text-danger">*</span>
+
+                        </label>
+
+                        <textarea
+                            name="message"
+                            id="message"
+                            class="form-control"
+                            rows="7"
+                            maxlength="1500"
+                            placeholder="Write the complete notice message..."
+                            required
+                        >{{ notice.message }}</textarea>
+
+                        <div class="d-flex justify-content-between mt-2">
+
+                            <small class="text-muted">
+                                Provide all important information tenants need.
+                            </small>
+
+                            <small class="text-muted">
+                                <span id="messageCount">0</span>/1500
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Visibility -->
+                    <div class="mb-4">
+
+                        <div class="notice-visibility-box">
+
+                            <div class="d-flex align-items-center justify-content-between gap-3">
+
+                                <div class="d-flex align-items-center gap-3">
+
+                                    <div class="visibility-icon">
+                                        <i class="bi bi-broadcast-pin"></i>
+                                    </div>
+
+                                    <div>
+
+                                        <h6 class="fw-bold mb-1">
+                                            Tenant Visibility
+                                        </h6>
+
+                                        <p class="text-muted small mb-0">
+                                            Control whether tenants can see this notice.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="form-check form-switch mb-0">
+
+                                    <input
+                                        type="checkbox"
+                                        name="is_active"
+                                        class="form-check-input"
+                                        id="is_active"
+                                        role="switch"
+                                        {% if notice.is_active %}
+                                            checked
+                                        {% endif %}
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="mt-3 pt-3 border-top">
+
+                                <div id="visibilityStatus" class="d-flex align-items-center gap-2">
+
+                                    {% if notice.is_active %}
+
+                                        <span class="status-dot bg-success"></span>
+
+                                        <span class="small fw-semibold text-success">
+                                            This notice is currently visible to tenants.
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="status-dot bg-secondary"></span>
+
+                                        <span class="small fw-semibold text-secondary">
+                                            This notice is currently hidden from tenants.
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Current Status -->
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+                            <i class="bi bi-info-circle me-1 text-primary"></i>
+                            Current Status
+                        </label>
+
+                        <div id="currentStatusBadge">
+
+                            {% if notice.is_active %}
+
+                                <span class="badge rounded-pill bg-success-subtle text-success px-3 py-2">
+                                    <i class="bi bi-check-circle-fill me-1"></i>
+                                    Currently Active
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge rounded-pill bg-secondary-subtle text-secondary px-3 py-2">
+                                    <i class="bi bi-eye-slash-fill me-1"></i>
+                                    Currently Inactive
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Buttons -->
+                    <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 pt-3 border-top">
+
+                        <a
+                            href="{% url 'notice_list' %}"
+                            class="btn btn-light border px-4"
+                        >
+                            <i class="bi bi-arrow-left me-1"></i>
+                            Cancel
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary px-4"
+                        >
+                            <i class="bi bi-check2-circle me-1"></i>
+                            Update Notice
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RIGHT: PREVIEW -->
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden sticky-lg-top"
+             style="top: 95px;">
+
+            <!-- Preview Header -->
+            <div class="p-4 text-white"
+                 style="background: linear-gradient(135deg, #4f46e5, #7c3aed);">
+
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <i class="bi bi-eye-fill"></i>
+                    <span class="fw-semibold">
+                        Live Preview
+                    </span>
+                </div>
+
+                <h5 class="fw-bold mb-0">
+                    Tenant Notice
+                </h5>
+
+            </div>
+
+
+            <!-- Preview Body -->
+            <div class="p-4">
+
+                <div class="preview-notice-card">
+
+                    <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+
+                        <div class="preview-megaphone">
+                            <i class="bi bi-megaphone-fill"></i>
+                        </div>
+
+                        <span id="previewStatus"
+                              class="badge rounded-pill bg-success-subtle text-success">
+                            <i class="bi bi-check-circle-fill me-1"></i>
+                            Active
+                        </span>
+
+                    </div>
+
+
+                    <h5 id="previewTitle" class="fw-bold mb-2">
+                        {{ notice.title }}
+                    </h5>
+
+                    <p id="previewMessage"
+                       class="text-muted small mb-3"
+                       style="white-space: pre-line;">
+                        {{ notice.message }}
+                    </p>
+
+
+                    <div class="border-top pt-3">
+
+                        <div class="d-flex align-items-center gap-2 text-muted small">
+
+                            <i class="bi bi-clock"></i>
+
+                            <span>
+                                Notice #{{ notice.id }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Tips -->
+                <div class="mt-4">
+
+                    <h6 class="fw-bold mb-3">
+                        <i class="bi bi-lightbulb text-warning me-1"></i>
+                        Notice Tips
+                    </h6>
+
+                    <div class="small text-muted">
+
+                        <div class="d-flex gap-2 mb-2">
+                            <i class="bi bi-check-circle text-success"></i>
+                            <span>Use a clear and meaningful title.</span>
+                        </div>
+
+                        <div class="d-flex gap-2 mb-2">
+                            <i class="bi bi-check-circle text-success"></i>
+                            <span>Include important dates and instructions.</span>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <i class="bi bi-check-circle text-success"></i>
+                            <span>Disable visibility when the notice is no longer required.</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+    .notice-visibility-box {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 18px;
+    }
+
+    .visibility-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(79, 70, 229, 0.10);
+        color: #4f46e5;
+        font-size: 20px;
+    }
+
+    .status-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .preview-notice-card {
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        padding: 20px;
+        background: #ffffff;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .preview-megaphone {
+        width: 46px;
+        height: 46px;
+        border-radius: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(79, 70, 229, 0.10);
+        color: #4f46e5;
+        font-size: 20px;
+    }
+
+    .form-control,
+    .form-select {
+        border-radius: 12px;
+        border-color: #dbe2ea;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.12);
+    }
+
+    .form-check-input {
+        width: 2.8em;
+        height: 1.45em;
+        cursor: pointer;
+    }
+
+    .form-check-input:checked {
+        background-color: #4f46e5;
+        border-color: #4f46e5;
+    }
+
+    .btn {
+        border-radius: 11px;
+        font-weight: 600;
+    }
+
+    @media (max-width: 991.98px) {
+
+        .sticky-lg-top {
+            position: static !important;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const titleInput = document.getElementById("title");
+    const messageInput = document.getElementById("message");
+    const activeInput = document.getElementById("is_active");
+
+    const titleCount = document.getElementById("titleCount");
+    const messageCount = document.getElementById("messageCount");
+
+    const previewTitle = document.getElementById("previewTitle");
+    const previewMessage = document.getElementById("previewMessage");
+    const previewStatus = document.getElementById("previewStatus");
+
+    const visibilityStatus = document.getElementById("visibilityStatus");
+    const currentStatusBadge = document.getElementById("currentStatusBadge");
+
+
+    function updateTitle() {
+
+        const value = titleInput.value.trim();
+
+        titleCount.textContent = titleInput.value.length;
+
+        previewTitle.textContent =
+            value || "Notice Title";
+
+    }
+
+
+    function updateMessage() {
+
+        const value = messageInput.value.trim();
+
+        messageCount.textContent = messageInput.value.length;
+
+        previewMessage.textContent =
+            value || "Your notice message will appear here.";
+
+    }
+
+
+    function updateStatus() {
+
+        if (activeInput.checked) {
+
+            previewStatus.className =
+                "badge rounded-pill bg-success-subtle text-success";
+
+            previewStatus.innerHTML =
+                '<i class="bi bi-check-circle-fill me-1"></i> Active';
+
+
+            visibilityStatus.innerHTML =
+                '<span class="status-dot bg-success"></span>' +
+                '<span class="small fw-semibold text-success">' +
+                'This notice is currently visible to tenants.' +
+                '</span>';
+
+
+            currentStatusBadge.innerHTML =
+                '<span class="badge rounded-pill bg-success-subtle text-success px-3 py-2">' +
+                '<i class="bi bi-check-circle-fill me-1"></i>' +
+                ' Currently Active' +
+                '</span>';
+
+        } else {
+
+            previewStatus.className =
+                "badge rounded-pill bg-secondary-subtle text-secondary";
+
+            previewStatus.innerHTML =
+                '<i class="bi bi-eye-slash-fill me-1"></i> Inactive';
+
+
+            visibilityStatus.innerHTML =
+                '<span class="status-dot bg-secondary"></span>' +
+                '<span class="small fw-semibold text-secondary">' +
+                'This notice is currently hidden from tenants.' +
+                '</span>';
+
+
+            currentStatusBadge.innerHTML =
+                '<span class="badge rounded-pill bg-secondary-subtle text-secondary px-3 py-2">' +
+                '<i class="bi bi-eye-slash-fill me-1"></i>' +
+                ' Currently Inactive' +
+                '</span>';
+
+        }
+
+    }
+
+
+    titleInput.addEventListener("input", updateTitle);
+    messageInput.addEventListener("input", updateMessage);
+    activeInput.addEventListener("change", updateStatus);
+
+
+    updateTitle();
+    updateMessage();
+    updateStatus();
+
+});
+
+</script>
+
+{% endblock %}

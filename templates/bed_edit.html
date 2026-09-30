@@ -1,0 +1,511 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Edit Bed | PG Management System
+{% endblock %}
+
+{% block content %}
+
+<div class="page-container py-4 py-lg-5">
+
+```
+<div class="row g-0 justify-content-center">
+
+    <!-- LEFT IMAGE PANEL -->
+    <div class="col-lg-5 d-none d-lg-block">
+
+        <div class="h-100 position-relative overflow-hidden"
+             style="min-height: 680px; border-radius: 24px 0 0 24px;">
+
+            <img
+                src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=1200&q=85"
+                alt="PG Bed Room"
+                class="w-100 h-100"
+                style="object-fit: cover;"
+            >
+
+            <!-- Overlay -->
+            <div class="position-absolute top-0 start-0 w-100 h-100"
+                 style="background: linear-gradient(180deg, rgba(15,23,42,.10), rgba(15,23,42,.88));">
+            </div>
+
+
+            <!-- Image Content -->
+            <div class="position-absolute bottom-0 start-0 end-0 p-4 p-xl-5 text-white">
+
+                <span class="badge rounded-pill bg-white text-primary px-3 py-2 mb-3">
+
+                    <i class="bi bi-pencil-square me-1"></i>
+                    Bed Management
+
+                </span>
+
+
+                <h2 class="fw-bold mb-3">
+                    Update Bed Information
+                </h2>
+
+
+                <p class="mb-4 opacity-75">
+
+                    Keep your bed allocation and availability
+                    information accurate and up to date.
+
+                </p>
+
+
+                <div class="d-flex flex-wrap gap-2">
+
+                    <span class="badge bg-white bg-opacity-10 border border-light border-opacity-25 px-3 py-2">
+
+                        <i class="bi bi-building me-1"></i>
+                        PG
+
+                    </span>
+
+
+                    <span class="badge bg-white bg-opacity-10 border border-light border-opacity-25 px-3 py-2">
+
+                        <i class="bi bi-door-open me-1"></i>
+                        Room
+
+                    </span>
+
+
+                    <span class="badge bg-white bg-opacity-10 border border-light border-opacity-25 px-3 py-2">
+
+                        <i class="bi bi-bed me-1"></i>
+                        Bed
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RIGHT FORM -->
+    <div class="col-lg-7">
+
+        <div class="card border-0 shadow-lg h-100"
+             style="border-radius: 0 24px 24px 0; overflow: hidden;">
+
+
+            <!-- HEADER -->
+            <div class="card-header border-0 text-white p-4 p-lg-5"
+                 style="background: linear-gradient(135deg, #4f46e5, #7c3aed);">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="d-flex align-items-center justify-content-center rounded-3 bg-white bg-opacity-10"
+                         style="width: 55px; height: 55px;">
+
+                        <i class="bi bi-pencil-square fs-3"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <h3 class="fw-bold mb-1">
+                            Edit Bed
+                        </h3>
+
+                        <p class="mb-0 opacity-75">
+                            Update bed information
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FORM BODY -->
+            <div class="card-body p-4 p-lg-5">
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+
+                    <!-- ROOM INFORMATION -->
+                    <div class="mb-4">
+
+                        <div class="d-flex align-items-center gap-2 mb-3">
+
+                            <div class="text-primary">
+
+                                <i class="bi bi-door-open fs-5"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <h5 class="fw-bold mb-0">
+                                    Room Information
+                                </h5>
+
+                                <small class="text-muted">
+                                    Select the room for this bed
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <label class="form-label fw-semibold">
+
+                            Select Room
+                            <span class="text-danger">*</span>
+
+                        </label>
+
+
+                        <select
+                            name="room"
+                            class="form-select form-select-lg"
+                            required>
+
+                            {% for room in rooms %}
+
+                            <option
+                                value="{{ room.id }}"
+                                {% if room.id == bed.room.id %}
+                                    selected
+                                {% endif %}>
+
+                                {{ room.pg.name }}
+                                -
+                                Room {{ room.room_number }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+
+                        <div class="form-text">
+
+                            <i class="bi bi-info-circle me-1"></i>
+
+                            Choose the PG room where this bed belongs.
+
+                        </div>
+
+                    </div>
+
+
+                    <hr class="my-4">
+
+
+                    <!-- BED DETAILS -->
+                    <div class="mb-4">
+
+                        <div class="d-flex align-items-center gap-2 mb-3">
+
+                            <div class="text-primary">
+
+                                <i class="bi bi-bed fs-5"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <h5 class="fw-bold mb-0">
+                                    Bed Details
+                                </h5>
+
+                                <small class="text-muted">
+                                    Update bed number and status
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- BED NUMBER -->
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Bed Number
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+
+                            <div class="input-group input-group-lg">
+
+                                <span class="input-group-text bg-light">
+
+                                    <i class="bi bi-hash text-primary"></i>
+
+                                </span>
+
+
+                                <input
+                                    type="text"
+                                    name="bed_number"
+                                    class="form-control"
+                                    value="{{ bed.bed_number }}"
+                                    placeholder="Example: 1"
+                                    required>
+
+                            </div>
+
+
+                            <div class="form-text">
+
+                                You can use numbers such as 1, 2, 3 or labels such as A1, B1.
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- STATUS -->
+                        <div class="mb-3">
+
+                            <label class="form-label fw-semibold">
+
+                                Bed Status
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+
+                            <select
+                                name="is_available"
+                                id="bedStatus"
+                                class="form-select form-select-lg"
+                                required>
+
+                                <option
+                                    value="True"
+                                    {% if bed.is_available %}
+                                        selected
+                                    {% endif %}>
+
+                                    Available
+
+                                </option>
+
+
+                                <option
+                                    value="False"
+                                    {% if not bed.is_available %}
+                                        selected
+                                    {% endif %}>
+
+                                    Occupied
+
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CURRENT BED INFORMATION -->
+                    <div id="statusPreview"
+                         class="rounded-4 p-3 mb-4"
+                         style="{% if bed.is_available %}background:#ecfdf5; border:1px solid #a7f3d0;{% else %}background:#fef2f2; border:1px solid #fecaca;{% endif %}">
+
+                        <div class="d-flex align-items-center gap-3">
+
+                            <div class="rounded-circle d-flex align-items-center justify-content-center"
+                                 style="width:45px; height:45px; background:{% if bed.is_available %}#d1fae5{% else %}#fee2e2{% endif %};">
+
+                                <i id="statusIcon"
+                                   class="bi {% if bed.is_available %}bi-check-circle-fill text-success{% else %}bi-person-fill text-danger{% endif %} fs-5">
+                                </i>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong id="statusTitle"
+                                        class="{% if bed.is_available %}text-success{% else %}text-danger{% endif %}">
+
+                                    {% if bed.is_available %}
+                                        Bed Available
+                                    {% else %}
+                                        Bed Occupied
+                                    {% endif %}
+
+                                </strong>
+
+
+                                <small id="statusText"
+                                       class="d-block text-muted">
+
+                                    {% if bed.is_available %}
+                                        This bed can be allocated to a tenant.
+                                    {% else %}
+                                        This bed is currently marked as occupied.
+                                    {% endif %}
+
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EDITING INFO -->
+                    <div class="rounded-4 p-3 mb-4"
+                         style="background:#f8fafc; border:1px solid #e2e8f0;">
+
+                        <div class="d-flex align-items-center gap-2 mb-2">
+
+                            <i class="bi bi-pencil-square text-primary"></i>
+
+                            <span class="fw-semibold">
+                                Currently Editing
+                            </span>
+
+                        </div>
+
+
+                        <div class="small text-muted">
+
+                            Bed
+                            <strong class="text-dark">
+                                {{ bed.bed_number }}
+                            </strong>
+
+                            in Room
+                            <strong class="text-dark">
+                                {{ bed.room.room_number }}
+                            </strong>
+
+                            -
+                            <strong class="text-dark">
+                                {{ bed.room.pg.name }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- BUTTONS -->
+                    <div class="d-flex flex-column flex-sm-row gap-2 pt-2">
+
+                        <a
+                            href="{% url 'bed_list' %}"
+                            class="btn btn-light border btn-lg px-4">
+
+                            <i class="bi bi-arrow-left me-1"></i>
+                            Cancel
+
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary btn-lg px-4 flex-grow-1">
+
+                            <i class="bi bi-check-circle me-1"></i>
+                            Update Bed
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+<!-- STATUS PREVIEW SCRIPT -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const bedStatus = document.getElementById("bedStatus");
+    const statusPreview = document.getElementById("statusPreview");
+    const statusIcon = document.getElementById("statusIcon");
+    const statusTitle = document.getElementById("statusTitle");
+    const statusText = document.getElementById("statusText");
+
+
+    function updateStatusPreview() {
+
+        if (bedStatus.value === "True") {
+
+            statusPreview.style.background = "#ecfdf5";
+            statusPreview.style.borderColor = "#a7f3d0";
+
+            statusIcon.className =
+                "bi bi-check-circle-fill text-success fs-5";
+
+            statusTitle.className =
+                "text-success";
+
+            statusTitle.textContent =
+                "Bed Available";
+
+            statusText.textContent =
+                "This bed can be allocated to a tenant.";
+
+        } else {
+
+            statusPreview.style.background = "#fef2f2";
+            statusPreview.style.borderColor = "#fecaca";
+
+            statusIcon.className =
+                "bi bi-person-fill text-danger fs-5";
+
+            statusTitle.className =
+                "text-danger";
+
+            statusTitle.textContent =
+                "Bed Occupied";
+
+            statusText.textContent =
+                "This bed is currently marked as occupied.";
+
+        }
+
+    }
+
+
+    bedStatus.addEventListener(
+        "change",
+        updateStatusPreview
+    );
+
+
+    updateStatusPreview();
+
+});
+
+</script>
+
+{% endblock %}

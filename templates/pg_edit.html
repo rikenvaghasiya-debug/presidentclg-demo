@@ -1,0 +1,648 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Edit PG | PG Management System
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .edit-pg-page {
+        padding: 40px 0 60px;
+    }
+
+    .pg-edit-card {
+        max-width: 1100px;
+        margin: auto;
+        background: #ffffff;
+        border-radius: 24px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 18px 50px rgba(15, 23, 42, 0.10);
+    }
+
+    /* LEFT IMAGE */
+    .pg-edit-image {
+        min-height: 720px;
+        background:
+            linear-gradient(
+                135deg,
+                rgba(15, 23, 42, 0.80),
+                rgba(79, 70, 229, 0.48)
+            ),
+            url("https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=85")
+            center / cover no-repeat;
+        color: white;
+        padding: 45px;
+        display: flex;
+        align-items: flex-end;
+    }
+
+    .pg-edit-image-content {
+        width: 100%;
+    }
+
+    .pg-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 15px;
+        border-radius: 50px;
+        background: rgba(255,255,255,0.16);
+        border: 1px solid rgba(255,255,255,0.28);
+        backdrop-filter: blur(8px);
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .pg-edit-image h2 {
+        font-size: 36px;
+        font-weight: 800;
+        line-height: 1.15;
+        margin-bottom: 15px;
+    }
+
+    .pg-edit-image p {
+        color: rgba(255,255,255,0.88);
+        line-height: 1.7;
+        max-width: 420px;
+    }
+
+    .property-name-box {
+        margin-top: 25px;
+        padding: 15px 17px;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.13);
+        border: 1px solid rgba(255,255,255,0.20);
+        backdrop-filter: blur(8px);
+    }
+
+    .property-name-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: rgba(255,255,255,0.70);
+        margin-bottom: 4px;
+    }
+
+    .property-name {
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    /* FORM */
+    .pg-edit-content {
+        padding: 45px;
+    }
+
+    .page-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+        margin-bottom: 18px;
+        box-shadow: 0 10px 25px rgba(79,70,229,0.22);
+    }
+
+    .page-title {
+        font-size: 29px;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 6px;
+    }
+
+    .page-subtitle {
+        color: #64748b;
+        margin-bottom: 30px;
+    }
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-size: 15px;
+        font-weight: 800;
+        color: #0f172a;
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 10px;
+        margin: 25px 0 17px;
+    }
+
+    .section-title i {
+        color: #4f46e5;
+    }
+
+    .form-label {
+        color: #334155;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .required {
+        color: #ef4444;
+    }
+
+    .input-box {
+        position: relative;
+    }
+
+    .input-box .form-control {
+        padding-left: 43px;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #64748b;
+        z-index: 2;
+    }
+
+    .textarea-box {
+        position: relative;
+    }
+
+    .textarea-box .form-control {
+        padding-left: 43px;
+    }
+
+    .textarea-box .input-icon {
+        top: 17px;
+        transform: none;
+    }
+
+    .form-control {
+        min-height: 49px;
+        border: 1px solid #e2e8f0;
+        border-radius: 11px;
+        color: #1e293b;
+        transition: all 0.25s ease;
+    }
+
+    .form-control:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 4px rgba(99,102,241,0.10);
+    }
+
+    textarea.form-control {
+        resize: vertical;
+    }
+
+    .form-help {
+        color: #94a3b8;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    .info-box {
+        display: flex;
+        gap: 10px;
+        background: #eff6ff;
+        border: 1px solid #dbeafe;
+        border-radius: 12px;
+        padding: 13px 15px;
+        color: #1e40af;
+        font-size: 13px;
+        line-height: 1.5;
+        margin-top: 22px;
+    }
+
+    .info-box i {
+        font-size: 17px;
+        margin-top: 1px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 28px;
+        padding-top: 24px;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .update-btn {
+        flex: 1;
+        min-height: 50px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        color: white;
+        font-weight: 700;
+        box-shadow: 0 8px 20px rgba(79,70,229,0.20);
+        transition: 0.25s ease;
+    }
+
+    .update-btn:hover {
+        transform: translateY(-2px);
+        color: white;
+        box-shadow: 0 12px 28px rgba(79,70,229,0.28);
+    }
+
+    .cancel-btn {
+        min-height: 50px;
+        padding: 0 22px;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        text-decoration: none;
+        font-weight: 600;
+        color: #475569;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+    }
+
+    .cancel-btn:hover {
+        background: #f1f5f9;
+        color: #0f172a;
+    }
+
+    @media (max-width: 991px) {
+        .pg-edit-image {
+            min-height: 420px;
+        }
+
+        .pg-edit-content {
+            padding: 35px 30px;
+        }
+    }
+
+    @media (max-width: 575px) {
+        .edit-pg-page {
+            padding: 20px 10px 40px;
+        }
+
+        .pg-edit-image {
+            min-height: 350px;
+            padding: 30px;
+        }
+
+        .pg-edit-image h2 {
+            font-size: 28px;
+        }
+
+        .pg-edit-content {
+            padding: 30px 20px;
+        }
+
+        .page-title {
+            font-size: 25px;
+        }
+
+        .form-actions {
+            flex-direction: column-reverse;
+        }
+
+        .cancel-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="container edit-pg-page">
+
+```
+<div class="pg-edit-card">
+
+    <div class="row g-0">
+
+        <!-- LEFT SIDE -->
+        <div class="col-lg-5">
+
+            <div class="pg-edit-image">
+
+                <div class="pg-edit-image-content">
+
+                    <div class="pg-badge">
+                        <i class="bi bi-pencil-square"></i>
+                        PG Property Management
+                    </div>
+
+                    <h2>
+                        Update Your PG Details
+                    </h2>
+
+                    <p>
+                        Keep your property information accurate and
+                        up to date for better PG management.
+                    </p>
+
+                    <div class="property-name-box">
+
+                        <div class="property-name-label">
+                            Currently Editing
+                        </div>
+
+                        <div class="property-name">
+                            <i class="bi bi-building me-2"></i>
+                            {{ pg.name }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+        <div class="col-lg-7">
+
+            <div class="pg-edit-content">
+
+                <div class="page-icon">
+                    <i class="bi bi-pencil-square"></i>
+                </div>
+
+                <h1 class="page-title">
+                    Edit PG
+                </h1>
+
+                <p class="page-subtitle">
+                    Update the information of your PG property below.
+                </p>
+
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+
+                    <!-- BASIC INFORMATION -->
+                    <div class="section-title">
+
+                        <i class="bi bi-info-circle-fill"></i>
+
+                        Basic Information
+
+                    </div>
+
+
+                    <!-- PG NAME -->
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            PG Name
+                            <span class="required">*</span>
+                        </label>
+
+                        <div class="input-box">
+
+                            <i class="bi bi-building input-icon"></i>
+
+                            <input
+                                type="text"
+                                name="name"
+                                class="form-control"
+                                value="{{ pg.name }}"
+                                placeholder="Enter PG name"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ADDRESS -->
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Address
+                            <span class="required">*</span>
+                        </label>
+
+                        <div class="textarea-box">
+
+                            <i class="bi bi-geo-alt input-icon"></i>
+
+                            <textarea
+                                name="address"
+                                class="form-control"
+                                rows="3"
+                                placeholder="Enter complete PG address"
+                                required
+                            >{{ pg.address }}</textarea>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CITY + CONTACT -->
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+                                City
+                                <span class="required">*</span>
+                            </label>
+
+                            <div class="input-box">
+
+                                <i class="bi bi-geo input-icon"></i>
+
+                                <input
+                                    type="text"
+                                    name="city"
+                                    class="form-control"
+                                    value="{{ pg.city }}"
+                                    placeholder="Enter city"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+                                Contact Number
+                                <span class="required">*</span>
+                            </label>
+
+                            <div class="input-box">
+
+                                <i class="bi bi-telephone input-icon"></i>
+
+                                <input
+                                    type="text"
+                                    name="contact_number"
+                                    class="form-control"
+                                    maxlength="10"
+                                    minlength="10"
+                                    pattern="[0-9]{10}"
+                                    value="{{ pg.contact_number }}"
+                                    placeholder="10 digit number"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="form-help">
+                                Enter a valid 10 digit mobile number.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CONTACT INFORMATION -->
+                    <div class="section-title">
+
+                        <i class="bi bi-person-lines-fill"></i>
+
+                        Contact Information
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Email Address
+                        </label>
+
+                        <div class="input-box">
+
+                            <i class="bi bi-envelope input-icon"></i>
+
+                            <input
+                                type="email"
+                                name="email"
+                                class="form-control"
+                                value="{{ pg.email|default:'' }}"
+                                placeholder="Enter email address"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ADDITIONAL INFORMATION -->
+                    <div class="section-title">
+
+                        <i class="bi bi-card-text"></i>
+
+                        Additional Information
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Description
+                        </label>
+
+                        <div class="textarea-box">
+
+                            <i class="bi bi-pencil-square input-icon"></i>
+
+                            <textarea
+                                name="description"
+                                class="form-control"
+                                rows="4"
+                                placeholder="Enter PG description"
+                            >{{ pg.description|default:'' }}</textarea>
+
+                        </div>
+
+                        <div class="form-help">
+                            You can update facilities, rules, food,
+                            parking, Wi-Fi and other PG details.
+                        </div>
+
+                    </div>
+
+
+                    <!-- INFORMATION BOX -->
+                    <div class="info-box">
+
+                        <i class="bi bi-info-circle-fill"></i>
+
+                        <span>
+                            Review all updated information carefully
+                            before clicking the Update PG button.
+                        </span>
+
+                    </div>
+
+
+                    <!-- ACTION BUTTONS -->
+                    <div class="form-actions">
+
+                        <a
+                            href="{% url 'pg_list' %}"
+                            class="cancel-btn"
+                        >
+
+                            <i class="bi bi-arrow-left"></i>
+
+                            Cancel
+
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="update-btn"
+                        >
+
+                            <i class="bi bi-check-circle-fill me-2"></i>
+
+                            Update PG
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+{% endblock %}
+
+````
+
+### Ab kya hoga?
+
+- Existing `{{ pg.name }}` automatically show hoga.
+- `{{ pg.address }}`, `{{ pg.city }}`, `{{ pg.contact_number }}` bhi show honge.
+- Email aur description bhi existing data ke saath show honge.
+- **Update PG** par click karne se aapka existing POST backend hi chalega.
+- **Cancel** → `pg_list`
+- Koi naya model, URL ya view add karne ki zarurat nahi hai.
+- Mobile/tablet par bhi responsive rahega.
+
+**Important:** Is file ko replace karte waqt old code ke saath mix mat karna, aur ` ```html ` / ` ``` ` ko file ke andar paste mat karna.
+
+Next logical page **Room List (`room_list.html`)** hai, jisme PG ke rooms ko professional cards/table + Available Beds + Total Beds + Edit/Delete UI me bana sakte hain.
+````
