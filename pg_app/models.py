@@ -1,3 +1,6 @@
+
+import uuid
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -68,33 +71,47 @@ class Tenant(models.Model):
         blank=True
     )
     full_name = models.CharField(max_length=100)
+
+    profile_photo = models.ImageField(
+        upload_to='tenant_profiles/',
+        blank=True,
+        null=True
+    )
+
     email = models.EmailField()
     phone = models.CharField(max_length=10)
+
     gender = models.CharField(
         max_length=10,
         choices=GENDER_CHOICES
     )
+
     date_of_birth = models.DateField(
         null=True,
         blank=True
     )
     address = models.TextField()
+
     bed = models.OneToOneField(
         Bed,
         on_delete=models.SET_NULL,
         null=True,
         blank=True
     )
+
     joining_date = models.DateField()
+
     rent_amount = models.DecimalField(
         max_digits=10,
         decimal_places=2
     )
+
     security_deposit = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         default=0
     )
+
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -119,34 +136,51 @@ class Payment(models.Model):
         on_delete=models.CASCADE,
         related_name='payments'
     )
+
     amount = models.DecimalField(
         max_digits=10,
         decimal_places=2
     )
+
     payment_date = models.DateField(
         auto_now_add=True
     )
+
     payment_method = models.CharField(
         max_length=20,
         choices=PAYMENT_METHODS
     )
+
     status = models.CharField(
         max_length=20,
         choices=PAYMENT_STATUS,
         default='Paid'
     )
+
     transaction_id = models.CharField(
         max_length=100,
         blank=True,
-        null=True
+        null=True,
+        editable=False,
+        default=None
     )
+
     description = models.TextField(
         blank=True,
         null=True
     )
 
+    def save(self, *args, **kwargs):
+        if not self.transaction_id:
+            self.transaction_id = (
+                f"PGTXN-{uuid.uuid4().hex[:12].upper()}"
+            )
+
+        super().save(*args, **kwargs)
     def __str__(self):
-        return f"{self.tenant.full_name} - ₹{self.amount}"
+        return (
+            f"{self.tenant.full_name} - ₹{self.amount}"
+        )
 
 
 class Complaint(models.Model):
@@ -167,21 +201,24 @@ class Complaint(models.Model):
         on_delete=models.CASCADE,
         related_name='complaints'
     )
+
     subject = models.CharField(max_length=200)
     description = models.TextField()
+
     priority = models.CharField(
         max_length=20,
         choices=PRIORITY_CHOICES,
         default='Medium'
     )
+
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
         default='Pending'
     )
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
     resolved_at = models.DateTimeField(
         null=True,
         blank=True
@@ -194,17 +231,14 @@ class Complaint(models.Model):
 class Notice(models.Model):
     title = models.CharField(max_length=200)
     message = models.TextField()
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
+    created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
 
-class Attendance(models.Model):
-    date = models.DateField()
 
+class Attendance(models.Model):
     STATUS_CHOICES = [
         ('Present', 'Present'),
         ('Absent', 'Absent'),
@@ -216,9 +250,7 @@ class Attendance(models.Model):
         related_name='attendance'
     )
 
-    date = models.DateField(
-        auto_now_add=True
-    )
+    date = models.DateField(auto_now_add=True)
 
     check_in = models.DateTimeField(
         null=True,
@@ -236,9 +268,7 @@ class Attendance(models.Model):
         default='Present'
     )
 
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.tenant.full_name} - {self.date}"

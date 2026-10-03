@@ -295,7 +295,18 @@ def tenant_profile_edit(request):
             ''
         ).strip()
 
-        # Name validation
+        # =========================================
+        # PROFILE PHOTO
+        # =========================================
+
+        profile_photo = request.FILES.get(
+            'profile_photo'
+        )
+
+        # =========================================
+        # NAME VALIDATION
+        # =========================================
+
         error = validate_name(
             full_name,
             'Full name'
@@ -310,7 +321,10 @@ def tenant_profile_edit(request):
                 'tenant_profile_edit'
             )
 
-        # Email validation
+        # =========================================
+        # EMAIL VALIDATION
+        # =========================================
+
         error = validate_email(
             email
         )
@@ -324,7 +338,10 @@ def tenant_profile_edit(request):
                 'tenant_profile_edit'
             )
 
-        # Phone validation
+        # =========================================
+        # PHONE VALIDATION
+        # =========================================
+
         error = validate_phone(
             phone
         )
@@ -338,7 +355,10 @@ def tenant_profile_edit(request):
                 'tenant_profile_edit'
             )
 
-        # Address validation
+        # =========================================
+        # ADDRESS VALIDATION
+        # =========================================
+
         error = validate_required(
             address,
             'Address'
@@ -353,19 +373,25 @@ def tenant_profile_edit(request):
                 'tenant_profile_edit'
             )
 
-        # DOB validation
+        # =========================================
+        # DOB VALIDATION
+        # =========================================
+
         if date_of_birth:
 
             try:
+
                 dob = date.fromisoformat(
                     date_of_birth
                 )
 
                 if dob > date.today():
+
                     messages.error(
                         request,
                         'Date of birth cannot be in the future.'
                     )
+
                     return redirect(
                         'tenant_profile_edit'
                     )
@@ -381,17 +407,51 @@ def tenant_profile_edit(request):
                     'tenant_profile_edit'
                 )
 
+        # =========================================
+        # UPDATE TENANT INFORMATION
+        # =========================================
+
         tenant.full_name = full_name
+
         tenant.email = email
+
         tenant.phone = phone
+
         tenant.address = address
 
+
+        # =========================================
+        # DATE OF BIRTH
+        # =========================================
+
         if date_of_birth:
+
             tenant.date_of_birth = date_of_birth
+
         else:
+
             tenant.date_of_birth = None
 
+
+        # =========================================
+        # SAVE PROFILE PHOTO
+        # =========================================
+
+        if profile_photo:
+
+            tenant.profile_photo = profile_photo
+
+
+        # =========================================
+        # SAVE EVERYTHING
+        # =========================================
+
         tenant.save()
+
+
+        # =========================================
+        # SUCCESS MESSAGE
+        # =========================================
 
         messages.success(
             request,
@@ -402,6 +462,11 @@ def tenant_profile_edit(request):
             'tenant_dashboard'
         )
 
+
+    # =========================================
+    # GET REQUEST
+    # =========================================
+
     return render(
         request,
         'tenant_profile_edit.html',
@@ -409,8 +474,6 @@ def tenant_profile_edit(request):
             'tenant': tenant
         }
     )
-
-
 # =========================================================
 # TENANT CHANGE PASSWORD
 # =========================================================
@@ -4040,7 +4103,110 @@ def payment_receipt(request, pk):
             'payment': payment
         }
     )
+# =========================================================
+# TENANT PAYMENT
+# =========================================================
 
+@login_required
+def tenant_payment(request):
+
+    tenant = Tenant.objects.filter(
+        user=request.user,
+        is_active=True
+    ).first()
+
+    if not tenant:
+        messages.error(
+            request,
+            'Tenant profile not found.'
+        )
+        return redirect(
+            'tenant_dashboard'
+        )
+
+    return render(
+        request,
+        'tenant_payment.html',
+        {
+            'tenant': tenant
+        }
+    )
+
+
+@login_required
+def tenant_make_payment(request):
+
+    tenant = Tenant.objects.filter(
+        user=request.user,
+        is_active=True
+    ).first()
+
+    if not tenant:
+        messages.error(
+            request,
+            'Tenant profile not found.'
+        )
+        return redirect(
+            'tenant_dashboard'
+        )
+
+    if request.method != 'POST':
+        return redirect(
+            'tenant_payment'
+        )
+
+    amount = request.POST.get(
+        'amount',
+        ''
+    ).strip()
+
+    payment_method = request.POST.get(
+        'payment_method',
+        ''
+    ).strip()
+
+    error = validate_positive_decimal(
+        amount,
+        'Payment amount'
+    )
+
+    if error:
+        messages.error(
+            request,
+            error
+        )
+        return redirect(
+            'tenant_payment'
+        )
+
+    if payment_method not in [
+        'Cash',
+        'UPI',
+        'Card'
+    ]:
+        messages.error(
+            request,
+            'Please select a valid payment method.'
+        )
+        return redirect(
+            'tenant_payment'
+        )
+
+    payment = Payment.objects.create(
+        tenant=tenant,
+        amount=amount,
+        payment_method=payment_method,
+        status='Paid',
+        description='Online payment'
+    )
+
+    return render(
+        request,
+        'payment_success.html',
+        {
+            'payment': payment
+        }
+    )
 
 # =========================================================
 # COMPLAINT MANAGEMENT

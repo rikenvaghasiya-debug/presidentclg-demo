@@ -435,48 +435,6 @@
 
 
         /* ================================================= */
-        /*                 ADMIN BUTTON                      */
-        /* ================================================= */
-
-        .admin-link {
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #6366f1,
-                    #7c3aed
-                );
-
-            color: #ffffff !important;
-
-            margin-left: 4px;
-
-            box-shadow:
-                0 5px 16px rgba(99,102,241,0.25);
-
-            border:
-                1px solid rgba(255,255,255,0.08);
-        }
-
-
-        .admin-link:hover {
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #4f46e5,
-                    #6d28d9
-                ) !important;
-
-            box-shadow:
-                0 8px 22px rgba(99,102,241,0.35);
-
-            transform:
-                translateY(-2px) !important;
-        }
-
-
-        /* ================================================= */
         /*                 LOGIN BUTTON                      */
         /* ================================================= */
 
@@ -1204,13 +1162,6 @@
             }
 
 
-            .admin-link {
-
-                margin-left:
-                    0;
-            }
-
-
             .page-container {
 
                 padding:
@@ -1420,28 +1371,6 @@
                     </li>
 
 
-                    <!-- ================= ADMIN ================= -->
-
-                    {% if user.is_staff %}
-
-                        <li class="nav-item">
-
-                            <a
-                                class="nav-link admin-link"
-                                href="/admin/"
-                            >
-
-                                <i class="bi bi-speedometer2 me-1"></i>
-
-                                Admin
-
-                            </a>
-
-                        </li>
-
-                    {% endif %}
-
-
                     <!-- ================= LOGOUT ================= -->
 
                     <li class="nav-item">
@@ -1493,24 +1422,6 @@
                             <i class="bi bi-person-plus me-1"></i>
 
                             Register
-
-                        </a>
-
-                    </li>
-
-
-                    <!-- ================= ADMIN ================= -->
-
-                    <li class="nav-item">
-
-                        <a
-                            class="nav-link admin-link"
-                            href="/admin/"
-                        >
-
-                            <i class="bi bi-shield-lock me-1"></i>
-
-                            Admin
 
                         </a>
 

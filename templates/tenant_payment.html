@@ -6,518 +6,761 @@
 
 <div class="container py-4 py-lg-5">
 
-```
-<!-- Page Header -->
-<div class="page-container mb-4">
+    <!-- Page Header -->
+    <div class="page-container mb-4">
 
-    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
 
-        <div>
-            <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill bg-success-subtle text-success fw-semibold small mb-3">
-                <i class="bi bi-shield-check"></i>
-                Secure Rent Payment
+            <div>
+
+                <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill bg-success-subtle text-success fw-semibold small mb-3">
+                    <i class="bi bi-shield-check"></i>
+                    Secure Rent Payment
+                </div>
+
+                <h2 class="fw-bold mb-2">
+                    <i class="bi bi-wallet2 text-success me-2"></i>
+                    Pay Rent Online
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Pay your monthly PG rent securely.
+                </p>
+
             </div>
 
-            <h2 class="fw-bold mb-2">
-                <i class="bi bi-wallet2 text-success me-2"></i>
-                Pay Rent Online
-            </h2>
+            <a href="{% url 'tenant_dashboard' %}"
+               class="btn btn-outline-secondary">
 
-            <p class="text-muted mb-0">
-                Pay your monthly PG rent securely using UPI.
-            </p>
+                <i class="bi bi-arrow-left me-1"></i>
+                Dashboard
+
+            </a>
+
         </div>
-
-        <a href="{% url 'tenant_dashboard' %}" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left me-1"></i>
-            Dashboard
-        </a>
 
     </div>
 
-</div>
+
+    <div class="row g-4 justify-content-center">
 
 
-<div class="row g-4 justify-content-center">
+        <!-- ================================================= -->
+        <!-- LEFT PAYMENT CARD -->
+        <!-- ================================================= -->
 
-    <!-- LEFT: PAYMENT CARD -->
-    <div class="col-xl-7 col-lg-8">
+        <div class="col-xl-7 col-lg-8">
 
-        <div class="card border-0 shadow-lg overflow-hidden payment-online-card">
-
-            <!-- Gradient Header -->
-            <div class="payment-header p-4 p-md-5 text-white">
-
-                <div class="d-flex align-items-center justify-content-between gap-3">
-
-                    <div>
-                        <div class="small opacity-75 mb-2">
-                            PG MANAGEMENT SYSTEM
-                        </div>
-
-                        <h4 class="fw-bold mb-1">
-                            Monthly Rent Payment
-                        </h4>
-
-                        <p class="mb-0 opacity-75">
-                            Complete your rent payment through UPI
-                        </p>
-                    </div>
-
-                    <div class="payment-icon">
-                        <i class="bi bi-qr-code-scan"></i>
-                    </div>
-
-                </div>
-
-            </div>
+            <div class="card border-0 shadow-lg overflow-hidden payment-online-card">
 
 
-            <div class="card-body p-4 p-md-5">
+                <!-- Gradient Header -->
 
-                <!-- Tenant Information -->
-                <div class="tenant-payment-card mb-4">
+                <div class="payment-header p-4 p-md-5 text-white">
 
-                    <div class="d-flex align-items-center gap-3 mb-4">
-
-                        <div class="tenant-avatar">
-                            <i class="bi bi-person-fill"></i>
-                        </div>
+                    <div class="d-flex align-items-center justify-content-between gap-3">
 
                         <div>
-                            <h5 class="fw-bold mb-1">
-                                {{ tenant.full_name }}
-                            </h5>
 
-                            <small class="text-muted">
-                                PG Tenant
-                            </small>
-                        </div>
-
-                        <div class="ms-auto">
-                            <span class="badge rounded-pill bg-success-subtle text-success px-3 py-2">
-                                <i class="bi bi-check-circle me-1"></i>
-                                Active
-                            </span>
-                        </div>
-
-                    </div>
-
-
-                    <div class="row g-3">
-
-                        <div class="col-sm-6">
-
-                            <div class="info-box">
-
-                                <small class="text-muted d-block mb-1">
-                                    <i class="bi bi-person me-1"></i>
-                                    Tenant
-                                </small>
-
-                                <strong>
-                                    {{ tenant.full_name }}
-                                </strong>
-
+                            <div class="small opacity-75 mb-2">
+                                PG MANAGEMENT SYSTEM
                             </div>
 
-                        </div>
-
-
-                        <div class="col-sm-6">
-
-                            <div class="info-box">
-
-                                <small class="text-muted d-block mb-1">
-                                    <i class="bi bi-calendar-month me-1"></i>
-                                    Monthly Rent
-                                </small>
-
-                                <strong class="text-success fs-5">
-                                    ₹{{ tenant.rent_amount }}
-                                </strong>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- Amount -->
-                <div class="amount-box text-center mb-4">
-
-                    <span class="text-muted small d-block mb-2">
-                        TOTAL AMOUNT TO PAY
-                    </span>
-
-                    <div class="amount-value">
-                        ₹{{ tenant.rent_amount }}
-                    </div>
-
-                    <div class="small text-muted mt-2">
-                        <i class="bi bi-shield-check text-success me-1"></i>
-                        Secure UPI Payment
-                    </div>
-
-                </div>
-
-
-                <!-- QR Payment Section -->
-                <div class="qr-payment-section mb-4">
-
-                    <div class="text-center mb-4">
-
-                        <div class="section-number">
-                            1
-                        </div>
-
-                        <h4 class="fw-bold mb-2">
-                            Scan & Pay
-                        </h4>
-
-                        <p class="text-muted mb-0">
-                            Scan the QR code using any supported UPI application.
-                        </p>
-
-                    </div>
-
-
-                    <div class="qr-wrapper">
-
-                        <div class="qr-card">
-
-                            <div class="qr-top-label">
-                                <i class="bi bi-qr-code me-1"></i>
-                                UPI PAYMENT
-                            </div>
-
-                            <div class="qr-image-container">
-
-                                <img
-                                    src="{{ qr_url }}"
-                                    alt="UPI Payment QR Code"
-                                    class="qr-image"
-                                >
-
-                            </div>
-
-                            <div class="qr-bottom-label">
-                                Scan to Pay
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- UPI ID -->
-                    <div class="upi-id-box mt-4">
-
-                        <div class="d-flex align-items-center gap-3">
-
-                            <div class="upi-icon">
-                                <i class="bi bi-phone-fill"></i>
-                            </div>
-
-                            <div class="flex-grow-1">
-
-                                <small class="text-muted d-block">
-                                    UPI ID
-                                </small>
-
-                                <strong id="upiId">
-                                    {{ upi_id }}
-                                </strong>
-
-                            </div>
-
-                            <button
-                                type="button"
-                                class="btn btn-sm btn-outline-primary"
-                                onclick="copyUPI()"
-                                title="Copy UPI ID"
-                            >
-                                <i class="bi bi-copy"></i>
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- Supported Apps -->
-                <div class="supported-apps mb-4">
-
-                    <div class="text-center mb-3">
-
-                        <small class="text-muted fw-semibold">
-                            SUPPORTED UPI APPS
-                        </small>
-
-                    </div>
-
-                    <div class="row g-2">
-
-                        <div class="col-4">
-
-                            <div class="app-item">
-                                <i class="bi bi-google-play"></i>
-                                <span>Google Pay</span>
-                            </div>
-
-                        </div>
-
-                        <div class="col-4">
-
-                            <div class="app-item">
-                                <i class="bi bi-phone"></i>
-                                <span>PhonePe</span>
-                            </div>
-
-                        </div>
-
-                        <div class="col-4">
-
-                            <div class="app-item">
-                                <i class="bi bi-wallet2"></i>
-                                <span>Paytm</span>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- Divider -->
-                <div class="payment-divider">
-                    <span>AFTER PAYMENT</span>
-                </div>
-
-
-                <!-- Transaction Form -->
-                <div class="transaction-card mb-4">
-
-                    <div class="d-flex align-items-center gap-3 mb-3">
-
-                        <div class="section-number">
-                            2
-                        </div>
-
-                        <div>
-                            <h5 class="fw-bold mb-1">
-                                Submit Payment Details
-                            </h5>
-
-                            <p class="text-muted small mb-0">
-                                Enter the Transaction ID after completing payment.
+                            <h4 class="fw-bold mb-1">
+                                Monthly Rent Payment
+                            </h4>
+
+                            <p class="mb-0 opacity-75">
+                                Complete your rent payment securely
                             </p>
+
+                        </div>
+
+                        <div class="payment-icon">
+
+                            <i class="bi bi-credit-card-fill"></i>
+
                         </div>
 
                     </div>
 
+                </div>
 
-                    <form method="POST" id="paymentForm">
 
-                        {% csrf_token %}
+                <div class="card-body p-4 p-md-5">
 
-                        <div class="mb-3">
 
-                            <label
-                                for="transaction_id"
-                                class="form-label fw-semibold"
-                            >
-                                Transaction ID
-                                <span class="text-danger">*</span>
-                            </label>
+                    <!-- ================================================= -->
+                    <!-- TENANT INFORMATION -->
+                    <!-- ================================================= -->
 
-                            <div class="input-group input-group-lg">
+                    <div class="tenant-payment-card mb-4">
 
-                                <span class="input-group-text bg-white">
-                                    <i class="bi bi-receipt text-primary"></i>
+                        <div class="d-flex align-items-center gap-3 mb-4">
+
+                            <div class="tenant-avatar">
+
+                                <i class="bi bi-person-fill"></i>
+
+                            </div>
+
+                            <div>
+
+                                <h5 class="fw-bold mb-1">
+                                    {{ tenant.full_name }}
+                                </h5>
+
+                                <small class="text-muted">
+                                    PG Tenant
+                                </small>
+
+                            </div>
+
+                            <div class="ms-auto">
+
+                                <span class="badge rounded-pill bg-success-subtle text-success px-3 py-2">
+
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    Active
+
                                 </span>
 
-                                <input
-                                    type="text"
-                                    name="transaction_id"
-                                    id="transaction_id"
-                                    class="form-control"
-                                    placeholder="Enter UPI Transaction ID"
-                                    autocomplete="off"
-                                    maxlength="100"
-                                    required
-                                >
-
-                            </div>
-
-                            <div class="d-flex justify-content-between mt-2">
-
-                                <small class="text-muted">
-                                    <i class="bi bi-info-circle me-1"></i>
-                                    Find it in your UPI payment history.
-                                </small>
-
-                                <small class="text-muted">
-                                    <span id="transactionCount">0</span>/100
-                                </small>
-
                             </div>
 
                         </div>
 
 
-                        <!-- Transaction Preview -->
-                        <div
-                            id="transactionPreview"
-                            class="transaction-preview d-none mb-3"
-                        >
+                        <div class="row g-3">
 
-                            <div class="d-flex align-items-center gap-2">
+                            <div class="col-sm-6">
 
-                                <i class="bi bi-check-circle-fill text-success"></i>
+                                <div class="info-box">
 
-                                <div>
-                                    <small class="text-muted d-block">
-                                        Transaction ID
+                                    <small class="text-muted d-block mb-1">
+
+                                        <i class="bi bi-person me-1"></i>
+                                        Tenant
+
                                     </small>
 
-                                    <strong id="previewTransaction"></strong>
+                                    <strong>
+                                        {{ tenant.full_name }}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-sm-6">
+
+                                <div class="info-box">
+
+                                    <small class="text-muted d-block mb-1">
+
+                                        <i class="bi bi-calendar-month me-1"></i>
+                                        Monthly Rent
+
+                                    </small>
+
+                                    <strong class="text-success fs-5">
+                                        ₹{{ tenant.rent_amount }}
+                                    </strong>
+
                                 </div>
 
                             </div>
 
                         </div>
 
+                    </div>
 
-                        <button
-                            type="submit"
-                            class="btn btn-success btn-lg w-100"
-                            id="submitPaymentBtn"
+
+                    <!-- ================================================= -->
+                    <!-- AMOUNT -->
+                    <!-- ================================================= -->
+
+                    <div class="amount-box text-center mb-4">
+
+                        <span class="text-muted small d-block mb-2">
+                            TOTAL AMOUNT TO PAY
+                        </span>
+
+                        <div class="amount-value">
+                            ₹{{ tenant.rent_amount }}
+                        </div>
+
+                        <div class="small text-muted mt-2">
+
+                            <i class="bi bi-shield-check text-success me-1"></i>
+
+                            Secure Payment
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- PAYMENT METHOD -->
+                    <!-- ================================================= -->
+
+                    <div class="payment-method-card mb-4">
+
+                        <div class="text-center mb-4">
+
+                            <div class="section-number">
+                                1
+                            </div>
+
+                            <h4 class="fw-bold mt-3 mb-2">
+                                Select Payment Method
+                            </h4>
+
+                            <p class="text-muted mb-0">
+                                Choose your preferred payment method.
+                            </p>
+
+                        </div>
+
+
+                        <form method="POST"
+                              action="{% url 'tenant_make_payment' %}"
+                              id="paymentForm">
+
+                            {% csrf_token %}
+
+
+                            <!-- Amount -->
+
+                            <div class="mb-4">
+
+                                <label
+                                    for="amount"
+                                    class="form-label fw-semibold"
+                                >
+                                    Payment Amount
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <div class="input-group input-group-lg">
+
+                                    <span class="input-group-text bg-white">
+                                        <i class="bi bi-currency-rupee text-success"></i>
+                                    </span>
+
+                                    <input
+                                        type="number"
+                                        name="amount"
+                                        id="amount"
+                                        class="form-control"
+                                        value="{{ tenant.rent_amount }}"
+                                        min="1"
+                                        step="0.01"
+                                        required
+                                    >
+
+                                </div>
+
+                                <small class="text-muted">
+                                    Enter the amount you want to pay.
+                                </small>
+
+                            </div>
+
+
+                            <!-- Payment Method -->
+
+                            <div class="mb-4">
+
+                                <label
+                                    class="form-label fw-semibold"
+                                >
+                                    Payment Method
+                                    <span class="text-danger">*</span>
+                                </label>
+
+
+                                <div class="row g-3">
+
+
+                                    <!-- Cash -->
+
+                                    <div class="col-md-4">
+
+                                        <label class="payment-method-option">
+
+                                            <input
+                                                type="radio"
+                                                name="payment_method"
+                                                value="Cash"
+                                                required
+                                            >
+
+                                            <div class="payment-method-content">
+
+                                                <div class="method-icon cash-icon">
+
+                                                    <i class="bi bi-cash-stack"></i>
+
+                                                </div>
+
+                                                <strong>
+                                                    Cash
+                                                </strong>
+
+                                                <small class="text-muted">
+                                                    Cash Payment
+                                                </small>
+
+                                            </div>
+
+                                        </label>
+
+                                    </div>
+
+
+                                    <!-- UPI -->
+
+                                    <div class="col-md-4">
+
+                                        <label class="payment-method-option">
+
+                                            <input
+                                                type="radio"
+                                                name="payment_method"
+                                                value="UPI"
+                                                required
+                                            >
+
+                                            <div class="payment-method-content">
+
+                                                <div class="method-icon upi-method-icon">
+
+                                                    <i class="bi bi-qr-code-scan"></i>
+
+                                                </div>
+
+                                                <strong>
+                                                    UPI
+                                                </strong>
+
+                                                <small class="text-muted">
+                                                    Google Pay / PhonePe
+                                                </small>
+
+                                            </div>
+
+                                        </label>
+
+                                    </div>
+
+
+                                    <!-- Card -->
+
+                                    <div class="col-md-4">
+
+                                        <label class="payment-method-option">
+
+                                            <input
+                                                type="radio"
+                                                name="payment_method"
+                                                value="Card"
+                                                required
+                                            >
+
+                                            <div class="payment-method-content">
+
+                                                <div class="method-icon card-method-icon">
+
+                                                    <i class="bi bi-credit-card"></i>
+
+                                                </div>
+
+                                                <strong>
+                                                    Card
+                                                </strong>
+
+                                                <small class="text-muted">
+                                                    Debit / Credit Card
+                                                </small>
+
+                                            </div>
+
+                                        </label>
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Payment Information -->
+
+                            <div class="payment-info-box mb-4">
+
+                                <div class="d-flex gap-3">
+
+                                    <div class="info-icon">
+
+                                        <i class="bi bi-info-circle-fill"></i>
+
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            Payment Information
+                                        </strong>
+
+                                        <p class="mb-0 mt-1 small text-muted">
+
+                                            After submitting the payment,
+                                            your transaction ID will be
+                                            generated automatically by the system.
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Submit -->
+
+                            <button
+                                type="submit"
+                                class="btn btn-success btn-lg w-100"
+                                id="submitPaymentBtn"
+                            >
+
+                                <i class="bi bi-check-circle-fill me-2"></i>
+
+                                Pay ₹{{ tenant.rent_amount }}
+
+                            </button>
+
+
+                        </form>
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- PAYMENT STEPS -->
+                    <!-- ================================================= -->
+
+                    <div class="payment-steps mb-4">
+
+                        <h6 class="fw-bold mb-3">
+
+                            <i class="bi bi-list-check text-primary me-2"></i>
+
+                            How to Pay
+
+                        </h6>
+
+
+                        <div class="step-item">
+
+                            <div class="step-icon">
+
+                                <i class="bi bi-currency-rupee"></i>
+
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Enter Amount
+                                </strong>
+
+                                <small class="text-muted d-block">
+                                    Enter your monthly rent amount.
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="step-item">
+
+                            <div class="step-icon">
+
+                                <i class="bi bi-credit-card"></i>
+
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Select Payment Method
+                                </strong>
+
+                                <small class="text-muted d-block">
+                                    Select Cash, UPI or Card.
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="step-item">
+
+                            <div class="step-icon">
+
+                                <i class="bi bi-check2-circle"></i>
+
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Complete Payment
+                                </strong>
+
+                                <small class="text-muted d-block">
+                                    Submit your payment details.
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="step-item">
+
+                            <div class="step-icon">
+
+                                <i class="bi bi-receipt"></i>
+
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Transaction ID Generated
+                                </strong>
+
+                                <small class="text-muted d-block">
+                                    The system automatically generates your transaction ID.
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- IMPORTANT NOTICE -->
+                    <!-- ================================================= -->
+
+                    <div class="payment-notice">
+
+                        <div class="notice-icon">
+
+                            <i class="bi bi-shield-check"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Payment Confirmation
+                            </strong>
+
+                            <p class="mb-0 mt-1">
+
+                                After successful submission,
+                                your payment will be saved and a unique
+                                transaction ID will be generated automatically.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Back -->
+
+                    <div class="text-center mt-4">
+
+                        <a
+                            href="{% url 'tenant_dashboard' %}"
+                            class="btn btn-outline-secondary px-4"
                         >
 
-                            <i class="bi bi-check-circle-fill me-2"></i>
-                            Submit Payment
+                            <i class="bi bi-arrow-left me-1"></i>
 
-                        </button>
+                            Back to Dashboard
 
-                    </form>
+                        </a>
+
+                    </div>
+
 
                 </div>
 
+            </div>
 
-                <!-- Payment Steps -->
-                <div class="payment-steps mb-4">
-
-                    <h6 class="fw-bold mb-3">
-                        <i class="bi bi-list-check text-primary me-2"></i>
-                        How to Pay
-                    </h6>
+        </div>
 
 
-                    <div class="step-item">
+        <!-- ================================================= -->
+        <!-- RIGHT INFO PANEL -->
+        <!-- ================================================= -->
 
-                        <div class="step-icon">
-                            <i class="bi bi-qr-code"></i>
-                        </div>
+        <div class="col-xl-4 col-lg-4">
 
-                        <div>
-                            <strong>Scan QR Code</strong>
-                            <small class="text-muted d-block">
-                                Open your UPI app and scan the QR code.
-                            </small>
-                        </div>
-
-                    </div>
+            <div class="payment-side-card sticky-lg-top"
+                 style="top: 90px;">
 
 
-                    <div class="step-item">
+                <div class="side-image">
 
-                        <div class="step-icon">
-                            <i class="bi bi-currency-rupee"></i>
-                        </div>
-
-                        <div>
-                            <strong>Verify Amount</strong>
-                            <small class="text-muted d-block">
-                                Make sure the amount matches ₹{{ tenant.rent_amount }}.
-                            </small>
-                        </div>
-
-                    </div>
-
-
-                    <div class="step-item">
-
-                        <div class="step-icon">
-                            <i class="bi bi-check2-circle"></i>
-                        </div>
-
-                        <div>
-                            <strong>Complete Payment</strong>
-                            <small class="text-muted d-block">
-                                Complete the UPI transaction successfully.
-                            </small>
-                        </div>
-
-                    </div>
-
-
-                    <div class="step-item">
-
-                        <div class="step-icon">
-                            <i class="bi bi-receipt"></i>
-                        </div>
-
-                        <div>
-                            <strong>Submit Transaction ID</strong>
-                            <small class="text-muted d-block">
-                                Enter the transaction ID and submit it for verification.
-                            </small>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- Important Notice -->
-                <div class="payment-notice">
-
-                    <div class="notice-icon">
-                        <i class="bi bi-shield-exclamation"></i>
-                    </div>
-
-                    <div>
-
-                        <strong>Payment Verification</strong>
-
-                        <p class="mb-0 mt-1">
-                            Your payment will remain
-                            <span class="fw-bold text-warning">Pending</span>
-                            until the administrator verifies the transaction.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <!-- Back Button -->
-                <div class="text-center mt-4">
-
-                    <a
-                        href="{% url 'tenant_dashboard' %}"
-                        class="btn btn-outline-secondary px-4"
+                    <img
+                        src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=85"
+                        alt="Online Payment"
                     >
-                        <i class="bi bi-arrow-left me-1"></i>
-                        Back to Dashboard
-                    </a>
+
+                    <div class="side-image-overlay">
+
+                        <span class="badge rounded-pill bg-white text-dark">
+
+                            <i class="bi bi-lock-fill text-success me-1"></i>
+
+                            Secure Payment
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="p-4">
+
+                    <h5 class="fw-bold mb-2">
+                        Simple & Secure
+                    </h5>
+
+                    <p class="text-muted small mb-4">
+                        Complete your monthly rent payment in a few simple steps.
+                    </p>
+
+
+                    <div class="side-feature">
+
+                        <div class="side-feature-icon">
+
+                            <i class="bi bi-currency-rupee"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Enter Amount
+                            </strong>
+
+                            <small class="text-muted d-block">
+                                Enter your rent amount.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="side-feature">
+
+                        <div class="side-feature-icon">
+
+                            <i class="bi bi-credit-card"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Choose Method
+                            </strong>
+
+                            <small class="text-muted d-block">
+                                Cash, UPI or Card.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="side-feature">
+
+                        <div class="side-feature-icon">
+
+                            <i class="bi bi-receipt"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Auto Transaction ID
+                            </strong>
+
+                            <small class="text-muted d-block">
+                                ID is generated automatically.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="side-feature">
+
+                        <div class="side-feature-icon">
+
+                            <i class="bi bi-check-circle"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Payment Done
+                            </strong>
+
+                            <small class="text-muted d-block">
+                                View your payment confirmation.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <hr class="my-4">
+
+
+                    <div class="small text-muted">
+
+                        <i class="bi bi-info-circle text-primary me-1"></i>
+
+                        Never share your UPI PIN, OTP or banking password
+                        with anyone.
+
+                    </div>
 
                 </div>
 
@@ -526,131 +769,11 @@
         </div>
 
     </div>
-
-
-    <!-- RIGHT INFO PANEL -->
-    <div class="col-xl-4 col-lg-4">
-
-        <div class="payment-side-card sticky-lg-top" style="top: 90px;">
-
-            <div class="side-image">
-
-                <img
-                    src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=85"
-                    alt="Online Payment"
-                >
-
-                <div class="side-image-overlay">
-
-                    <span class="badge rounded-pill bg-white text-dark">
-                        <i class="bi bi-lock-fill text-success me-1"></i>
-                        Secure Payment
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="p-4">
-
-                <h5 class="fw-bold mb-2">
-                    Simple & Secure
-                </h5>
-
-                <p class="text-muted small mb-4">
-                    Complete your monthly rent payment in a few simple steps.
-                </p>
-
-
-                <div class="side-feature">
-
-                    <div class="side-feature-icon">
-                        <i class="bi bi-qr-code"></i>
-                    </div>
-
-                    <div>
-                        <strong>Scan QR</strong>
-                        <small class="text-muted d-block">
-                            Use any UPI application.
-                        </small>
-                    </div>
-
-                </div>
-
-
-                <div class="side-feature">
-
-                    <div class="side-feature-icon">
-                        <i class="bi bi-lightning-charge"></i>
-                    </div>
-
-                    <div>
-                        <strong>Quick Payment</strong>
-                        <small class="text-muted d-block">
-                            Complete your rent payment easily.
-                        </small>
-                    </div>
-
-                </div>
-
-
-                <div class="side-feature">
-
-                    <div class="side-feature-icon">
-                        <i class="bi bi-receipt"></i>
-                    </div>
-
-                    <div>
-                        <strong>Transaction ID</strong>
-                        <small class="text-muted d-block">
-                            Submit your payment reference.
-                        </small>
-                    </div>
-
-                </div>
-
-
-                <div class="side-feature">
-
-                    <div class="side-feature-icon">
-                        <i class="bi bi-person-check"></i>
-                    </div>
-
-                    <div>
-                        <strong>Admin Verification</strong>
-                        <small class="text-muted d-block">
-                            Payment is verified by admin.
-                        </small>
-                    </div>
-
-                </div>
-
-
-                <hr class="my-4">
-
-
-                <div class="small text-muted">
-
-                    <i class="bi bi-info-circle text-primary me-1"></i>
-
-                    Never share your UPI PIN, OTP or banking password
-                    with anyone.
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-```
 
 </div>
 
 {% endblock %}
+
 
 {% block extra_css %}
 
@@ -659,6 +782,7 @@
     .payment-online-card {
         border-radius: 24px;
     }
+
 
     .payment-header {
         background: linear-gradient(
@@ -669,321 +793,525 @@
         );
     }
 
+
     .payment-icon {
+
         width: 64px;
         height: 64px;
+
         border-radius: 18px;
+
         background: rgba(255,255,255,.15);
+
         border: 1px solid rgba(255,255,255,.25);
+
         display: flex;
         align-items: center;
         justify-content: center;
+
         font-size: 28px;
+
         flex-shrink: 0;
+
     }
+
 
     .tenant-payment-card {
+
         background: #f8fafc;
+
         border: 1px solid #e2e8f0;
+
         border-radius: 18px;
+
         padding: 20px;
+
     }
+
 
     .tenant-avatar {
+
         width: 50px;
         height: 50px;
+
         border-radius: 15px;
-        background: linear-gradient(135deg,#4f46e5,#7c3aed);
+
+        background: linear-gradient(
+            135deg,
+            #4f46e5,
+            #7c3aed
+        );
+
         color: #fff;
+
         display: flex;
+
         align-items: center;
+
         justify-content: center;
+
         font-size: 23px;
-        box-shadow: 0 8px 20px rgba(79,70,229,.2);
+
+        box-shadow:
+            0 8px 20px rgba(79,70,229,.2);
+
     }
+
 
     .info-box {
+
         background: #fff;
+
         border: 1px solid #e5e7eb;
+
         border-radius: 12px;
+
         padding: 12px 14px;
+
     }
+
 
     .amount-box {
+
         border-radius: 18px;
+
         padding: 24px;
-        background: linear-gradient(135deg,#ecfdf5,#f0fdf4);
+
+        background: linear-gradient(
+            135deg,
+            #ecfdf5,
+            #f0fdf4
+        );
+
         border: 1px solid #bbf7d0;
+
     }
+
 
     .amount-value {
+
         font-size: 42px;
+
         line-height: 1;
+
         font-weight: 800;
+
         color: #059669;
+
     }
 
-    .qr-payment-section {
+
+    .payment-method-card {
+
         background: #fafafa;
+
         border: 1px solid #e5e7eb;
+
         border-radius: 20px;
+
         padding: 28px 20px;
+
     }
+
 
     .section-number {
+
         width: 32px;
         height: 32px;
+
         border-radius: 50%;
+
         display: inline-flex;
+
         align-items: center;
+
         justify-content: center;
+
         background: #4f46e5;
+
         color: #fff;
+
         font-size: 14px;
+
         font-weight: 700;
+
         flex-shrink: 0;
+
     }
 
-    .qr-wrapper {
-        display: flex;
-        justify-content: center;
-    }
 
-    .qr-card {
-        width: 280px;
-        max-width: 100%;
-        background: #fff;
-        border: 1px solid #dbe3ed;
-        border-radius: 20px;
-        padding: 18px;
-        text-align: center;
-        box-shadow: 0 12px 30px rgba(15,23,42,.08);
-    }
+    /* PAYMENT METHOD */
 
-    .qr-top-label,
-    .qr-bottom-label {
-        font-size: 12px;
-        font-weight: 700;
-        letter-spacing: .08em;
-        color: #475569;
-    }
+    .payment-method-option {
 
-    .qr-image-container {
-        margin: 14px auto;
-        padding: 12px;
-        width: 236px;
-        max-width: 100%;
-        border: 2px dashed #cbd5e1;
-        border-radius: 14px;
-        background: #fff;
-    }
-
-    .qr-image {
-        width: 100%;
-        height: auto;
-        aspect-ratio: 1 / 1;
-        object-fit: contain;
         display: block;
-    }
 
-    .upi-id-box {
-        background: #fff;
-        border: 1px solid #bfdbfe;
-        border-radius: 14px;
-        padding: 13px 15px;
-    }
+        cursor: pointer;
 
-    .upi-icon {
-        width: 42px;
-        height: 42px;
-        border-radius: 12px;
-        background: #eff6ff;
-        color: #2563eb;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 19px;
-    }
+        height: 100%;
 
-    .supported-apps {
-        padding: 4px 0;
-    }
-
-    .app-item {
-        min-height: 55px;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        background: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 7px;
-        font-size: 13px;
-        font-weight: 600;
-        color: #475569;
-    }
-
-    .app-item i {
-        font-size: 17px;
-        color: #4f46e5;
-    }
-
-    .payment-divider {
         position: relative;
-        text-align: center;
-        margin: 30px 0;
-        color: #94a3b8;
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: .1em;
+
     }
 
-    .payment-divider::before {
-        content: "";
+
+    .payment-method-option input {
+
         position: absolute;
-        left: 0;
-        right: 0;
-        top: 50%;
-        height: 1px;
-        background: #e2e8f0;
+
+        opacity: 0;
+
+        pointer-events: none;
+
     }
 
-    .payment-divider span {
-        position: relative;
+
+    .payment-method-content {
+
+        min-height: 145px;
+
         background: #fff;
-        padding: 0 12px;
-    }
 
-    .transaction-card {
-        border: 1px solid #c7d2fe;
-        background: #f8faff;
-        border-radius: 18px;
-        padding: 22px;
-    }
+        border: 2px solid #e2e8f0;
 
-    .transaction-preview {
-        border: 1px solid #bbf7d0;
-        background: #f0fdf4;
-        border-radius: 12px;
-        padding: 12px 14px;
-    }
+        border-radius: 16px;
 
-    .payment-steps {
-        border: 1px solid #e2e8f0;
-        border-radius: 18px;
-        padding: 22px;
-        background: #fff;
-    }
+        padding: 18px 10px;
 
-    .step-item {
         display: flex;
-        gap: 14px;
-        padding: 14px 0;
-        border-bottom: 1px solid #f1f5f9;
-    }
 
-    .step-item:last-child {
-        border-bottom: 0;
-        padding-bottom: 0;
-    }
+        flex-direction: column;
 
-    .step-item:first-of-type {
-        padding-top: 4px;
-    }
-
-    .step-icon {
-        width: 42px;
-        height: 42px;
-        border-radius: 12px;
-        background: #eef2ff;
-        color: #4f46e5;
-        display: flex;
         align-items: center;
+
         justify-content: center;
-        flex-shrink: 0;
-        font-size: 18px;
+
+        text-align: center;
+
+        gap: 7px;
+
+        transition: all .2s ease;
+
     }
 
-    .payment-notice {
-        display: flex;
-        gap: 14px;
-        padding: 16px;
+
+    .payment-method-content:hover {
+
+        border-color: #86efac;
+
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 8px 20px rgba(15,23,42,.07);
+
+    }
+
+
+    .payment-method-option input:checked
+    + .payment-method-content {
+
+        border-color: #059669;
+
+        background: #ecfdf5;
+
+        box-shadow:
+            0 8px 22px rgba(5,150,105,.14);
+
+    }
+
+
+    .method-icon {
+
+        width: 52px;
+        height: 52px;
+
         border-radius: 15px;
-        background: #fffbeb;
-        border: 1px solid #fde68a;
-        color: #78350f;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 23px;
+
+        margin-bottom: 3px;
+
     }
 
-    .notice-icon {
-        width: 42px;
-        height: 42px;
-        border-radius: 12px;
+
+    .cash-icon {
+
         background: #fef3c7;
         color: #d97706;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        font-size: 19px;
+
     }
+
+
+    .upi-method-icon {
+
+        background: #ede9fe;
+        color: #7c3aed;
+
+    }
+
+
+    .card-method-icon {
+
+        background: #dbeafe;
+        color: #2563eb;
+
+    }
+
+
+    .payment-info-box {
+
+        border: 1px solid #bfdbfe;
+
+        background: #eff6ff;
+
+        border-radius: 14px;
+
+        padding: 15px;
+
+    }
+
+
+    .info-icon {
+
+        width: 40px;
+        height: 40px;
+
+        border-radius: 12px;
+
+        background: #dbeafe;
+
+        color: #2563eb;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        flex-shrink: 0;
+
+    }
+
+
+    .payment-steps {
+
+        border: 1px solid #e2e8f0;
+
+        border-radius: 18px;
+
+        padding: 22px;
+
+        background: #fff;
+
+    }
+
+
+    .step-item {
+
+        display: flex;
+
+        gap: 14px;
+
+        padding: 14px 0;
+
+        border-bottom: 1px solid #f1f5f9;
+
+    }
+
+
+    .step-item:last-child {
+
+        border-bottom: 0;
+
+        padding-bottom: 0;
+
+    }
+
+
+    .step-item:first-of-type {
+
+        padding-top: 4px;
+
+    }
+
+
+    .step-icon {
+
+        width: 42px;
+        height: 42px;
+
+        border-radius: 12px;
+
+        background: #eef2ff;
+
+        color: #4f46e5;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        flex-shrink: 0;
+
+        font-size: 18px;
+
+    }
+
+
+    .payment-notice {
+
+        display: flex;
+
+        gap: 14px;
+
+        padding: 16px;
+
+        border-radius: 15px;
+
+        background: #ecfdf5;
+
+        border: 1px solid #bbf7d0;
+
+        color: #065f46;
+
+    }
+
+
+    .notice-icon {
+
+        width: 42px;
+        height: 42px;
+
+        border-radius: 12px;
+
+        background: #d1fae5;
+
+        color: #059669;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        flex-shrink: 0;
+
+        font-size: 19px;
+
+    }
+
 
     .payment-side-card {
+
         overflow: hidden;
+
         border-radius: 22px;
+
         background: #fff;
+
         border: 1px solid #e2e8f0;
-        box-shadow: 0 12px 35px rgba(15,23,42,.08);
+
+        box-shadow:
+            0 12px 35px rgba(15,23,42,.08);
+
     }
+
 
     .side-image {
+
         height: 230px;
+
         position: relative;
+
         overflow: hidden;
+
     }
+
 
     .side-image img {
+
         width: 100%;
+
         height: 100%;
+
         object-fit: cover;
+
     }
 
+
     .side-image-overlay {
+
         position: absolute;
+
         inset: 0;
+
         display: flex;
+
         align-items: flex-start;
+
         justify-content: flex-end;
+
         padding: 16px;
+
         background: linear-gradient(
             to bottom,
             rgba(15,23,42,.25),
             transparent 55%
         );
+
     }
+
 
     .side-feature {
+
         display: flex;
+
         align-items: center;
+
         gap: 13px;
+
         padding: 13px 0;
+
         border-bottom: 1px solid #f1f5f9;
+
     }
+
 
     .side-feature:last-of-type {
+
         border-bottom: 0;
+
     }
 
+
     .side-feature-icon {
+
         width: 42px;
         height: 42px;
+
         border-radius: 12px;
+
         background: #eef2ff;
+
         color: #4f46e5;
+
         display: flex;
+
         align-items: center;
+
         justify-content: center;
+
         flex-shrink: 0;
+
     }
+
 
     @media (max-width: 575.98px) {
 
@@ -991,30 +1319,39 @@
             padding: 24px !important;
         }
 
+
         .payment-icon {
+
             width: 50px;
             height: 50px;
+
             font-size: 22px;
+
         }
+
 
         .amount-value {
+
             font-size: 34px;
+
         }
 
-        .qr-payment-section {
+
+        .payment-method-card {
+
             padding: 22px 14px;
+
         }
 
-        .transaction-card,
-        .payment-steps {
-            padding: 18px;
+
+        .payment-method-content {
+
+            min-height: 125px;
+
+            padding: 14px 7px;
+
         }
 
-        .app-item {
-            flex-direction: column;
-            gap: 3px;
-            font-size: 11px;
-        }
 
     }
 
@@ -1022,105 +1359,68 @@
 
 {% endblock %}
 
+
 {% block extra_js %}
 
 <script>
 
-    // Copy UPI ID
-    function copyUPI() {
+    // =========================================================
+    // PAYMENT FORM SUBMIT
+    // =========================================================
 
-        const upiElement = document.getElementById("upiId");
-
-        if (!upiElement) return;
-
-        const upi = upiElement.innerText.trim();
-
-        navigator.clipboard.writeText(upi).then(function () {
-
-            const button = event.currentTarget;
-            const oldHtml = button.innerHTML;
-
-            button.innerHTML = '<i class="bi bi-check-lg"></i>';
-            button.classList.remove("btn-outline-primary");
-            button.classList.add("btn-success");
-
-            setTimeout(function () {
-
-                button.innerHTML = oldHtml;
-                button.classList.remove("btn-success");
-                button.classList.add("btn-outline-primary");
-
-            }, 1800);
-
-        }).catch(function () {
-
-            alert("Unable to copy UPI ID.");
-
-        });
-
-    }
-
-
-    // Transaction ID live preview
-    const transactionInput =
-        document.getElementById("transaction_id");
-
-    const transactionCount =
-        document.getElementById("transactionCount");
-
-    const transactionPreview =
-        document.getElementById("transactionPreview");
-
-    const previewTransaction =
-        document.getElementById("previewTransaction");
-
-
-    if (transactionInput) {
-
-        transactionInput.addEventListener("input", function () {
-
-            const value = this.value.trim();
-
-            if (transactionCount) {
-                transactionCount.textContent = this.value.length;
-            }
-
-            if (value.length > 0) {
-
-                transactionPreview.classList.remove("d-none");
-                previewTransaction.textContent = value;
-
-            } else {
-
-                transactionPreview.classList.add("d-none");
-
-            }
-
-        });
-
-    }
-
-
-    // Submit button loading state
     const paymentForm =
         document.getElementById("paymentForm");
 
+
     if (paymentForm) {
 
-        paymentForm.addEventListener("submit", function () {
+        paymentForm.addEventListener(
+            "submit",
+            function () {
 
-            const button =
-                document.getElementById("submitPaymentBtn");
+                const button =
+                    document.getElementById(
+                        "submitPaymentBtn"
+                    );
 
-            if (!button) return;
+                if (!button) return;
 
-            button.disabled = true;
 
-            button.innerHTML =
-                '<span class="spinner-border spinner-border-sm me-2"></span>' +
-                'Submitting Payment...';
+                button.disabled = true;
 
-        });
+
+                button.innerHTML =
+                    '<span class="spinner-border spinner-border-sm me-2"></span>' +
+                    'Processing Payment...';
+
+            }
+        );
+
+    }
+
+
+    // =========================================================
+    // AMOUNT VALIDATION
+    // =========================================================
+
+    const amountInput =
+        document.getElementById("amount");
+
+
+    if (amountInput) {
+
+        amountInput.addEventListener(
+            "input",
+            function () {
+
+                if (parseFloat(this.value) < 1) {
+
+                    this.value = "";
+
+                }
+
+            }
+        );
 
     }
 

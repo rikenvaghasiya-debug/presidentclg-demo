@@ -8,381 +8,146 @@ My Profile | PG Management
 
 <div class="page-container py-4 py-lg-5">
 
-```
-<!-- ========================= -->
-<!-- PAGE HEADER -->
-<!-- ========================= -->
+    <!-- PAGE HEADER -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
 
-<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
 
-    <div>
+            <div class="d-flex align-items-center gap-2 mb-2">
 
-        <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="badge rounded-pill bg-primary-subtle text-primary px-3 py-2">
+                    <i class="bi bi-person-circle me-1"></i>
+                    Tenant Profile
+                </span>
 
-            <span class="badge rounded-pill bg-primary-subtle text-primary px-3 py-2">
-                <i class="bi bi-person-circle me-1"></i>
-                Tenant Profile
-            </span>
+            </div>
+
+            <h1 class="fw-bold mb-1">
+                Edit My Profile
+            </h1>
+
+            <p class="text-muted mb-0">
+                Keep your personal information updated.
+            </p>
 
         </div>
 
-        <h1 class="fw-bold mb-1">
-            Edit My Profile
-        </h1>
+        <a href="{% url 'tenant_dashboard' %}"
+           class="btn btn-light border shadow-sm">
 
-        <p class="text-muted mb-0">
-            Keep your personal information updated.
-        </p>
+            <i class="bi bi-arrow-left me-1"></i>
+            Back to Dashboard
+
+        </a>
 
     </div>
 
 
-    <a href="{% url 'tenant_dashboard' %}"
-       class="btn btn-light border shadow-sm">
+    <div class="row g-4 align-items-start">
 
-        <i class="bi bi-arrow-left me-1"></i>
-        Back to Dashboard
+        <!-- ================================= -->
+        <!-- LEFT PROFILE CARD -->
+        <!-- ================================= -->
 
-    </a>
+        <div class="col-lg-4">
 
-</div>
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden sticky-lg-top"
+                 style="top: 95px;">
 
+                <!-- COVER -->
 
-<div class="row g-4 align-items-start">
+                <div class="profile-cover">
 
-    <!-- ========================= -->
-    <!-- LEFT PROFILE CARD -->
-    <!-- ========================= -->
-
-    <div class="col-lg-4">
-
-        <div class="card border-0 shadow-sm rounded-4 overflow-hidden sticky-lg-top"
-             style="top: 95px;">
-
-            <!-- Profile Cover -->
-
-            <div class="profile-cover">
-
-                <div class="profile-cover-pattern"></div>
-
-            </div>
-
-
-            <!-- Avatar -->
-
-            <div class="profile-avatar-wrapper">
-
-                <div class="profile-avatar">
-
-                    <i class="bi bi-person-fill"></i>
-
-                </div>
-
-            </div>
-
-
-            <div class="card-body text-center pt-2 pb-4 px-4">
-
-                <h4 class="fw-bold mb-1">
-                    {{ tenant.full_name }}
-                </h4>
-
-                <p class="text-muted small mb-3">
-                    PG Tenant
-                </p>
-
-
-                <!-- Active Status -->
-
-                <div class="mb-4">
-
-                    <span class="badge rounded-pill bg-success-subtle text-success px-3 py-2">
-
-                        <span class="profile-status-dot"></span>
-
-                        Active Tenant
-
-                    </span>
+                    <div class="profile-cover-pattern"></div>
 
                 </div>
 
 
-                <!-- Quick Information -->
+                <!-- PROFILE PHOTO -->
 
-                <div class="profile-info-list text-start">
+                <div class="profile-avatar-wrapper">
 
-                    <div class="profile-info-item">
+                    <div class="profile-avatar">
 
-                        <div class="profile-info-icon bg-primary-subtle text-primary">
+                        {% if tenant.profile_photo %}
 
-                            <i class="bi bi-envelope-fill"></i>
+                            <img
+                                src="{{ tenant.profile_photo.url }}"
+                                alt="{{ tenant.full_name }}"
+                                class="profile-avatar-image"
+                            >
 
-                        </div>
+                        {% else %}
 
-                        <div class="overflow-hidden">
+                            <i class="bi bi-person-fill"></i>
 
-                            <small class="text-muted d-block">
-                                Email
-                            </small>
-
-                            <span class="fw-semibold text-truncate d-block">
-                                {{ tenant.email }}
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="profile-info-item">
-
-                        <div class="profile-info-icon bg-success-subtle text-success">
-
-                            <i class="bi bi-telephone-fill"></i>
-
-                        </div>
-
-                        <div>
-
-                            <small class="text-muted d-block">
-                                Phone
-                            </small>
-
-                            <span class="fw-semibold">
-                                {{ tenant.phone }}
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="profile-info-item">
-
-                        <div class="profile-info-icon bg-info-subtle text-info">
-
-                            <i class="bi bi-calendar3"></i>
-
-                        </div>
-
-                        <div>
-
-                            <small class="text-muted d-block">
-                                Date of Birth
-                            </small>
-
-                            <span class="fw-semibold">
-
-                                {% if tenant.date_of_birth %}
-                                    {{ tenant.date_of_birth|date:'d M Y' }}
-                                {% else %}
-                                    Not Provided
-                                {% endif %}
-
-                            </span>
-
-                        </div>
+                        {% endif %}
 
                     </div>
 
                 </div>
 
 
-                <!-- Security Note -->
+                <div class="card-body text-center pt-2 pb-4 px-4">
 
-                <div class="profile-security-note mt-4">
+                    <h4 class="fw-bold mb-1">
+                        {{ tenant.full_name }}
+                    </h4>
 
-                    <i class="bi bi-shield-check text-success fs-5"></i>
-
-                    <div class="text-start">
-
-                        <div class="fw-semibold small">
-                            Profile Security
-                        </div>
-
-                        <small class="text-muted">
-                            Your personal information is managed securely.
-                        </small>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
+                    <p class="text-muted small mb-3">
+                        PG Tenant
+                    </p>
 
 
-    <!-- ========================= -->
-    <!-- RIGHT EDIT FORM -->
-    <!-- ========================= -->
+                    <!-- ACTIVE STATUS -->
 
-    <div class="col-lg-8">
+                    <div class="mb-4">
 
-        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                        <span class="badge rounded-pill bg-success-subtle text-success px-3 py-2">
 
-            <!-- Header -->
+                            <span class="profile-status-dot"></span>
 
-            <div class="p-4 text-white"
-                 style="background: linear-gradient(135deg, #0f172a, #3730a3);">
+                            Active Tenant
 
-                <div class="d-flex align-items-center gap-3">
-
-                    <div class="profile-header-icon">
-
-                        <i class="bi bi-person-gear"></i>
+                        </span>
 
                     </div>
 
-                    <div>
 
-                        <h4 class="fw-bold mb-1">
-                            Personal Information
-                        </h4>
+                    <!-- QUICK INFORMATION -->
 
-                        <p class="text-white-50 mb-0 small">
-                            Update the information you are allowed to manage.
-                        </p>
+                    <div class="profile-info-list text-start">
 
-                    </div>
+                        <!-- EMAIL -->
 
-                </div>
+                        <div class="profile-info-item">
 
-            </div>
+                            <div class="profile-info-icon bg-primary-subtle text-primary">
 
-
-            <!-- Form -->
-
-            <div class="card-body p-4 p-lg-5">
-
-                <form method="POST" id="profileForm">
-
-                    {% csrf_token %}
-
-
-                    <!-- ========================= -->
-                    <!-- BASIC INFORMATION -->
-                    <!-- ========================= -->
-
-                    <div class="form-section mb-4">
-
-                        <div class="section-heading">
-
-                            <div class="section-icon bg-primary-subtle text-primary">
-
-                                <i class="bi bi-person-fill"></i>
+                                <i class="bi bi-envelope-fill"></i>
 
                             </div>
 
-                            <div>
+                            <div class="overflow-hidden">
 
-                                <h6 class="fw-bold mb-0">
-                                    Basic Information
-                                </h6>
-
-                                <small class="text-muted">
-                                    Enter your name and email address.
+                                <small class="text-muted d-block">
+                                    Email
                                 </small>
 
-                            </div>
-
-                        </div>
-
-
-                        <div class="row g-3 mt-2">
-
-                            <!-- Full Name -->
-
-                            <div class="col-md-6">
-
-                                <label for="full_name"
-                                       class="form-label fw-semibold">
-
-                                    Full Name
-
-                                    <span class="text-danger">*</span>
-
-                                </label>
-
-                                <div class="input-group">
-
-                                    <span class="input-group-text">
-                                        <i class="bi bi-person"></i>
-                                    </span>
-
-                                    <input
-                                        type="text"
-                                        name="full_name"
-                                        id="full_name"
-                                        class="form-control"
-                                        value="{{ tenant.full_name }}"
-                                        maxlength="100"
-                                        placeholder="Enter your full name"
-                                        required
-                                    >
-
-                                </div>
-
-                                <small class="text-muted">
-                                    Maximum 100 characters.
-                                </small>
-
-                            </div>
-
-
-                            <!-- Email -->
-
-                            <div class="col-md-6">
-
-                                <label for="email"
-                                       class="form-label fw-semibold">
-
-                                    Email Address
-
-                                    <span class="text-danger">*</span>
-
-                                </label>
-
-                                <div class="input-group">
-
-                                    <span class="input-group-text">
-                                        <i class="bi bi-envelope"></i>
-                                    </span>
-
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        id="email"
-                                        class="form-control"
-                                        value="{{ tenant.email }}"
-                                        placeholder="example@email.com"
-                                        required
-                                    >
-
-                                </div>
-
-                                <small class="text-muted">
-                                    Use an active email address.
-                                </small>
+                                <span class="fw-semibold text-truncate d-block">
+                                    {{ tenant.email }}
+                                </span>
 
                             </div>
 
                         </div>
 
-                    </div>
 
+                        <!-- PHONE -->
 
-                    <!-- ========================= -->
-                    <!-- CONTACT INFORMATION -->
-                    <!-- ========================= -->
+                        <div class="profile-info-item">
 
-                    <div class="form-section mb-4">
-
-                        <div class="section-heading">
-
-                            <div class="section-icon bg-success-subtle text-success">
+                            <div class="profile-info-icon bg-success-subtle text-success">
 
                                 <i class="bi bi-telephone-fill"></i>
 
@@ -390,253 +155,699 @@ My Profile | PG Management
 
                             <div>
 
-                                <h6 class="fw-bold mb-0">
-                                    Contact Information
-                                </h6>
-
-                                <small class="text-muted">
-                                    Keep your contact details current.
+                                <small class="text-muted d-block">
+                                    Phone
                                 </small>
+
+                                <span class="fw-semibold">
+                                    {{ tenant.phone }}
+                                </span>
 
                             </div>
 
                         </div>
 
 
-                        <div class="row g-3 mt-2">
+                        <!-- DOB -->
 
-                            <!-- Phone -->
+                        <div class="profile-info-item">
 
-                            <div class="col-md-6">
+                            <div class="profile-info-icon bg-info-subtle text-info">
 
-                                <label for="phone"
+                                <i class="bi bi-calendar3"></i>
+
+                            </div>
+
+                            <div>
+
+                                <small class="text-muted d-block">
+                                    Date of Birth
+                                </small>
+
+                                <span class="fw-semibold">
+
+                                    {% if tenant.date_of_birth %}
+                                        {{ tenant.date_of_birth|date:'d M Y' }}
+                                    {% else %}
+                                        Not Provided
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PROFILE PHOTO STATUS -->
+
+                        <div class="profile-info-item">
+
+                            <div class="profile-info-icon bg-warning-subtle text-warning">
+
+                                <i class="bi bi-image-fill"></i>
+
+                            </div>
+
+                            <div>
+
+                                <small class="text-muted d-block">
+                                    Profile Photo
+                                </small>
+
+                                <span class="fw-semibold">
+
+                                    {% if tenant.profile_photo %}
+                                        Uploaded
+                                    {% else %}
+                                        Not Uploaded
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SECURITY NOTE -->
+
+                    <div class="profile-security-note mt-4">
+
+                        <i class="bi bi-shield-check text-success fs-5"></i>
+
+                        <div class="text-start">
+
+                            <div class="fw-semibold small">
+                                Profile Security
+                            </div>
+
+                            <small class="text-muted">
+                                Your personal information is managed securely.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================= -->
+        <!-- RIGHT EDIT FORM -->
+        <!-- ================================= -->
+
+        <div class="col-lg-8">
+
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+                <!-- HEADER -->
+
+                <div class="p-4 text-white"
+                     style="background: linear-gradient(135deg, #0f172a, #3730a3);">
+
+                    <div class="d-flex align-items-center gap-3">
+
+                        <div class="profile-header-icon">
+
+                            <i class="bi bi-person-gear"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h4 class="fw-bold mb-1">
+                                Personal Information
+                            </h4>
+
+                            <p class="text-white-50 mb-0 small">
+                                Update the information you are allowed to manage.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FORM BODY -->
+
+                <div class="card-body p-4 p-lg-5">
+
+                    <form
+                        method="POST"
+                        enctype="multipart/form-data"
+                        id="profileForm"
+                    >
+
+                        {% csrf_token %}
+
+
+                        <!-- ================================= -->
+                        <!-- BASIC INFORMATION -->
+                        <!-- ================================= -->
+
+                        <div class="form-section mb-4">
+
+                            <div class="section-heading">
+
+                                <div class="section-icon bg-primary-subtle text-primary">
+
+                                    <i class="bi bi-person-fill"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <h6 class="fw-bold mb-0">
+                                        Basic Information
+                                    </h6>
+
+                                    <small class="text-muted">
+                                        Enter your name and email address.
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="row g-3 mt-2">
+
+                                <!-- FULL NAME -->
+
+                                <div class="col-md-6">
+
+                                    <label for="full_name"
+                                           class="form-label fw-semibold">
+
+                                        Full Name
+
+                                        <span class="text-danger">*</span>
+
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-text">
+                                            <i class="bi bi-person"></i>
+                                        </span>
+
+                                        <input
+                                            type="text"
+                                            name="full_name"
+                                            id="full_name"
+                                            class="form-control"
+                                            value="{{ tenant.full_name }}"
+                                            maxlength="100"
+                                            placeholder="Enter your full name"
+                                            required
+                                        >
+
+                                    </div>
+
+                                    <small class="text-muted">
+                                        Maximum 100 characters.
+                                    </small>
+
+                                </div>
+
+
+                                <!-- EMAIL -->
+
+                                <div class="col-md-6">
+
+                                    <label for="email"
+                                           class="form-label fw-semibold">
+
+                                        Email Address
+
+                                        <span class="text-danger">*</span>
+
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-text">
+                                            <i class="bi bi-envelope"></i>
+                                        </span>
+
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            id="email"
+                                            class="form-control"
+                                            value="{{ tenant.email }}"
+                                            placeholder="example@email.com"
+                                            required
+                                        >
+
+                                    </div>
+
+                                    <small class="text-muted">
+                                        Use an active email address.
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================================= -->
+                        <!-- CONTACT INFORMATION -->
+                        <!-- ================================= -->
+
+                        <div class="form-section mb-4">
+
+                            <div class="section-heading">
+
+                                <div class="section-icon bg-success-subtle text-success">
+
+                                    <i class="bi bi-telephone-fill"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <h6 class="fw-bold mb-0">
+                                        Contact Information
+                                    </h6>
+
+                                    <small class="text-muted">
+                                        Keep your contact details current.
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="row g-3 mt-2">
+
+                                <!-- PHONE -->
+
+                                <div class="col-md-6">
+
+                                    <label for="phone"
+                                           class="form-label fw-semibold">
+
+                                        Phone Number
+
+                                        <span class="text-danger">*</span>
+
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-text">
+                                            <i class="bi bi-phone"></i>
+                                        </span>
+
+                                        <input
+                                            type="text"
+                                            name="phone"
+                                            id="phone"
+                                            class="form-control"
+                                            value="{{ tenant.phone }}"
+                                            maxlength="10"
+                                            minlength="10"
+                                            pattern="[0-9]{10}"
+                                            inputmode="numeric"
+                                            placeholder="10 digit mobile number"
+                                            required
+                                        >
+
+                                    </div>
+
+                                    <small id="phoneHelp"
+                                           class="text-muted">
+
+                                        Enter exactly 10 digits.
+
+                                    </small>
+
+                                </div>
+
+
+                                <!-- DATE OF BIRTH -->
+
+                                <div class="col-md-6">
+
+                                    <label for="date_of_birth"
+                                           class="form-label fw-semibold">
+
+                                        Date of Birth
+
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-text">
+                                            <i class="bi bi-calendar-heart"></i>
+                                        </span>
+
+                                        <input
+                                            type="date"
+                                            name="date_of_birth"
+                                            id="date_of_birth"
+                                            class="form-control"
+                                            value="{{ tenant.date_of_birth|date:'Y-m-d' }}"
+                                        >
+
+                                    </div>
+
+                                    <small class="text-muted">
+                                        Optional.
+                                    </small>
+
+                                </div>
+
+
+                                <!-- ================================= -->
+                                <!-- PROFILE PHOTO -->
+                                <!-- ================================= -->
+
+                                <div class="col-12">
+
+                                    <div class="profile-photo-box">
+
+                                        <div class="profile-photo-heading">
+
+                                            <div class="profile-photo-icon">
+
+                                                <i class="bi bi-camera-fill"></i>
+
+                                            </div>
+
+                                            <div>
+
+                                                <h6 class="fw-bold mb-1">
+                                                    Profile Photo
+                                                </h6>
+
+                                                <small class="text-muted">
+                                                    Upload your profile picture.
+                                                </small>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="row g-4 align-items-center mt-1">
+
+                                            <!-- PHOTO PREVIEW -->
+
+                                            <div class="col-md-4">
+
+                                                <div class="profile-upload-preview">
+
+                                                    {% if tenant.profile_photo %}
+
+                                                        <img
+                                                            src="{{ tenant.profile_photo.url }}"
+                                                            alt="{{ tenant.full_name }}"
+                                                            id=" profilePhotoPreview"
+                                                            class="profile-upload-image"
+                                                        >
+
+                                                    {% else %}
+
+                                                        <div
+                                                            id="profilePhotoPlaceholder"
+                                                            class="profile-photo-placeholder"
+                                                        >
+
+                                                            <i class="bi bi-person-fill"></i>
+
+                                                            <span>
+                                                                No Photo
+                                                            </span>
+
+                                                        </div>
+
+                                                        <img
+                                                            src=""
+                                                            alt="Profile Preview"
+                                                            id="profilePhotoPreview"
+                                                            class="profile-upload-image d-none"
+                                                        >
+
+                                                    {% endif %}
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <!-- UPLOAD -->
+
+                                            <div class="col-md-8">
+
+                                                <label
+                                                    for="profile_photo"
+                                                    class="form-label fw-semibold"
+                                                >
+                                                    Choose Profile Photo
+                                                </label>
+
+                                                <div class="input-group">
+
+                                                    <span class="input-group-text">
+
+                                                        <i class="bi bi-upload"></i>
+
+                                                    </span>
+
+                                                    <input
+                                                        type="file"
+                                                        name="profile_photo"
+                                                        id="profile_photo"
+                                                        class="form-control"
+                                                        accept="image/jpeg,image/png,image/webp"
+                                                    >
+
+                                                </div>
+
+                                                <small class="text-muted d-block mt-2">
+
+                                                    <i class="bi bi-info-circle me-1"></i>
+
+                                                    JPG, PNG or WEBP image recommended.
+                                                    Maximum 5 MB.
+
+                                                </small>
+
+
+                                                {% if tenant.profile_photo %}
+
+                                                    <div class="mt-3">
+
+                                                        <span class="badge rounded-pill bg-success-subtle text-success">
+
+                                                            <i class="bi bi-check-circle-fill me-1"></i>
+
+                                                            Current photo uploaded
+
+                                                        </span>
+
+                                                    </div>
+
+                                                {% else %}
+
+                                                    <div class="mt-3">
+
+                                                        <span class="badge rounded-pill bg-secondary-subtle text-secondary">
+
+                                                            <i class="bi bi-image me-1"></i>
+
+                                                            No photo uploaded
+
+                                                        </span>
+
+                                                    </div>
+
+                                                {% endif %}
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================================= -->
+                        <!-- ADDRESS -->
+                        <!-- ================================= -->
+
+                        <div class="form-section mb-4">
+
+                            <div class="section-heading">
+
+                                <div class="section-icon bg-info-subtle text-info">
+
+                                    <i class="bi bi-geo-alt-fill"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <h6 class="fw-bold mb-0">
+                                        Address
+                                    </h6>
+
+                                    <small class="text-muted">
+                                        Enter your current residential address.
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="mt-3">
+
+                                <label for="address"
                                        class="form-label fw-semibold">
 
-                                    Phone Number
+                                    Full Address
 
                                     <span class="text-danger">*</span>
 
                                 </label>
 
-                                <div class="input-group">
+                                <textarea
+                                    name="address"
+                                    id="address"
+                                    class="form-control"
+                                    rows="5"
+                                    placeholder="Enter your complete address"
+                                    required
+                                >{{ tenant.address }}</textarea>
 
-                                    <span class="input-group-text">
-                                        <i class="bi bi-phone"></i>
-                                    </span>
+                                <div class="d-flex justify-content-between mt-2">
 
-                                    <input
-                                        type="text"
-                                        name="phone"
-                                        id="phone"
-                                        class="form-control"
-                                        value="{{ tenant.phone }}"
-                                        maxlength="10"
-                                        minlength="10"
-                                        pattern="[0-9]{10}"
-                                        inputmode="numeric"
-                                        placeholder="10 digit mobile number"
-                                        required
-                                    >
+                                    <small class="text-muted">
 
-                                </div>
+                                        <i class="bi bi-info-circle me-1"></i>
 
-                                <small id="phoneHelp"
-                                       class="text-muted">
+                                        Please provide an accurate address.
 
-                                    Enter exactly 10 digits.
+                                    </small>
 
-                                </small>
+                                    <small class="text-muted">
 
-                            </div>
+                                        <span id="addressCount">0</span>
+                                        characters
 
-
-                            <!-- Date of Birth -->
-
-                            <div class="col-md-6">
-
-                                <label for="date_of_birth"
-                                       class="form-label fw-semibold">
-
-                                    Date of Birth
-
-                                </label>
-
-                                <div class="input-group">
-
-                                    <span class="input-group-text">
-                                        <i class="bi bi-calendar-heart"></i>
-                                    </span>
-
-                                    <input
-                                        type="date"
-                                        name="date_of_birth"
-                                        id="date_of_birth"
-                                        class="form-control"
-                                        value="{{ tenant.date_of_birth|date:'Y-m-d' }}"
-                                    >
+                                    </small>
 
                                 </div>
 
-                                <small class="text-muted">
-                                    Optional.
-                                </small>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- ========================= -->
-                    <!-- ADDRESS -->
-                    <!-- ========================= -->
-
-                    <div class="form-section mb-4">
-
-                        <div class="section-heading">
-
-                            <div class="section-icon bg-info-subtle text-info">
-
-                                <i class="bi bi-geo-alt-fill"></i>
-
-                            </div>
-
-                            <div>
-
-                                <h6 class="fw-bold mb-0">
-                                    Address
-                                </h6>
-
-                                <small class="text-muted">
-                                    Enter your current residential address.
-                                </small>
-
                             </div>
 
                         </div>
 
 
-                        <div class="mt-3">
+                        <!-- ================================= -->
+                        <!-- ADMIN MANAGED INFORMATION -->
+                        <!-- ================================= -->
 
-                            <label for="address"
-                                   class="form-label fw-semibold">
+                        <div class="admin-info-box mb-4">
 
-                                Full Address
+                            <div class="d-flex gap-3">
 
-                                <span class="text-danger">*</span>
+                                <div class="admin-info-icon">
 
-                            </label>
+                                    <i class="bi bi-shield-lock-fill"></i>
 
-                            <textarea
-                                name="address"
-                                id="address"
-                                class="form-control"
-                                rows="5"
-                                placeholder="Enter your complete address"
-                                required
-                            >{{ tenant.address }}</textarea>
+                                </div>
 
-                            <div class="d-flex justify-content-between mt-2">
+                                <div>
 
-                                <small class="text-muted">
-                                    <i class="bi bi-info-circle me-1"></i>
-                                    Please provide an accurate address.
-                                </small>
+                                    <h6 class="fw-bold mb-2">
+                                        Admin Managed Information
+                                    </h6>
 
-                                <small class="text-muted">
-                                    <span id="addressCount">0</span> characters
-                                </small>
-
-                            </div>
-
-                        </div>
-
-                    </div>
+                                    <p class="text-muted small mb-3">
+                                        The following information is managed by the PG administrator
+                                        and cannot be changed from your profile.
+                                    </p>
 
 
-                    <!-- ========================= -->
-                    <!-- ADMIN MANAGED INFORMATION -->
-                    <!-- ========================= -->
+                                    <div class="row g-2">
 
-                    <div class="admin-info-box mb-4">
+                                        <div class="col-sm-6">
 
-                        <div class="d-flex gap-3">
+                                            <div class="managed-item">
 
-                            <div class="admin-info-icon">
+                                                <i class="bi bi-building"></i>
 
-                                <i class="bi bi-shield-lock-fill"></i>
+                                                <span>
+                                                    PG / Property
+                                                </span>
 
-                            </div>
-
-                            <div>
-
-                                <h6 class="fw-bold mb-2">
-                                    Admin Managed Information
-                                </h6>
-
-                                <p class="text-muted small mb-3">
-                                    The following information is managed by the PG administrator
-                                    and cannot be changed from your profile.
-                                </p>
-
-
-                                <div class="row g-2">
-
-                                    <div class="col-sm-6">
-
-                                        <div class="managed-item">
-
-                                            <i class="bi bi-building"></i>
-
-                                            <span>
-                                                PG / Property
-                                            </span>
+                                            </div>
 
                                         </div>
 
-                                    </div>
 
+                                        <div class="col-sm-6">
 
-                                    <div class="col-sm-6">
+                                            <div class="managed-item">
 
-                                        <div class="managed-item">
+                                                <i class="bi bi-door-open"></i>
 
-                                            <i class="bi bi-door-open"></i>
+                                                <span>
+                                                    Room & Bed
+                                                </span>
 
-                                            <span>
-                                                Room & Bed
-                                            </span>
-
-                                        </div>
-
-                                    </div>
-
-
-                                    <div class="col-sm-6">
-
-                                        <div class="managed-item">
-
-                                            <i class="bi bi-cash-stack"></i>
-
-                                            <span>
-                                                Rent Amount
-                                            </span>
+                                            </div>
 
                                         </div>
 
-                                    </div>
+
+                                        <div class="col-sm-6">
+
+                                            <div class="managed-item">
+
+                                                <i class="bi bi-cash-stack"></i>
+
+                                                <span>
+                                                    Rent Amount
+                                                </span>
+
+                                            </div>
+
+                                        </div>
 
 
-                                    <div class="col-sm-6">
+                                        <div class="col-sm-6">
 
-                                        <div class="managed-item">
+                                            <div class="managed-item">
 
-                                            <i class="bi bi-wallet2"></i>
+                                                <i class="bi bi-wallet2"></i>
 
-                                            <span>
-                                                Security Deposit
-                                            </span>
+                                                <span>
+                                                    Security Deposit
+                                                </span>
+
+                                            </div>
 
                                         </div>
 
@@ -648,37 +859,40 @@ My Profile | PG Management
 
                         </div>
 
-                    </div>
+
+                        <!-- ================================= -->
+                        <!-- BUTTONS -->
+                        <!-- ================================= -->
+
+                        <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 pt-4 border-top">
+
+                            <a href="{% url 'tenant_dashboard' %}"
+                               class="btn btn-light border px-4">
+
+                                <i class="bi bi-x-lg me-1"></i>
+
+                                Cancel
+
+                            </a>
 
 
-                    <!-- ========================= -->
-                    <!-- BUTTONS -->
-                    <!-- ========================= -->
+                            <button
+                                type="submit"
+                                id="saveBtn"
+                                class="btn btn-primary px-4"
+                            >
 
-                    <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 pt-4 border-top">
+                                <i class="bi bi-check-circle-fill me-1"></i>
 
-                        <a href="{% url 'tenant_dashboard' %}"
-                           class="btn btn-light border px-4">
+                                Save Changes
 
-                            <i class="bi bi-x-lg me-1"></i>
-                            Cancel
+                            </button>
 
-                        </a>
+                        </div>
 
+                    </form>
 
-                        <button
-                            type="submit"
-                            id="saveBtn"
-                            class="btn btn-primary px-4">
-
-                            <i class="bi bi-check-circle-fill me-1"></i>
-                            Save Changes
-
-                        </button>
-
-                    </div>
-
-                </form>
+                </div>
 
             </div>
 
@@ -687,33 +901,41 @@ My Profile | PG Management
     </div>
 
 </div>
-```
-
-</div>
 
 {% endblock %}
+
 
 {% block extra_css %}
 
 <style>
 
+    /* ================================= */
+    /* PROFILE COVER */
+    /* ================================= */
+
     .profile-cover {
         height: 125px;
         position: relative;
         overflow: hidden;
-        background:
-            linear-gradient(135deg, #4f46e5, #7c3aed);
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
     }
+
 
     .profile-cover-pattern {
         position: absolute;
         inset: 0;
         opacity: 0.25;
+
         background-image:
             radial-gradient(circle at 20% 20%, #ffffff 0, transparent 22%),
             radial-gradient(circle at 80% 70%, #ffffff 0, transparent 20%),
             radial-gradient(circle at 55% 10%, #ffffff 0, transparent 15%);
     }
+
+
+    /* ================================= */
+    /* PROFILE AVATAR */
+    /* ================================= */
 
     .profile-avatar-wrapper {
         display: flex;
@@ -723,155 +945,399 @@ My Profile | PG Management
         z-index: 2;
     }
 
+
     .profile-avatar {
         width: 90px;
         height: 90px;
         border-radius: 50%;
+
         background: linear-gradient(135deg, #0f172a, #3730a3);
-        color: #fff;
-        border: 5px solid #fff;
+
+        color: #ffffff;
+
+        border: 5px solid #ffffff;
+
         display: flex;
         align-items: center;
         justify-content: center;
+
         font-size: 36px;
+
+        overflow: hidden;
+
         box-shadow: 0 10px 25px rgba(15, 23, 42, 0.18);
     }
 
+
+    .profile-avatar-image {
+        width: 100%;
+        height: 100%;
+
+        object-fit: cover;
+
+        display: block;
+
+        border-radius: 50%;
+    }
+
+
+    /* ================================= */
+    /* STATUS */
+    /* ================================= */
+
     .profile-status-dot {
         display: inline-block;
+
         width: 8px;
         height: 8px;
+
         background: #10b981;
+
         border-radius: 50%;
+
         margin-right: 5px;
     }
+
+
+    /* ================================= */
+    /* PROFILE INFO */
+    /* ================================= */
 
     .profile-info-list {
         border-top: 1px solid #eef2f7;
     }
 
+
     .profile-info-item {
         display: flex;
         align-items: center;
+
         gap: 12px;
+
         padding: 13px 0;
+
         border-bottom: 1px solid #eef2f7;
     }
+
 
     .profile-info-icon {
         width: 40px;
         height: 40px;
+
         border-radius: 11px;
+
         display: flex;
         align-items: center;
         justify-content: center;
+
         flex-shrink: 0;
     }
 
+
+    /* ================================= */
+    /* SECURITY */
+    /* ================================= */
+
     .profile-security-note {
         display: flex;
+
         gap: 10px;
+
         align-items: flex-start;
+
         background: #f8fafc;
+
         border: 1px solid #e2e8f0;
+
         border-radius: 14px;
+
         padding: 13px;
     }
+
+
+    /* ================================= */
+    /* HEADER */
+    /* ================================= */
 
     .profile-header-icon {
         width: 50px;
         height: 50px;
+
         border-radius: 14px;
+
         background: rgba(255, 255, 255, 0.12);
+
         display: flex;
         align-items: center;
         justify-content: center;
+
         font-size: 22px;
     }
+
+
+    /* ================================= */
+    /* FORM */
+    /* ================================= */
 
     .form-section {
         padding-bottom: 4px;
     }
 
+
     .section-heading {
         display: flex;
+
         align-items: center;
+
         gap: 12px;
     }
+
 
     .section-icon {
         width: 42px;
         height: 42px;
+
         border-radius: 12px;
+
         display: flex;
         align-items: center;
         justify-content: center;
+
         font-size: 18px;
+
         flex-shrink: 0;
     }
 
+
     .form-control {
         border-color: #dbe2ea;
+
         border-radius: 12px;
     }
 
+
     .input-group-text {
         border-color: #dbe2ea;
+
         background: #f8fafc;
+
         color: #64748b;
+
         border-radius: 12px 0 0 12px;
     }
+
 
     .input-group .form-control {
         border-radius: 0 12px 12px 0;
     }
 
+
     .form-control:focus {
         border-color: #6366f1;
-        box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.12);
+
+        box-shadow:
+            0 0 0 0.2rem rgba(99, 102, 241, 0.12);
     }
+
+
+    /* ================================= */
+    /* PROFILE PHOTO BOX */
+    /* ================================= */
+
+    .profile-photo-box {
+        padding: 18px;
+
+        background: #f8fafc;
+
+        border: 1px solid #e2e8f0;
+
+        border-radius: 16px;
+    }
+
+
+    .profile-photo-heading {
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+    }
+
+
+    .profile-photo-icon {
+        width: 42px;
+        height: 42px;
+
+        border-radius: 12px;
+
+        background: #ede9fe;
+
+        color: #7c3aed;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 18px;
+
+        flex-shrink: 0;
+    }
+
+
+    .profile-upload-preview {
+        width: 120px;
+        height: 120px;
+
+        border-radius: 50%;
+
+        overflow: hidden;
+
+        border: 4px solid #e0e7ff;
+
+        background: #ffffff;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        margin: 0 auto;
+
+        box-shadow:
+            0 8px 20px rgba(15, 23, 42, 0.10);
+    }
+
+
+    .profile-upload-image {
+        width: 100%;
+        height: 100%;
+
+        object-fit: cover;
+
+        display: block;
+
+        border-radius: 50%;
+    }
+
+
+    .profile-photo-placeholder {
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        justify-content: center;
+
+        color: #94a3b8;
+
+        background: #f8fafc;
+    }
+
+
+    .profile-photo-placeholder i {
+        font-size: 42px;
+
+        color: #cbd5e1;
+    }
+
+
+    .profile-photo-placeholder span {
+        font-size: 12px;
+
+        margin-top: 3px;
+    }
+
+
+    /* ================================= */
+    /* ADMIN INFORMATION */
+    /* ================================= */
 
     .admin-info-box {
         padding: 18px;
+
         border: 1px solid #bfdbfe;
+
         background: #eff6ff;
+
         border-radius: 16px;
     }
+
 
     .admin-info-icon {
         width: 44px;
         height: 44px;
+
         border-radius: 12px;
+
         background: #dbeafe;
+
         color: #2563eb;
+
         display: flex;
         align-items: center;
         justify-content: center;
+
         font-size: 20px;
+
         flex-shrink: 0;
     }
 
+
     .managed-item {
         display: flex;
+
         align-items: center;
+
         gap: 8px;
+
         padding: 9px 11px;
+
         background: rgba(255, 255, 255, 0.75);
+
         border: 1px solid #dbeafe;
+
         border-radius: 10px;
+
         color: #475569;
+
         font-size: 13px;
+
         font-weight: 600;
     }
+
 
     .managed-item i {
         color: #2563eb;
     }
 
+
+    /* ================================= */
+    /* BUTTON */
+    /* ================================= */
+
     .btn {
         border-radius: 11px;
+
         font-weight: 600;
     }
+
+
+    /* ================================= */
+    /* MOBILE */
+    /* ================================= */
+
+    @media (max-width: 767.98px) {
+
+        .profile-upload-preview {
+            width: 105px;
+            height: 105px;
+        }
+
+    }
+
 
     @media (max-width: 991.98px) {
 
@@ -885,99 +1351,223 @@ My Profile | PG Management
 
 {% endblock %}
 
+
 {% block extra_js %}
 
 <script>
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    const phoneInput = document.getElementById("phone");
-    const phoneHelp = document.getElementById("phoneHelp");
+    const phoneInput =
+        document.getElementById("phone");
 
-    const addressInput = document.getElementById("address");
-    const addressCount = document.getElementById("addressCount");
+    const phoneHelp =
+        document.getElementById("phoneHelp");
 
-    const profileForm = document.getElementById("profileForm");
+    const addressInput =
+        document.getElementById("address");
+
+    const addressCount =
+        document.getElementById("addressCount");
+
+    const profileForm =
+        document.getElementById("profileForm");
+
+    const profilePhotoInput =
+        document.getElementById("profile_photo");
+
+    const profilePhotoPreview =
+        document.getElementById("profilePhotoPreview");
+
+    const profilePhotoPlaceholder =
+        document.getElementById("profilePhotoPlaceholder");
 
 
-    /* ========================= */
+    /* ================================= */
     /* PHONE INPUT */
-    /* ========================= */
+    /* ================================= */
 
-    phoneInput.addEventListener("input", function () {
+    if (phoneInput) {
 
-        this.value = this.value.replace(/\D/g, "");
+        phoneInput.addEventListener("input", function () {
 
-        if (this.value.length === 10) {
+            this.value =
+                this.value.replace(/\D/g, "");
 
-            phoneHelp.textContent =
-                "✓ Valid 10-digit phone number.";
+            if (this.value.length === 10) {
 
-            phoneHelp.className =
-                "text-success small";
+                phoneHelp.textContent =
+                    "✓ Valid 10-digit phone number.";
 
-        } else {
+                phoneHelp.className =
+                    "text-success small";
 
-            phoneHelp.textContent =
-                "Enter exactly 10 digits.";
+            } else {
 
-            phoneHelp.className =
-                "text-muted small";
+                phoneHelp.textContent =
+                    "Enter exactly 10 digits.";
 
-        }
+                phoneHelp.className =
+                    "text-muted small";
 
-    });
+            }
 
-
-    /* ========================= */
-    /* ADDRESS COUNTER */
-    /* ========================= */
-
-    function updateAddressCount() {
-
-        addressCount.textContent =
-            addressInput.value.length;
+        });
 
     }
 
 
-    addressInput.addEventListener(
-        "input",
-        updateAddressCount
-    );
+    /* ================================= */
+    /* PROFILE PHOTO PREVIEW */
+    /* ================================= */
+
+    if (profilePhotoInput) {
+
+        profilePhotoInput.addEventListener(
+            "change",
+            function () {
+
+                const file =
+                    this.files[0];
+
+                if (!file) {
+                    return;
+                }
 
 
-    /* ========================= */
-    /* FORM SUBMIT */
-    /* ========================= */
+                /* IMAGE TYPE CHECK */
 
-    profileForm.addEventListener("submit", function (event) {
+                if (!file.type.startsWith("image/")) {
 
-        const phone =
-            phoneInput.value.trim();
+                    alert(
+                        "Please select a valid image file."
+                    );
 
-        if (!/^[0-9]{10}$/.test(phone)) {
+                    this.value = "";
 
-            event.preventDefault();
+                    return;
+                }
 
-            phoneInput.focus();
 
-            phoneHelp.textContent =
-                "Please enter exactly 10 digits.";
+                /* SIZE CHECK */
 
-            phoneHelp.className =
-                "text-danger small";
+                if (file.size > 5 * 1024 * 1024) {
 
-            return;
+                    alert(
+                        "Profile photo must be less than 5 MB."
+                    );
+
+                    this.value = "";
+
+                    return;
+                }
+
+
+                /* PREVIEW */
+
+                const reader =
+                    new FileReader();
+
+
+                reader.onload =
+                    function (event) {
+
+                        if (profilePhotoPreview) {
+
+                            profilePhotoPreview.src =
+                                event.target.result;
+
+                            profilePhotoPreview.classList.remove(
+                                "d-none"
+                            );
+
+                            profilePhotoPreview.style.display =
+                                "block";
+                        }
+
+
+                        if (profilePhotoPlaceholder) {
+
+                            profilePhotoPlaceholder.style.display =
+                                "none";
+                        }
+
+                    };
+
+
+                reader.readAsDataURL(file);
+
+            }
+        );
+
+    }
+
+
+    /* ================================= */
+    /* ADDRESS COUNTER */
+    /* ================================= */
+
+    function updateAddressCount() {
+
+        if (addressInput && addressCount) {
+
+            addressCount.textContent =
+                addressInput.value.length;
 
         }
 
-    });
+    }
 
 
-    /* ========================= */
+    if (addressInput) {
+
+        addressInput.addEventListener(
+            "input",
+            updateAddressCount
+        );
+
+    }
+
+
+    /* ================================= */
+    /* FORM SUBMIT */
+    /* ================================= */
+
+    if (profileForm) {
+
+        profileForm.addEventListener(
+            "submit",
+            function (event) {
+
+                const phone =
+                    phoneInput.value.trim();
+
+
+                if (!/^[0-9]{10}$/.test(phone)) {
+
+                    event.preventDefault();
+
+                    phoneInput.focus();
+
+                    phoneHelp.textContent =
+                        "Please enter exactly 10 digits.";
+
+                    phoneHelp.className =
+                        "text-danger small";
+
+                    return;
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* ================================= */
     /* INITIAL LOAD */
-    /* ========================= */
+    /* ================================= */
 
     updateAddressCount();
 

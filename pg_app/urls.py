@@ -331,16 +331,23 @@ path(
         views.notice_delete,
         name='notice_delete'
     ),
+# =========================
+# TENANT PAYMENT PAGE
+# =========================
 
+path(
+    'tenant-payment/',
+    views.tenant_payment,
+    name='tenant_payment'
+),
 
-    # =========================
-    # TENANT ONLINE PAYMENT
-    # =========================
+# =========================
+# PROCESS TENANT PAYMENT
+# =========================
 
-    path(
-        'tenant-payment/',
-        views.tenant_payment,
-        name='tenant_payment'
-    ),
-
+path(
+    'tenant-payment/process/',
+    views.tenant_make_payment,
+    name='tenant_make_payment'
+),
 ]

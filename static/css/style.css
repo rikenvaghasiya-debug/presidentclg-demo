@@ -1702,4 +1702,46 @@ textarea {
             auto !important;
     }
 }
+.profile-photo-upload {
+    background: white;
+    border: 1px solid #e8edf5;
+    border-radius: 14px;
+    padding: 14px;
+}
+
+.profile-photo-preview {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #e0e7ff;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-photo-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#profilePhotoPlaceholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    gap: 3px;
+}
+
+#profilePhotoPlaceholder i {
+    font-size: 42px;
+    color: #cbd5e1;
+}
+
+#profilePhotoPlaceholder span {
+    font-size: 12px;
+}
 ```

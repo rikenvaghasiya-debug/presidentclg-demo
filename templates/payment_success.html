@@ -1,0 +1,558 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Payment Successful | PG Management System
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-xl-7 col-lg-8 col-md-10">
+
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+
+
+                <!-- SUCCESS HEADER -->
+
+                <div class="success-header text-white text-center py-5">
+
+                    <div class="success-icon mb-3">
+
+                        <i class="bi bi-check-lg"></i>
+
+                    </div>
+
+                    <h2 class="fw-bold mb-2">
+                        Payment Successful!
+                    </h2>
+
+                    <p class="mb-0 opacity-75">
+                        Your payment has been completed successfully.
+                    </p>
+
+                </div>
+
+
+                <!-- PAYMENT DETAILS -->
+
+                <div class="card-body p-4 p-md-5">
+
+
+                    <div class="text-center mb-4">
+
+                        <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill">
+
+                            <i class="bi bi-check-circle-fill me-1"></i>
+
+                            Payment Done
+
+                        </span>
+
+                        <h4 class="fw-bold mt-3 mb-1">
+                            Thank you for your payment
+                        </h4>
+
+                        <p class="text-muted mb-0">
+                            Your payment has been recorded successfully.
+                        </p>
+
+                    </div>
+
+
+                    <!-- AMOUNT -->
+
+                    <div class="amount-success-box text-center mb-4">
+
+                        <small class="text-muted d-block mb-2">
+                            AMOUNT PAID
+                        </small>
+
+                        <div class="success-amount">
+                            ₹{{ payment.amount }}
+                        </div>
+
+                        <span class="badge bg-success mt-2 px-3 py-2">
+                            {{ payment.status }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- DETAILS -->
+
+                    <div class="payment-details-card">
+
+
+                        <!-- Transaction ID -->
+
+                        <div class="detail-row">
+
+                            <div class="detail-left">
+
+                                <div class="detail-icon transaction-icon">
+                                    <i class="bi bi-receipt"></i>
+                                </div>
+
+                                <div>
+                                    <small class="text-muted d-block">
+                                        Transaction ID
+                                    </small>
+
+                                    <strong>
+                                        {{ payment.transaction_id }}
+                                    </strong>
+                                </div>
+
+                            </div>
+
+                            <button
+                                type="button"
+                                class="btn btn-sm btn-outline-primary"
+                                onclick="copyTransactionId()"
+                                title="Copy Transaction ID"
+                            >
+                                <i class="bi bi-copy"></i>
+                            </button>
+
+                        </div>
+
+
+                        <!-- Payment Method -->
+
+                        <div class="detail-row">
+
+                            <div class="detail-left">
+
+                                <div class="detail-icon method-icon">
+                                    <i class="bi bi-credit-card"></i>
+                                </div>
+
+                                <div>
+
+                                    <small class="text-muted d-block">
+                                        Payment Method
+                                    </small>
+
+                                    <strong>
+                                        {{ payment.payment_method }}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Status -->
+
+                        <div class="detail-row">
+
+                            <div class="detail-left">
+
+                                <div class="detail-icon status-icon">
+                                    <i class="bi bi-check-circle"></i>
+                                </div>
+
+                                <div>
+
+                                    <small class="text-muted d-block">
+                                        Payment Status
+                                    </small>
+
+                                    <span class="badge bg-success px-3 py-2">
+                                        {{ payment.status }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Payment Date -->
+                        <div class="detail-row border-0">
+
+                         <div class="detail-left">
+
+                            <div class="detail-icon date-icon">
+                                <i class="bi bi-calendar-check"></i>
+                           </div>
+
+                         <div>
+
+                     <small class="text-muted d-block">
+                         Payment Date
+                    </small>
+
+                    <strong>
+                         {{ payment.payment_date|date:"d M Y" }}
+                   </strong>
+
+               </div>
+
+           </div>
+
+          </div>
+
+
+                    <!-- SUCCESS MESSAGE -->
+
+                    <div class="success-message mt-4">
+
+                        <div class="success-message-icon">
+
+                            <i class="bi bi-shield-check"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Payment Recorded Successfully
+                            </strong>
+
+                            <p class="mb-0 mt-1 small">
+                                Your transaction ID was generated automatically
+                                by the PG Management System.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="d-flex flex-column flex-sm-row justify-content-center gap-2 mt-4">
+
+
+                        <a
+                            href="{% url 'tenant_dashboard' %}"
+                            class="btn btn-success btn-lg px-4 rounded-pill"
+                        >
+
+                            <i class="bi bi-speedometer2 me-2"></i>
+
+                            Back to Dashboard
+
+                        </a>
+
+
+                        <a
+                            href="{% url 'payment_receipt' payment.id %}"
+                            class="btn btn-outline-success btn-lg px-4 rounded-pill"
+                        >
+
+                            <i class="bi bi-receipt me-2"></i>
+
+                            View Receipt
+
+                        </a>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+    .success-header {
+
+        background: linear-gradient(
+            135deg,
+            #047857,
+            #059669,
+            #10b981
+        );
+
+    }
+
+
+    .success-icon {
+
+        width: 82px;
+        height: 82px;
+
+        margin: 0 auto;
+
+        border-radius: 50%;
+
+        background: rgba(255,255,255,.18);
+
+        border: 3px solid rgba(255,255,255,.65);
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 48px;
+
+    }
+
+
+    .amount-success-box {
+
+        background: linear-gradient(
+            135deg,
+            #ecfdf5,
+            #f0fdf4
+        );
+
+        border: 1px solid #bbf7d0;
+
+        border-radius: 20px;
+
+        padding: 25px;
+
+    }
+
+
+    .success-amount {
+
+        font-size: 42px;
+
+        font-weight: 800;
+
+        color: #059669;
+
+        line-height: 1.1;
+
+    }
+
+
+    .payment-details-card {
+
+        border: 1px solid #e2e8f0;
+
+        border-radius: 18px;
+
+        overflow: hidden;
+
+        background: #fff;
+
+    }
+
+
+    .detail-row {
+
+        min-height: 82px;
+
+        padding: 16px 18px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        gap: 15px;
+
+        border-bottom: 1px solid #f1f5f9;
+
+    }
+
+
+    .detail-left {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 14px;
+
+        min-width: 0;
+
+    }
+
+
+    .detail-icon {
+
+        width: 44px;
+
+        height: 44px;
+
+        border-radius: 12px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        flex-shrink: 0;
+
+        font-size: 18px;
+
+    }
+
+
+    .transaction-icon {
+
+        background: #ede9fe;
+
+        color: #7c3aed;
+
+    }
+
+
+    .method-icon {
+
+        background: #dbeafe;
+
+        color: #2563eb;
+
+    }
+
+
+    .status-icon {
+
+        background: #d1fae5;
+
+        color: #059669;
+
+    }
+
+
+    .date-icon {
+
+        background: #fef3c7;
+
+        color: #d97706;
+
+    }
+
+
+    .success-message {
+
+        display: flex;
+
+        align-items: flex-start;
+
+        gap: 13px;
+
+        padding: 16px;
+
+        border-radius: 15px;
+
+        background: #ecfdf5;
+
+        border: 1px solid #bbf7d0;
+
+        color: #065f46;
+
+    }
+
+
+    .success-message-icon {
+
+        width: 42px;
+
+        height: 42px;
+
+        border-radius: 12px;
+
+        background: #d1fae5;
+
+        color: #059669;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        flex-shrink: 0;
+
+        font-size: 19px;
+
+    }
+
+
+    @media (max-width: 575.98px) {
+
+        .success-icon {
+
+            width: 70px;
+
+            height: 70px;
+
+            font-size: 40px;
+
+        }
+
+
+        .success-amount {
+
+            font-size: 34px;
+
+        }
+
+
+        .detail-row {
+
+            padding: 14px;
+
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+
+    function copyTransactionId() {
+
+        const transactionId =
+            "{{ payment.transaction_id }}";
+
+        if (!transactionId) {
+            return;
+        }
+
+        navigator.clipboard.writeText(transactionId)
+            .then(function () {
+
+                alert(
+                    "Transaction ID copied successfully!"
+                );
+
+            })
+            .catch(function () {
+
+                alert(
+                    "Unable to copy Transaction ID."
+                );
+
+            });
+
+    }
+
+</script>
+
+{% endblock %}
+</div>

@@ -190,7 +190,7 @@ Add Tenant | PG Management System
 
             <div class="card-body p-4">
 
-                <form method="POST" id="tenantForm">
+                <form method="POST" enctype="multipart/form-data" id="tenantForm">
 
                     {% csrf_token %}
 
@@ -442,7 +442,48 @@ Add Tenant | PG Management System
                                 </div>
 
                             </div>
+<!-- Profile Photo -->
+<div class="col-md-6">
 
+    <label class="form-label fw-semibold">
+        Profile Photo
+    </label>
+
+    <div class="profile-photo-upload">
+
+        <div class="profile-photo-preview mb-3">
+            <img
+                id="profilePhotoPreview"
+                src=""
+                alt="Profile Preview"
+                style="display:none;">
+
+            <div id="profilePhotoPlaceholder">
+                <i class="bi bi-person-circle"></i>
+                <span>No Photo</span>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <span class="input-group-text">
+                <i class="bi bi-camera text-primary"></i>
+            </span>
+
+            <input
+                type="file"
+                name="profile_photo"
+                id="profilePhoto"
+                class="form-control"
+                accept="image/jpeg,image/png,image/webp">
+        </div>
+
+        <small class="text-muted d-block mt-2">
+            JPG, PNG or WEBP image. Recommended square photo.
+        </small>
+
+    </div>
+
+</div>
 
                             <!-- Address -->
                             <div class="col-12">
