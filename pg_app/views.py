@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.views import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -12,10 +13,13 @@ from django.contrib.auth.views import (
     PasswordResetConfirmView,
     PasswordResetCompleteView,
 )
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.models import User
+from django.utils.http import urlsafe_base64_decode
 import re
 from decimal import Decimal, InvalidOperation
 from datetime import date
-
+from django.template.loader import get_template
 
 
 
@@ -24,24 +28,152 @@ from datetime import date
 # ============================================================
 
 class CustomPasswordResetView(PasswordResetView):
-    template_name = 'registration/password_reset_form.html'
+    template_name = 'password_reset_form.html'
     email_template_name = 'registration/password_reset_email.html'
     subject_template_name = 'registration/password_reset_subject.txt'
     success_url = '/forgot-password/done/'
-
+    token_generator = default_token_generator
 
 class CustomPasswordResetDoneView(PasswordResetDoneView):
     template_name = 'registration/password_reset_done.html'
 
+# ============================================================
+# CUSTOM PASSWORD RESET CONFIRM
+# ============================================================
 
-class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+class CustomPasswordResetConfirmView(View):
+
     template_name = 'registration/password_reset_confirm.html'
-    success_url = '/forgot-password/complete/'
 
+    def get(self, request, uidb64, token):
+        print("🔥 CUSTOM PASSWORD RESET VIEW HIT")
+        print("UID:", uidb64)
+        print("TOKEN:", token)
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = User.objects.get(pk=uid)
+
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        # Check reset token
+        if user is None or not default_token_generator.check_token(user, token):
+
+            return render(
+                request,
+                self.template_name,
+                {
+                    'validlink': False
+                }
+            )
+
+        # Valid reset link
+        return render(
+            request,
+            self.template_name,
+            {
+                'validlink': True,
+                'uidb64': uidb64,
+                'token': token
+            }
+        )
+
+    def post(self, request, uidb64, token):
+
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = User.objects.get(pk=uid)
+
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        # Check reset token again
+        if user is None or not default_token_generator.check_token(user, token):
+
+            return render(
+                request,
+                self.template_name,
+                {
+                    'validlink': False
+                }
+            )
+
+        password1 = request.POST.get('new_password1', '').strip()
+        password2 = request.POST.get('new_password2', '').strip()
+
+        # Empty password
+        if not password1 or not password2:
+
+            messages.error(
+                request,
+                'Please enter both passwords.'
+            )
+
+            return render(
+                request,
+                self.template_name,
+                {
+                    'validlink': True,
+                    'uidb64': uidb64,
+                    'token': token
+                }
+            )
+
+        # Password mismatch
+        if password1 != password2:
+
+            messages.error(
+                request,
+                'Passwords do not match.'
+            )
+
+            return render(
+                request,
+                self.template_name,
+                {
+                    'validlink': True,
+                    'uidb64': uidb64,
+                    'token': token
+                }
+            )
+
+        # Minimum password length
+        if len(password1) < 8:
+
+            messages.error(
+                request,
+                'Password must contain at least 8 characters.'
+            )
+
+            return render(
+                request,
+                self.template_name,
+                {
+                    'validlink': True,
+                    'uidb64': uidb64,
+                    'token': token
+                }
+            )
+
+        # Change password
+        user.set_password(password1)
+        user.save()
+
+        messages.success(
+            request,
+            'Your password has been changed successfully.'
+        )
+
+        return redirect('password_reset_complete')
+
+
+# ============================================================
+# PASSWORD RESET COMPLETE
+# ============================================================
 
 class CustomPasswordResetCompleteView(PasswordResetCompleteView):
-    template_name = 'registration/password_reset_complete.html'
 
+    template_name = 'registration/password_reset_complete.html'
 
 
 # =========================================================
@@ -4132,7 +4264,6 @@ def tenant_payment(request):
         }
     )
 
-
 @login_required
 def tenant_make_payment(request):
 
@@ -4146,24 +4277,14 @@ def tenant_make_payment(request):
             request,
             'Tenant profile not found.'
         )
-        return redirect(
-            'tenant_dashboard'
-        )
+        return redirect('tenant_dashboard')
 
     if request.method != 'POST':
-        return redirect(
-            'tenant_payment'
-        )
+        return redirect('tenant_payment')
 
-    amount = request.POST.get(
-        'amount',
-        ''
-    ).strip()
-
-    payment_method = request.POST.get(
-        'payment_method',
-        ''
-    ).strip()
+    amount = request.POST.get('amount', '').strip()
+    payment_method = request.POST.get('payment_method', '').strip()
+    utr = request.POST.get('utr', '').strip()
 
     error = validate_positive_decimal(
         amount,
@@ -4171,34 +4292,55 @@ def tenant_make_payment(request):
     )
 
     if error:
-        messages.error(
-            request,
-            error
-        )
-        return redirect(
-            'tenant_payment'
-        )
+        messages.error(request, error)
+        return redirect('tenant_payment')
 
-    if payment_method not in [
-        'Cash',
-        'UPI',
-        'Card'
-    ]:
+    if payment_method not in ['Cash', 'UPI', 'Card']:
         messages.error(
             request,
             'Please select a valid payment method.'
         )
-        return redirect(
-            'tenant_payment'
+        return redirect('tenant_payment')
+
+    # UPI payments require the real UTR/reference number.
+    if payment_method == 'UPI':
+        if not utr:
+            messages.error(
+                request,
+                'Please enter your UPI transaction reference/UTR.'
+            )
+            return redirect('tenant_payment')
+
+        if len(utr) > 100:
+            messages.error(
+                request,
+                'UTR cannot exceed 100 characters.'
+            )
+            return redirect('tenant_payment')
+
+        payment = Payment.objects.create(
+            tenant=tenant,
+            amount=amount,
+            payment_method='UPI',
+            status='Pending',
+            transaction_id=utr,
+            description='UPI QR payment - awaiting admin verification'
         )
 
-    payment = Payment.objects.create(
-        tenant=tenant,
-        amount=amount,
-        payment_method=payment_method,
-        status='Paid',
-        description='Online payment'
-    )
+        messages.success(
+            request,
+            'Payment details submitted. Your payment is pending admin verification.'
+        )
+
+    else:
+        # Cash/Card entries retain the existing behavior.
+        payment = Payment.objects.create(
+            tenant=tenant,
+            amount=amount,
+            payment_method=payment_method,
+            status='Paid',
+            description=f'{payment_method} payment'
+        )
 
     return render(
         request,
@@ -4207,12 +4349,10 @@ def tenant_make_payment(request):
             'payment': payment
         }
     )
-
 # =========================================================
 # COMPLAINT MANAGEMENT
 # =========================================================
 
-@login_required
 def complaint_list(request):
 
     if not request.user.is_staff:

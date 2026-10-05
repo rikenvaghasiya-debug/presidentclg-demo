@@ -54,3 +54,4 @@ media/
 
 # Jupyter
 .ipynb_checkpoints/
+data_backup.json
