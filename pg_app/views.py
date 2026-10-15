@@ -20,31 +20,53 @@ import re
 from decimal import Decimal, InvalidOperation
 from datetime import date
 from django.template.loader import get_template
+from django.contrib.auth.views import PasswordResetView
 
+from pathlib import Path
+from django.conf import settings
+
+print("BASE_DIR:", settings.BASE_DIR)
+
+custom_file = (
+    Path(settings.BASE_DIR)
+    / "templates"
+    / "registration"
+    / "password_reset_form.html"
+)
+
+print("CUSTOM FILE EXISTS:", custom_file.exists())
+print("CUSTOM FILE PATH:", custom_file)
 
 
 # ============================================================
 # FORGOT PASSWORD / PASSWORD RESET
 # ============================================================
 
+
 class CustomPasswordResetView(PasswordResetView):
-    template_name = 'password_reset_form.html'
+    template_name = "custom_forgot_password.html"
     email_template_name = 'registration/password_reset_email.html'
     subject_template_name = 'registration/password_reset_subject.txt'
     success_url = '/forgot-password/done/'
     token_generator = default_token_generator
 
-class CustomPasswordResetDoneView(PasswordResetDoneView):
-    template_name = 'registration/password_reset_done.html'
+    def get_template_names(self):
+        from django.template.loader import get_template
 
+        template = get_template('registration/password_reset_form.html')
+        print("ACTUAL TEMPLATE FILE:", template.origin.name)
+
+        return super().get_template_names()
+
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = "custom_forgot_password_done.html"
 # ============================================================
 # CUSTOM PASSWORD RESET CONFIRM
 # ============================================================
 
 class CustomPasswordResetConfirmView(View):
-
-    template_name = 'registration/password_reset_confirm.html'
-
+    template_name = "custom_reset_password.html"
     def get(self, request, uidb64, token):
         print("🔥 CUSTOM PASSWORD RESET VIEW HIT")
         print("UID:", uidb64)
@@ -172,9 +194,7 @@ class CustomPasswordResetConfirmView(View):
 # ============================================================
 
 class CustomPasswordResetCompleteView(PasswordResetCompleteView):
-
-    template_name = 'registration/password_reset_complete.html'
-
+    template_name = "custom_reset_password_complete.html"
 
 # =========================================================
 # VALIDATION HELPERS
@@ -311,10 +331,7 @@ def validate_date_not_future(value, field_name='Date'):
 # =========================================================
 
 def home(request):
-    return render(
-        request,
-        'home.html'
-    )
+    return render(request,'home.html')
 
 
 # =========================================================

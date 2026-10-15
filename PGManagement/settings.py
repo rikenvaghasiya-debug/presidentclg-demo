@@ -49,8 +49,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cloudinary_storage',
-    'cloudinary',
 
     'pg_app',
 ]
@@ -94,32 +92,25 @@ WSGI_APPLICATION = 'PGManagement.wsgi.application'
 # ============================================================
 
 TEMPLATES = [
-
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-
         'DIRS': [
             BASE_DIR / 'templates',
         ],
-
-        'APP_DIRS': True,
-
+        'APP_DIRS': False,
         'OPTIONS': {
-
             'context_processors': [
-
                 'django.template.context_processors.request',
-
                 'django.contrib.auth.context_processors.auth',
-
                 'django.contrib.messages.context_processors.messages',
-
+            ],
+            'loaders': [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
             ],
         },
     },
-
 ]
-
 
 
 # ============================================================
@@ -200,26 +191,6 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
-
-
-# ============================================================
-# CLOUDINARY CONFIGURATION
-# ============================================================
-
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
-}
-
-STORAGES = {
-    "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
 
 # ============================================================
 # UPI PAYMENT
