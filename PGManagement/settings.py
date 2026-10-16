@@ -198,15 +198,18 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 UPI_ID = "riken@upi"
 
+# Gmail SMTP Configuration
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 
-# ============================================================
-# EMAIL CONFIGURATION
-# ============================================================
+EMAIL_HOST_USER = "rikenvaghasiya@gmail.com"
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
 
-# Development: email/reset link will appear in PyCharm terminal
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-DEFAULT_FROM_EMAIL = 'noreply@pgmanagement.local'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+PASSWORD_RESET_TIMEOUT = 3600
 
 
 # ============================================================
