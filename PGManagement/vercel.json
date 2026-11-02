@@ -1,1 +1,10 @@
 
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "https://presidentclg-demo.onrender.com/$1"
+    }
+  ]
+}
