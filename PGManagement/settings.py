@@ -27,12 +27,7 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = 'RENDER' not in os.environ
 
-ALLOWED_HOSTS = [
-    "presidentclg-demo.onrender.com",
-    "presidentclg-pg-live.vercel.app",
-    "localhost",
-    "127.0.0.1",
-]
+ALLOWED_HOSTS = []
 
 CSRF_TRUSTED_ORIGINS = [
     "https://presidentclg-demo.onrender.com",
