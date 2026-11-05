@@ -27,8 +27,21 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = 'RENDER' not in os.environ
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "presidentclg-demo.onrender.com",
+    "presidentclg-pg-live.vercel.app",
+    "localhost",
+    "127.0.0.1",
+]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://presidentclg-demo.onrender.com",
+    "https://presidentclg-pg-live.vercel.app",
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
+]
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 
 if RENDER_EXTERNAL_HOSTNAME:
